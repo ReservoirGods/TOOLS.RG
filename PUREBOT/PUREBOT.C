@@ -4,11 +4,12 @@
  intercept bios and output text to debug log
 
  parses PBT file
- -C=<pure_c dir>
- -O=<log_output>
+ -A=<pure_c dir>
+ -B=<log_output>
  .PRJ
 */
 
+#include <GODLIB\BIOS\BIOS.H>
 #include <GODLIB\DRIVE\DRIVE.H>
 #include <GODLIB\FILE\FILE.H>
 #include <GODLIB\MEMORY\MEMORY.H>
@@ -21,6 +22,7 @@ typedef struct sProjectParser
 	const char *	mpFileName;
 	const char *	mpPureC;
 	const char *	mpDebugOutFile;
+	char *			mpDebugOutSpace;
 	char *			mpPRJ;
 	U32				mSize;
 	U32				mLinkScriptSize;
@@ -318,7 +320,6 @@ void	ProcessPBT( sProjectParser * apParser, const char * apFileName )
 	U32 lOffset = 0;
 	char * lpText;
 
-
 	lpText = File_Load(apFileName);
 
 	while( lOffset<lSize)
@@ -348,11 +349,17 @@ void	ProcessPBT( sProjectParser * apParser, const char * apFileName )
 				}
 				else if( 'B' == lpText[lLineStart+1])
 				{
+					if( apParser->mpDebugOutFile ) 
+					{
+						Bios_UnPipeConsole();
+					}
 					apParser->mpDebugOutFile = &lpText[lFileOff];
+					apParser->mpDebugOutSpace = mMEMCALLOC( 512 + 2 );
+					Bios_PipeConsole( apParser->mpDebugOutSpace, 512 );
 				}
 				else
 				{
-					printf( "Warning: unkown option %s\n", &lpText[lLineStart]);
+					printf( "Warning: unknown option %s\n", &lpText[lLineStart]);
 				}
 			}
 			else
@@ -363,6 +370,21 @@ void	ProcessPBT( sProjectParser * apParser, const char * apFileName )
 			}
 		}
 
+		if( apParser->mpDebugOutSpace )
+		{
+			U32 lLen = String_StrLen( apParser->mpDebugOutSpace );
+
+			File_Save( apParser->mpDebugOutFile, apParser->mpDebugOutSpace, lLen );
+
+			mMEMFREE( apParser->mpDebugOutSpace );
+			apParser->mpDebugOutSpace = 0;
+		}
+
+	}
+
+	if( apParser->mpDebugOutFile )
+	{
+		Bios_UnPipeConsole();
 	}
 
 	File_UnLoad(lpText);
