@@ -16,6 +16,14 @@
 #include <GODLIB\PROGRAM\PROGRAM.H>
 #include <GODLIB\STRING\STRING.H>
 
+typedef struct sFileBackedBuffer
+{
+	S32		mFileHandle;
+	U16		mOpenFlag;
+	U16		mOffset;
+	char	mBuffer[ 512 ];
+}sFileBackedBuffer;
+
 typedef struct sProjectParser
 {
 	const char *	mpExecutable;
@@ -25,21 +33,70 @@ typedef struct sProjectParser
 	char *			mpDebugOutSpace;
 	char *			mpPRJ;
 	U32				mSize;
-	U32				mLinkScriptSize;
-	U32				mLinkScriptOffset;
+/*	U32				mLinkScriptSize;
+	U32				mLinkScriptOffset;*/
 	U32				mObjectCount;
 	U16				mPathPRJLen;
 	U16				mAssemblerOptionsLen;
 	U16				mCompilerOptionsLen;
 	U16				mLinkerOptionsLen;
 	U8				mGather;
-	char **			mppObjs;
+/*	char **			mppObjs;*/
 	char *			mpLinkScript;
 	char			mPathPRJ[512];
-	char			mAssemblerOptions[512];
-	char			mCompilerOptions[512];
-	char			mLinkerOptions[512];
+	char			mAssemblerOptions[128];
+	char			mCompilerOptions[128];
+	char				mLinkerOptions[128];
+	sFileBackedBuffer	mLinkerScript;
+	sFileBackedBuffer	mDebugLog;
 } sProjectParser;
+
+
+
+void	FileBackedBuffer_Init( sFileBackedBuffer * apBuffer, const char * apFileName )
+{
+	apBuffer->mFileHandle = File_Create( apFileName);
+	apBuffer->mOffset=0;
+	apBuffer->mOpenFlag=1;
+}
+
+void	FileBackedBuffer_Write( sFileBackedBuffer * apBuffer )
+{
+	if( apBuffer->mOffset && apBuffer->mOpenFlag )
+	{
+		File_Write( apBuffer->mFileHandle, apBuffer->mOffset, &apBuffer->mBuffer[ 0 ] );
+		apBuffer->mOffset = 0;
+	}
+}
+
+void	FileBackedBuffer_DeInit( sFileBackedBuffer * apBuffer )
+{
+	FileBackedBuffer_Write(apBuffer);
+	if( apBuffer->mOpenFlag )
+		File_Close( apBuffer->mFileHandle );
+	apBuffer->mFileHandle=0;
+	apBuffer->mOffset=0;
+	apBuffer->mOpenFlag=0;
+}
+
+void	FileBackedBuffer_Append( sFileBackedBuffer * apBuffer, char aChar )
+{
+	if( apBuffer->mOffset >= 512 )
+	{
+		apBuffer->mOffset=512;
+		FileBackedBuffer_Write(apBuffer);
+		apBuffer->mOffset=0;
+	}
+	apBuffer->mBuffer[ apBuffer->mOffset ] = aChar;
+	apBuffer->mOffset++;
+}
+
+void	FileBackedBuffer_StringAppend( sFileBackedBuffer * apBuffer, const char * apString )
+{
+	while( *apString )
+		FileBackedBuffer_Append( apBuffer, *apString++);
+}
+
 
 void	CopyOptions( const char * apSource, char * apDest )
 {
@@ -51,6 +108,18 @@ void	CopyOptions( const char * apSource, char * apDest )
 	for(;j>0&&(' '==apDest[j-1]||'\t'==apDest[j-1]);j--);
 	apDest[j++]=' ';
 	apDest[j]=0;
+}
+
+void	DebugLog_Update( sProjectParser * apParser )
+{
+	apParser->mDebugLog.mOffset = Bios_GetPipeOffset();
+	if( apParser->mDebugLog.mOffset && apParser->mDebugLog.mOpenFlag )
+	{
+		if( apParser->mDebugLog.mOffset > 512 )
+			apParser->mDebugLog.mOffset = 512;
+		FileBackedBuffer_Write( &apParser->mDebugLog );
+		Bios_ClearPipeOffset();
+	}
 }
 
 void	ParseLine(sProjectParser * apParser, char * apLine)
@@ -69,12 +138,35 @@ void	ParseLine(sProjectParser * apParser, char * apLine)
 				{
 					if( !apParser->mpExecutable && *apLine )
 					{
+						char lOut[256];
+						U32 i;
 						apParser->mpExecutable = apLine;
 
-						sprintf( &apParser->mpLinkScript[ apParser->mLinkScriptOffset ], "-V -O=%s%s", apParser->mPathPRJ, apParser->mpExecutable);
+						FileBackedBuffer_StringAppend( &apParser->mLinkerScript, "-V -O=");
+						FileBackedBuffer_StringAppend( &apParser->mLinkerScript, apParser->mPathPRJ);
+						FileBackedBuffer_StringAppend( &apParser->mLinkerScript, apParser->mpExecutable);
+
+
+						String_StrCpy( lOut, apParser->mPathPRJ );
+						String_StrCpy( &lOut[ apParser->mPathPRJLen ], apParser->mpExecutable );
+						for( i=0; lOut[i]; i++ );
+						for( ; i && '.'!=lOut[i-1]; i--);
+						lOut[i++]='P';
+						lOut[i++]='L';
+						lOut[i++]='K';
+						lOut[i++]=0;
+
+						apParser->mObjectCount=0;
+
+						FileBackedBuffer_Init( &apParser->mLinkerScript, lOut );
+
+
+/*						sprintf( &apParser->mpLinkScript[ apParser->mLinkScriptOffset ], "-V -O=%s%s", apParser->mPathPRJ, apParser->mpExecutable); 
 						for(;apParser->mpLinkScript[apParser->mLinkScriptOffset];apParser->mLinkScriptOffset++);
 						apParser->mpLinkScript[apParser->mLinkScriptOffset++]=13;
-						apParser->mpLinkScript[apParser->mLinkScriptOffset++]=10;
+						apParser->mpLinkScript[apParser->mLinkScriptOffset++]=10;*/
+						FileBackedBuffer_Append( &apParser->mLinkerScript, 13 );
+						FileBackedBuffer_Append( &apParser->mLinkerScript, 10 );
 					}
 					else if( '.' == *apLine)
 					{
@@ -147,6 +239,7 @@ void	ParseLine(sProjectParser * apParser, char * apLine)
 					lpH = Program_Load("PCC.TTP");
 					Program_Execute(lpH,lCmdLine);
 					Program_UnLoad(lpH);
+
 				}
 				else if( 'S' == apLine[lOff] || 's'==apLine[lOff])
 				{
@@ -157,22 +250,29 @@ void	ParseLine(sProjectParser * apParser, char * apLine)
 					Program_Execute(lpH,lCmdLine);
 					Program_UnLoad(lpH);
 				}
+	
+				DebugLog_Update( apParser );
 
 				{
 					U16 k;
 					for( lOff=0; lpFile[lOff]; lOff++);
 					for( ;lOff && '.'!=lpFile[lOff-1];lOff--);
-					for( k=0; k<lOff; apParser->mpLinkScript[ apParser->mLinkScriptOffset++ ] = lpFile[ k++ ] );
+/*					for( k=0; k<lOff; apParser->mpLinkScript[ apParser->mLinkScriptOffset++ ] = lpFile[ k++ ] ); */
+					for( k=0; k<lOff; FileBackedBuffer_Append( &apParser->mLinkerScript, lpFile[ k++ ] ) );
 					if( lpFile[lOff] == 'C' || lpFile[lOff] == 'c' || lpFile[lOff] == 'S' || lpFile[lOff] == 's')
 					{
-						apParser->mpLinkScript[apParser->mLinkScriptOffset++] = 'O';
+/*						apParser->mpLinkScript[apParser->mLinkScriptOffset++] = 'O';*/
+						FileBackedBuffer_Append( &apParser->mLinkerScript, 'O' );
 					}
 					else
 					{
-						for( ; lpFile[k]; apParser->mpLinkScript[ apParser->mLinkScriptOffset++]=lpFile[k++] );
+/*						for( ; lpFile[k]; apParser->mpLinkScript[ apParser->mLinkScriptOffset++]=lpFile[k++] ); */
+						for( ; lpFile[k]; FileBackedBuffer_Append( &apParser->mLinkerScript, lpFile[k++] ) );
 					}
-					apParser->mpLinkScript[ apParser->mLinkScriptOffset++ ] = 13;
-					apParser->mpLinkScript[ apParser->mLinkScriptOffset++ ] = 10;
+/*					apParser->mpLinkScript[ apParser->mLinkScriptOffset++ ] = 13;
+					apParser->mpLinkScript[ apParser->mLinkScriptOffset++ ] = 10;*/
+					FileBackedBuffer_Append( &apParser->mLinkerScript, 13 );
+					FileBackedBuffer_Append( &apParser->mLinkerScript, 10 );
 				}
 
 				apParser->mAssemblerOptions[apParser->mAssemblerOptionsLen]=0;
@@ -248,12 +348,14 @@ void	Link( sProjectParser * apParser )
 	lOut[i++]='K';
 	lOut[i++]=0;
 
-	File_Save( &lOut[6], apParser->mpLinkScript, apParser->mLinkScriptOffset );
+/*	File_Save( &lOut[6], apParser->mpLinkScript, apParser->mLinkScriptOffset );*/
 
 	lpPage = Program_Load("PLINK.TTP");
 	printf( "PLINK.TTP %s\n",&lOut[0]);
 	Program_Execute(lpPage,lOut);
 	Program_UnLoad(lpPage);
+	DebugLog_Update( apParser );
+
 }
 
 
@@ -286,31 +388,48 @@ void	ProcessPRJ(sProjectParser * apParser, const char * apFileName )
 		apParser->mpPRJ = mMEMALLOC( apParser->mSize +1);
 		if( apParser->mpPRJ )
 		{
-			U32 lLC;
+			char lOut[ 256 ];
+			U32 i;
+/*			U32 lLC;*/
 			File_LoadAt(apFileName,apParser->mpPRJ);
 			apParser->mpPRJ[apParser->mSize]=0;
 
+/*
 			lLC = PRJCountLines(apParser);
 			apParser->mLinkScriptSize = (lLC) * apParser->mPathPRJLen;
 			apParser->mLinkScriptSize += apParser->mSize;
 			apParser->mLinkScriptSize += 6;
-			apParser->mpLinkScript = mMEMALLOC( apParser->mLinkScriptSize );
+			apParser->mpLinkScript = mMEMCALLOC( apParser->mLinkScriptSize );
 			apParser->mLinkScriptOffset = 0;
 
 			apParser->mppObjs = mMEMALLOC( (lLC+1) * sizeof(char*));
+*/
+
+/*
+			sprintf( lOut, "%s%s", apParser->mPathPRJ, apParser->mpExecutable );
+			for( i=0; lOut[i]; i++ );
+			for( ; i && '.'!=lOut[i-1]; i--);
+			lOut[i++]='P';
+			lOut[i++]='L';
+			lOut[i++]='K';
+			lOut[i++]=0;
 
 			apParser->mObjectCount=0;
+*/
+			FileBackedBuffer_Init( &apParser->mLinkerScript, lOut );
 			ParsePRJ(apParser);
+			FileBackedBuffer_DeInit( &apParser->mLinkerScript );
 			Link(apParser);
 
-			mMEMFREE( apParser->mpLinkScript);
-			mMEMFREE( apParser->mppObjs);
+/*			mMEMFREE( apParser->mpLinkScript);
+			mMEMFREE( apParser->mppObjs);*/
 			mMEMFREE(apParser->mpPRJ);
 		}
 	}
 	else
 	{
-		printf( "%s does not exist", apFileName);
+		printf( "error\n");
+		printf( "file %s does not exist", apFileName);
 	}
 }
 
@@ -320,8 +439,9 @@ void	ProcessPBT( sProjectParser * apParser, const char * apFileName )
 	U32 lOffset = 0;
 	char * lpText;
 
-	lpText = File_Load(apFileName);
 
+	lpText = mMEMCALLOC( lSize+1 );
+	File_LoadAt(apFileName,lpText);
 	while( lOffset<lSize)
 	{
 		U32 lLineStart = 0;
@@ -332,7 +452,15 @@ void	ProcessPBT( sProjectParser * apParser, const char * apFileName )
 		lLineStart = lOffset;
 		for(;13!=lpText[lOffset] && 10 !=lpText[lOffset] && lpText[lOffset] && lOffset<lSize;lOffset++);
 		for(;(lOffset>0)&&(' '==lpText[lOffset-1]||'\t'==lpText[lOffset-1]);lpText[--lOffset]=0);
-		lpText[lOffset++]=0;
+		if( lOffset<=lSize)
+		{
+			lpText[lOffset++]=0;
+		}
+		else
+		{
+
+			printf("end");
+		}
 
 		lLineLen = lOffset-lLineStart;
 		if( lLineLen > 1 )
@@ -349,13 +477,25 @@ void	ProcessPBT( sProjectParser * apParser, const char * apFileName )
 				}
 				else if( 'B' == lpText[lLineStart+1])
 				{
-					if( apParser->mpDebugOutFile ) 
+					U32 i=0;
+					if( apParser->mDebugLog.mOpenFlag ) 
 					{
+						FileBackedBuffer_DeInit( &apParser->mDebugLog );
 						Bios_UnPipeConsole();
 					}
-					apParser->mpDebugOutFile = &lpText[lFileOff];
-					apParser->mpDebugOutSpace = mMEMCALLOC( 512 + 2 );
-					Bios_PipeConsole( apParser->mpDebugOutSpace, 512 );
+					for( i=lLineStart+2; i<lOffset && '='!=lpText[i]; i++ );
+					if( '=' == lpText[i])
+					{
+						for( i++; i<lOffset && (' '==lpText[i] || '\t' ==lpText[i]); i++);
+						FileBackedBuffer_Init( &apParser->mDebugLog, &lpText[i] );
+						Bios_PipeConsole( &apParser->mDebugLog.mBuffer[0], 512 );
+	/*
+						apParser->mpDebugOutFile = &lpText[lFileOff];
+						apParser->mpDebugOutSpace = mMEMCALLOC( 512 + 2 );
+						Bios_PipeConsole( apParser->mpDebugOutSpace, 512 );*/
+
+					}
+
 				}
 				else
 				{
@@ -379,15 +519,15 @@ void	ProcessPBT( sProjectParser * apParser, const char * apFileName )
 			mMEMFREE( apParser->mpDebugOutSpace );
 			apParser->mpDebugOutSpace = 0;
 		}
-
 	}
 
-	if( apParser->mpDebugOutFile )
+	if( apParser->mDebugLog.mOpenFlag ) 
 	{
+		FileBackedBuffer_DeInit( &apParser->mDebugLog );
 		Bios_UnPipeConsole();
 	}
 
-	File_UnLoad(lpText);
+	mMEMFREE(lpText);
 
 }
 
