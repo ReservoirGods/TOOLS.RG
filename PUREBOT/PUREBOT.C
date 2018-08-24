@@ -225,7 +225,7 @@ void	ParseLine(sProjectParser * apParser, char * apLine)
 				if( 'C' == apLine[lOff] || 'c'==apLine[lOff])
 				{
 					sBasePage * lpH = 0;
-					sprintf( &lCmdLine[0], "-V %s%s", &apParser->mCompilerOptions[0], lpFile);
+					sprintf( &lCmdLine[0], "%s%s", &apParser->mCompilerOptions[0], lpFile);
 					printf( "PCC.TTP %s\n",&lCmdLine[0]);
 					lpH = Program_Load("PCC.TTP");
 					Program_Execute(lpH,lCmdLine);
@@ -235,7 +235,7 @@ void	ParseLine(sProjectParser * apParser, char * apLine)
 				else if( 'S' == apLine[lOff] || 's'==apLine[lOff])
 				{
 					sBasePage * lpH = 0;
-					sprintf( &lCmdLine[0], "-V %s%s", &apParser->mAssemblerOptions[0], lpFile);
+					sprintf( &lCmdLine[0], "%s%s", &apParser->mAssemblerOptions[0], lpFile);
 					lpH = Program_Load("PASM.TTP");
 					printf( "PASM.TTP %s\n",&lCmdLine[0]);
 					Program_Execute(lpH,lCmdLine);
@@ -347,6 +347,9 @@ void	ProcessPRJ(sProjectParser * apParser, const char * apFileName )
 {
 	printf( "Process: %s\n",apFileName);
 
+	for(apParser->mPathPRJLen=0; apFileName[ apParser->mPathPRJLen ]; apParser->mPathPRJ[ apParser->mPathPRJLen ] = apFileName[ apParser->mPathPRJLen ],apParser->mPathPRJLen++);
+	for(; (apParser->mPathPRJLen) > 0 && ('\\' != apParser->mPathPRJ[ apParser->mPathPRJLen-1 ]) && ('/' != apParser->mPathPRJ[ apParser->mPathPRJLen-1 ]) ;apParser->mPathPRJLen-- );
+
 	apParser->mAssemblerOptionsLen=0;
 	apParser->mCompilerOptionsLen=0;
 	apParser->mLinkerOptionsLen=0;
@@ -451,8 +454,17 @@ void	ProcessPBT( sProjectParser * apParser, const char * apFileName )
 			else
 			{
 				U32 i;
+				U32 lOldLen = apParser->mPathPRJLen;
+				
 				for( i=lLineStart; i<=lOffset; apParser->mPathPRJ[ (i-lLineStart) + apParser->mPathPRJLen ] = lpText[ i ],i++);
+				
+				for( i=apParser->mPathPRJLen; apParser->mPathPRJ[i]; i++);
+				for( ;i>0 && '\\' != apParser->mPathPRJ[ i-1] && '/' != apParser->mPathPRJ[i-1]; i-- );
+				apParser->mPathPRJLen=i;
+
 				ProcessPRJ( apParser, apParser->mPathPRJ);
+
+				apParser->mPathPRJLen =lOldLen;
 			}
 		}
 
