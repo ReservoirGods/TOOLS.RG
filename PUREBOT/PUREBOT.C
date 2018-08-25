@@ -416,9 +416,8 @@ void	ProcessPBT( sProjectParser * apParser, const char * apFileName )
 		}
 
 		lLineLen = lOffset-lLineStart;
-		if( lLineLen > 1 )
+		if( (lLineLen > 1) && ';' !=lpText[lLineStart] )
 		{
-			printf( "doing %s\n", &lpText[ lLineStart]);
 			if( lLineLen > 3 && ('-'==lpText[lLineStart] && '='==lpText[lLineStart+2]) )
 			{
 				U32 lFileOff=0;
