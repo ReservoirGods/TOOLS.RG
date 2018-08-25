@@ -8,9 +8,9 @@ PUREBOT.TTP
 ;	OPTIONS
 ;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
-;.C [ -Y -W-par ]
-.C [ -W-par ]
-;.L [ -Y ]
+.C [ -8 -G -M -P -W-par -IINCLUDE ]
+.L [ -F -G ]
+.S [ -1 -2 -8 -S -Y ]
 
 =
 
@@ -21,7 +21,7 @@ PUREBOT.TTP
 LIB\PCSTART.O
 
 ;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-;	GODLIB LIBRARY MODULES
+;	GODLIB LIBRARY MODULES (C)
 ;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
 INCLUDE\GODLIB\BASE\BASE.C
@@ -32,7 +32,6 @@ INCLUDE\GODLIB\MEMORY\MEMORY.C
 INCLUDE\GODLIB\PROGRAM\PROGRAM.C
 INCLUDE\GODLIB\STRING\STRING.C
 
-
 ;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 ;	GODLIB LIBRARY MODULES (ASM)
 ;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
@@ -42,9 +41,8 @@ INCLUDE\GODLIB\GEMDOS\GEMDOS_S.S
 INCLUDE\GODLIB\MEMORY\MEMORY_S.S
 INCLUDE\GODLIB\PROGRAM\PROG_S.S
 
-
 ;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-;	TOOLBASE MODULES
+;	MAIN CODE
 ;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
 PUREBOT.C
@@ -53,8 +51,6 @@ PUREBOT.C
 ;	PURE C LIBRARIES
 ;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
-LIB\PCFLTLIB.LIB       ; floating point library
 LIB\PCSTDLIB.LIB       ; standard library
-LIB\PCTOSLIB.LIB       ; TOS library
 
 ;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
