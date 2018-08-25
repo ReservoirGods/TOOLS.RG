@@ -139,10 +139,6 @@ void	ParseLine(sProjectParser * apParser, char * apLine)
 						U32 i;
 						apParser->mpExecutable = apLine;
 
-						FileBackedBuffer_StringAppend( &apParser->mLinkerScript, "-V -O=");
-						FileBackedBuffer_StringAppend( &apParser->mLinkerScript, apParser->mPathPRJ);
-						FileBackedBuffer_StringAppend( &apParser->mLinkerScript, apParser->mpExecutable);
-
 						String_StrCpy( lOut, apParser->mPathPRJ );
 						String_StrCpy( &lOut[ apParser->mPathPRJLen ], apParser->mpExecutable );
 						for( i=0; lOut[i]; i++ );
@@ -155,6 +151,11 @@ void	ParseLine(sProjectParser * apParser, char * apLine)
 						apParser->mObjectCount=0;
 
 						FileBackedBuffer_Init( &apParser->mLinkerScript, lOut );
+
+						FileBackedBuffer_StringAppend( &apParser->mLinkerScript, "-V -O=");
+						String_StrCpy( lOut, apParser->mPathPRJ );
+						String_StrCpy( &lOut[ apParser->mPathPRJLen ], apParser->mpExecutable );
+						FileBackedBuffer_StringAppend( &apParser->mLinkerScript, lOut);
 
 						FileBackedBuffer_Append( &apParser->mLinkerScript, 13 );
 						FileBackedBuffer_Append( &apParser->mLinkerScript, 10 );
