@@ -21,7 +21,7 @@ typedef struct sFileBackedBuffer
 	S32		mFileHandle;
 	U16		mOpenFlag;
 	U16		mOffset;
-	char	mBuffer[ 512 ];
+	char	mBuffer[ 1024 ];
 }sFileBackedBuffer;
 
 typedef struct sProjectParser
@@ -78,9 +78,9 @@ void	FileBackedBuffer_DeInit( sFileBackedBuffer * apBuffer )
 
 void	FileBackedBuffer_Append( sFileBackedBuffer * apBuffer, char aChar )
 {
-	if( apBuffer->mOffset >= 512 )
+	if( apBuffer->mOffset >= 1024 )
 	{
-		apBuffer->mOffset=512;
+		apBuffer->mOffset=1024;
 		FileBackedBuffer_Write(apBuffer);
 		apBuffer->mOffset=0;
 	}
@@ -112,8 +112,8 @@ void	DebugLog_Update( sProjectParser * apParser )
 	apParser->mDebugLog.mOffset = Bios_GetPipeOffset();
 	if( apParser->mDebugLog.mOffset && apParser->mDebugLog.mOpenFlag )
 	{
-		if( apParser->mDebugLog.mOffset > 512 )
-			apParser->mDebugLog.mOffset = 512;
+		if( apParser->mDebugLog.mOffset > 1024 )
+			apParser->mDebugLog.mOffset = 1024;
 		FileBackedBuffer_Write( &apParser->mDebugLog );
 		Bios_ClearPipeOffset();
 	}
@@ -442,7 +442,7 @@ void	ProcessPBT( sProjectParser * apParser, const char * apFileName )
 						for( i++; i<lOffset && (' '==lpText[i] || '\t' ==lpText[i]); i++);
 						String_StrCpy( &apParser->mPathPRJ[ apParser->mPathPRJLen ], &lpText[i] );
 						FileBackedBuffer_Init( &apParser->mDebugLog, &apParser->mPathPRJ[0] );
-						Bios_PipeConsole( &apParser->mDebugLog.mBuffer[0], 512 );
+						Bios_PipeConsole( &apParser->mDebugLog.mBuffer[0], sizeof(apParser->mDebugLog.mBuffer) );
 					}
 
 				}
