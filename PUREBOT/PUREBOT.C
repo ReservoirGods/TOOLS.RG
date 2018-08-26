@@ -12,6 +12,7 @@
 #include <GODLIB\BIOS\BIOS.H>
 #include <GODLIB\DRIVE\DRIVE.H>
 #include <GODLIB\FILE\FILE.H>
+#include <GODLIB\GEMDOS\GEMDOS.H>
 #include <GODLIB\MEMORY\MEMORY.H>
 #include <GODLIB\PROGRAM\PROGRAM.H>
 #include <GODLIB\STRING\STRING.H>
@@ -34,6 +35,8 @@ typedef struct sProjectParser
 	char *			mpPRJ;
 	U32				mSize;
 	U32				mObjectCount;
+	U32				mObjectDateTimeNewest;
+	U16				mObjectBuiltCount;
 	U16				mPathPRJLen;
 	U16				mAssemblerOptionsLen;
 	U16				mCompilerOptionsLen;
@@ -48,6 +51,8 @@ typedef struct sProjectParser
 	sFileBackedBuffer	mDebugLog;
 } sProjectParser;
 
+sGemDosDTA	gDTA;
+sGemDosDTA	* gpOldDTA = 0;
 
 
 void	FileBackedBuffer_Init( sFileBackedBuffer * apBuffer, const char * apFileName )
@@ -119,6 +124,18 @@ void	DebugLog_Update( sProjectParser * apParser )
 	}
 }
 
+void	ShowDTA( sGemDosDTA * apDTA )
+{
+	U16 lYear;
+	U16	lMonth;
+	U16 lDay;
+
+	lYear = (apDTA->mDate >> 9) + 1980;
+	lMonth = ( (apDTA->mDate >> 5) & 15);
+	lDay = (apDTA->mDate & 31);
+	printf( "%s %d-%d-%d\n", apDTA->mFileName, lYear, lMonth, lDay );
+}
+
 void	ParseLine(sProjectParser * apParser, char * apLine)
 {
 	if(';' != *apLine && *apLine)
@@ -183,7 +200,7 @@ void	ParseLine(sProjectParser * apParser, char * apLine)
 			else
 			{
 				char lCmdLine[ 256 ];
-				const char * lpFile=apLine;
+				char * lpFile=apLine;
 				char * lpOpts = 0;
 
 				U32 lOff=0;
@@ -211,56 +228,101 @@ void	ParseLine(sProjectParser * apParser, char * apLine)
 					}
 				}
 
-
+				lpFile = apLine;
 				if( !File_Exists(apLine))
 				{
 					lpFile=&apParser->mPathPRJ[0];
 					String_StrCpy( &apParser->mPathPRJ[ apParser->mPathPRJLen ], apLine );
+					for(;' '!=lpFile[lOff]&&'\t'!=lpFile[lOff]&&0!=lpFile[lOff];lOff++);
+					while(lOff>0 && '.'!=lpFile[lOff-1])lOff--;
 					if( !File_Exists(lpFile))
 					{
 						printf("ERROR: Can't find file %s\n",apLine);
 					}
 				}
 
-
-				if( 'C' == apLine[lOff] || 'c'==apLine[lOff])
+				if( lpFile[lOff] == 'C' || lpFile[lOff] == 'c' || lpFile[lOff] == 'S' || lpFile[lOff] == 's')
 				{
-					sBasePage * lpH = 0;
-					sprintf( &lCmdLine[0], "%s%s", &apParser->mCompilerOptions[0], lpFile);
-					printf( "PCC.TTP %s\n",&lCmdLine[0]);
-					lpH = Program_Load("PCC.TTP");
-					Program_Execute(lpH,lCmdLine);
-					Program_UnLoad(lpH);
-
-				}
-				else if( 'S' == apLine[lOff] || 's'==apLine[lOff])
-				{
-					sBasePage * lpH = 0;
-					sprintf( &lCmdLine[0], "%s%s", &apParser->mAssemblerOptions[0], lpFile);
-					lpH = Program_Load("PASM.TTP");
-					printf( "PASM.TTP %s\n",&lCmdLine[0]);
-					Program_Execute(lpH,lCmdLine);
-					Program_UnLoad(lpH);
-				}
-	
-				DebugLog_Update( apParser );
-
-				{
-					U16 k;
-					for( lOff=0; lpFile[lOff]; lOff++);
-					for( ;lOff && '.'!=lpFile[lOff-1];lOff--);
-					for( k=0; k<lOff; FileBackedBuffer_Append( &apParser->mLinkerScript, lpFile[ k++ ] ) );
-					if( lpFile[lOff] == 'C' || lpFile[lOff] == 'c' || lpFile[lOff] == 'S' || lpFile[lOff] == 's')
+					if( 0 == GemDos_Fsfirst( lpFile, dGEMDOS_FA_READONLY | dGEMDOS_FA_ARCHIVE ) )
 					{
-						FileBackedBuffer_Append( &apParser->mLinkerScript, 'O' );
+						U32 lSrcDateTime;
+						U16 lBuildFlag = 1;
+						char lOld[2];
+
+						lSrcDateTime = gDTA.mDate;
+						lSrcDateTime <<= 16;
+						lSrcDateTime |= gDTA.mTime;
+
+						lOld[0]=lpFile[lOff];
+						lOld[1]=lpFile[lOff+1];
+
+						lpFile[lOff+0]='O';
+						lpFile[lOff+1]=0;
+						FileBackedBuffer_StringAppend( &apParser->mLinkerScript, lpFile );
+
+						/*printf( "%d - %d -%s\n", gDTA.mDate, gDTA.mTime, gDTA.mFileName);*/
+						if( 0 == GemDos_Fsfirst( lpFile, dGEMDOS_FA_READONLY | dGEMDOS_FA_ARCHIVE ) )
+						{
+							U32 lObjDateTime;
+							lObjDateTime = gDTA.mDate;
+							lObjDateTime <<= 16;
+							lObjDateTime |= gDTA.mTime;
+
+							if( lObjDateTime > apParser->mObjectDateTimeNewest )
+								apParser->mObjectDateTimeNewest = lObjDateTime;
+
+							lBuildFlag = 0;
+							/*printf( "%d - %d -%s\n", gDTA.mDate, gDTA.mTime, gDTA.mFileName);*/
+							if( lSrcDateTime >= lObjDateTime )
+							{
+								printf( "newer so building\n");
+								lBuildFlag = 1;
+							}
+						}
+
+						lpFile[lOff+0] = lOld[0];
+						lpFile[lOff+1] = lOld[1];
+
+						if( lBuildFlag )
+						{
+							apParser->mObjectBuiltCount++;
+
+							if( 'C' == lpFile[lOff] || 'c'==lpFile[lOff])
+							{
+								sBasePage * lpH = 0;
+								sprintf( &lCmdLine[0], "%s%s", &apParser->mCompilerOptions[0], lpFile);
+								printf( "PCC.TTP %s\n",&lCmdLine[0]);
+								lpH = Program_Load("PCC.TTP");
+								Program_Execute(lpH,lCmdLine);
+								Program_UnLoad(lpH);
+
+							}
+							else if( 'S' == lpFile[lOff] || 's'==lpFile[lOff])
+							{
+								sBasePage * lpH = 0;
+								sprintf( &lCmdLine[0], "%s%s", &apParser->mAssemblerOptions[0], lpFile);
+								lpH = Program_Load("PASM.TTP");
+								printf( "PASM.TTP %s\n",&lCmdLine[0]);
+								Program_Execute(lpH,lCmdLine);
+								Program_UnLoad(lpH);
+							}
+						}
 					}
 					else
 					{
-						for( ; lpFile[k]; FileBackedBuffer_Append( &apParser->mLinkerScript, lpFile[k++] ) );
+						printf( "File not found: %s\n", lpFile );
 					}
-					FileBackedBuffer_Append( &apParser->mLinkerScript, 13 );
-					FileBackedBuffer_Append( &apParser->mLinkerScript, 10 );
+
 				}
+				else
+				{
+					FileBackedBuffer_StringAppend( &apParser->mLinkerScript, lpFile);
+				}
+
+				FileBackedBuffer_Append( &apParser->mLinkerScript, 13 );
+				FileBackedBuffer_Append( &apParser->mLinkerScript, 10 );
+	
+				DebugLog_Update( apParser );
 
 				apParser->mAssemblerOptions[apParser->mAssemblerOptionsLen]=0;
 				apParser->mCompilerOptions[apParser->mCompilerOptionsLen]=0;
@@ -325,22 +387,48 @@ void	Link( sProjectParser * apParser )
 	char lOut[ 256 ];
 	U32 i;
 	sBasePage * lpPage;
-
+	U16 lLinkFlag = 0;
 
 	sprintf( lOut, "-V -c=%s%s", apParser->mPathPRJ, apParser->mpExecutable );
-	for( i=0; lOut[i]; i++ );
-	for( ; i && '.'!=lOut[i-1]; i--);
-	lOut[i++]='P';
-	lOut[i++]='L';
-	lOut[i++]='K';
-	lOut[i++]=0;
+	if( apParser->mObjectBuiltCount || GemDos_Fsfirst( &lOut[6], dGEMDOS_FA_READONLY | dGEMDOS_FA_ARCHIVE ) )
+	{
+		lLinkFlag = 1;
+	}
+	else
+	{
+		U32 lExeDateTime;
 
-	lpPage = Program_Load("PLINK.TTP");
-	printf( "PLINK.TTP %s\n",&lOut[0]);
-	Program_Execute(lpPage,lOut);
-	Program_UnLoad(lpPage);
+		lLinkFlag = 0;
+		lExeDateTime = gDTA.mDate;
+		lExeDateTime <<= 16;
+		lExeDateTime |= gDTA.mTime;
+
+		if( lExeDateTime < apParser->mObjectDateTimeNewest )
+		{
+			printf( "objs %lx newer than exe %lx so linking\n", apParser->mObjectDateTimeNewest, lExeDateTime);
+			lLinkFlag = 1;
+		}
+	}
+	if( lLinkFlag )
+	{
+
+		for( i=0; lOut[i]; i++ );
+		for( ; i && '.'!=lOut[i-1]; i--);
+		lOut[i++]='P';
+		lOut[i++]='L';
+		lOut[i++]='K';
+		lOut[i++]=0;
+
+		lpPage = Program_Load("PLINK.TTP");
+		printf( "PLINK.TTP %s\n",&lOut[0]);
+		Program_Execute(lpPage,lOut);
+		Program_UnLoad(lpPage);
+	}
+	else
+	{
+		printf( "Up to date, no linking.\n");
+	}
 	DebugLog_Update( apParser );
-
 }
 
 
@@ -357,6 +445,9 @@ void	ProcessPRJ(sProjectParser * apParser, const char * apFileName )
 
 	apParser->mpFileName = apFileName;
 	apParser->mpExecutable=0;
+
+	apParser->mObjectBuiltCount = 0;
+	apParser->mObjectDateTimeNewest = 0;
 
 	String_StrCpy( &apParser->mCompilerOptions[0], "-I" );
 	String_StrCat( &apParser->mCompilerOptions[0], &apParser->mCompilerOptions[0], "INCLUDE " );
@@ -494,6 +585,8 @@ int main( int argc, char **argv)
 	if( argc > 1 )
 	{
 		sProjectParser	lParser;
+		gpOldDTA = GemDos_Fgetdta();
+		GemDos_Fsetdta(&gDTA);
 		Memory_Clear( sizeof(sProjectParser), &lParser );
 		lParser.mPathPRJ[0]=Drive_GetDrive() + 'A';
 		lParser.mPathPRJ[1]=':';
@@ -503,6 +596,7 @@ int main( int argc, char **argv)
 			lParser.mPathPRJ[ lParser.mPathPRJLen++ ]= '\\';
 		ProcessPBT( &lParser, argv[1]);
 		Drive_SetPath( &lParser.mPathPRJ[0]);
+		GemDos_Fsetdta(gpOldDTA);
 	}
 	else
 	{
