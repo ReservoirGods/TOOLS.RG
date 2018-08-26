@@ -46,6 +46,7 @@
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
+				StructMemberAlignment="1"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
 				DebugInformationFormat="4"
@@ -172,6 +173,18 @@
 			Name="CODE"
 			>
 			<File
+				RelativePath=".\PASM_GP.C"
+				>
+			</File>
+			<File
+				RelativePath=".\PCC_GP.C"
+				>
+			</File>
+			<File
+				RelativePath=".\PLINK_GP.C"
+				>
+			</File>
+			<File
 				RelativePath=".\PUREBOT.C"
 				>
 			</File>
@@ -180,6 +193,10 @@
 				>
 			</File>
 		</Filter>
+		<File
+			RelativePath="..\..\GODLIB\GODLIB.MAK"
+			>
+		</File>
 	</Files>
 	<Globals>
 	</Globals>

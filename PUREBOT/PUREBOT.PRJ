@@ -1,4 +1,13 @@
 ;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+;	PUREBOT - PUREC TOOLCHAIN
+;
+;	Expected folder structure:
+;		GODLIB
+;		TOOLS.RG
+;		GODLIB.SPL\COOKIJAR\COOKIJAR.PRJ
+;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 ;	OUTPUT FILENAME
 ;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
@@ -8,8 +17,8 @@ PUREBOT.TTP
 ;	OPTIONS
 ;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
-.C [ -8 -G -M -P -W-par -IINCLUDE ]
-.L [ -F -G ]
+.C [ -8 -G -M -P -W-par -I..\..\TOOLS.RG\PURE_C\INCLUDE -I..\.. ]
+.L [ -F -G -S=8192 ]
 .S [ -1 -2 -8 -S -Y ]
 
 =
@@ -18,28 +27,37 @@ PUREBOT.TTP
 ;	STARTUP MODULE
 ;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
-LIB\PCSTART.O
+..\..\TOOLS.RG\PURE_C\LIB\PCSTART.O
 
 ;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 ;	GODLIB LIBRARY MODULES (C)
 ;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
-INCLUDE\GODLIB\BASE\BASE.C
-INCLUDE\GODLIB\DRIVE\DRIVE.C
-INCLUDE\GODLIB\GEMDOS\GEMDOS.C
-INCLUDE\GODLIB\FILE\FILE.C
-INCLUDE\GODLIB\MEMORY\MEMORY.C
-INCLUDE\GODLIB\PROGRAM\PROGRAM.C
-INCLUDE\GODLIB\STRING\STRING.C
+..\..\GODLIB\BASE\BASE.C
+..\..\GODLIB\DRIVE\DRIVE.C
+..\..\GODLIB\GEMDOS\GEMDOS.C
+..\..\GODLIB\FILE\FILE.C
+..\..\GODLIB\MEMORY\MEMORY.C
+..\..\GODLIB\PROGRAM\PROGRAM.C
+..\..\GODLIB\STRING\STRING.C
 
 ;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 ;	GODLIB LIBRARY MODULES (ASM)
 ;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
-INCLUDE\GODLIB\BIOS\BIOS_S.S
-INCLUDE\GODLIB\GEMDOS\GEMDOS_S.S
-INCLUDE\GODLIB\MEMORY\MEMORY_S.S
-INCLUDE\GODLIB\PROGRAM\PROG_S.S
+..\..\GODLIB\BIOS\BIOS_S.S
+..\..\GODLIB\GEMDOS\GEMDOS_S.S
+..\..\GODLIB\MEMORY\MEMORY_S.S
+..\..\GODLIB\PROGRAM\PROG_S.S
+
+;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+;	EMBEDDED PROGRAM SUPPORT
+;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+..\..\GODLIB\PACKER\GODPACK.C
+..\..\GODLIB\PACKER\LZ77_S.S
+..\..\GODLIB\PACKER\LZ77B_S.S
+..\..\GODLIB\PACKER\RLE_S.S
 
 ;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 ;	MAIN CODE
@@ -47,10 +65,14 @@ INCLUDE\GODLIB\PROGRAM\PROG_S.S
 
 PUREBOT.C
 
+PASM_GP.O
+PCC_GP.O
+PLINK_GP.O
+
 ;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 ;	PURE C LIBRARIES
 ;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
-LIB\PCSTDLIB.LIB       ; standard library
+..\..\TOOLS.RG\PURE_C\LIB\PCSTDLIB.LIB       ; standard library
 
 ;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
