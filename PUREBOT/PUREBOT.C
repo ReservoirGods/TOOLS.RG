@@ -448,7 +448,7 @@ void	ParseLine(sProjectParser * apParser, char * apLine)
 							lpFile[lOff+0] = lOld[0];
 							lpFile[lOff+1] = lOld[1];
 
-							lBuildFlag=1;
+/*							lBuildFlag=1;*/
 							if( lBuildFlag )
 							{
 								apParser->mObjectBuiltCount++;
