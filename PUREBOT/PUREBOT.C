@@ -1,17 +1,9 @@
-/* TODO: optional verbosity
- get PRJ from command line
- process multiple PRJs
- intercept bios and output text to debug log
-
- parses PBT file
- .PRJ
-
-;:
-
+/* 
 Special character ;: is extension point for PRJ format
 
 ;:-A=<pure_c dir>
 ;:-B=<log_output>
+;:-K=Continuous Building mode
 ;:-V
 
 */
@@ -28,9 +20,9 @@ Special character ;: is extension point for PRJ format
 #define dEMBEDDED_PUREC
 
 #ifdef dEMBEDDED_PUREC
-extern unsigned char PASM_Array[ 44572 ];
-extern unsigned char PCC_Array[ 80521 ];
-extern unsigned char PLINK_Array[ 16915 ];
+extern unsigned char PASM_Array[];
+extern unsigned char PCC_Array[];
+extern unsigned char PLINK_Array[];
 
 typedef struct sEmbeddedProgram
 {
@@ -99,6 +91,8 @@ typedef struct sProjectParser
 	U16							mLinkerOptionsLen;
 	U8							mGather;
 	U8							mVerboseFlag;
+	U8							mContinuousBuildFlag;
+	U8							mPadFlag;
 	char						mPathPRJ[512];
 	char						mAssemblerOptions[128];
 	char						mCompilerOptions[128];
@@ -367,6 +361,14 @@ void	ParseLine(sProjectParser * apParser, char * apLine)
 				FileBackedBuffer_Init( &apParser->mDebugLog, &apParser->mPathPRJ[0] );
 				Bios_PipeConsole( &apParser->mDebugLog.mBuffer[0], sizeof(apParser->mDebugLog.mBuffer) );
 			}
+			else if( 'K'==apLine[lOff])
+			{
+				/* only allow continuous build if no parents are currently continuously building */
+				sProjectParser * lpP = apParser->mpParent;
+				for( ; lpP && !lpP->mContinuousBuildFlag; lpP=lpP->mpParent );
+				if( !lpP )
+					apParser->mContinuousBuildFlag=1;
+			}
 			else if( 'V'==apLine[lOff])
 			{
 				apParser->mVerboseFlag=1;
@@ -623,7 +625,6 @@ void	Link( sProjectParser * apParser )
 
 	if( !apParser->mpExecutable )
 	{
-		printf( "Error: no linker output file found\n");
 		return;
 	}
 
@@ -684,178 +685,76 @@ void	ProcessPRJ(sProjectParser * apParser, const char * apFileName )
 	char lPath[ 512 ];
 	char lOld;
 	sProjectParser	lParser;
-	Memory_Clear( sizeof(sProjectParser), &lParser );
-	lParser.mpParent = apParser;
 
 	printf( "Process: %s\n",apFileName);
 
 	Drive_GetPath( 0, lPath );
 
-	if( ':' == apFileName[1])
+	do
 	{
-		String_StrCpy( lParser.mPathPRJ, apFileName );
-	}
-	else
-	{
-		String_StrCpy( lParser.mPathPRJ, apParser->mPathPRJ );
-		String_StrCpy( &lParser.mPathPRJ[ apParser->mPathPRJLen ], apFileName );
-	}
-
-	lParser.mPathPRJLen = String_StrLen( lParser.mPathPRJ );
-	for(; (lParser.mPathPRJLen) > 0 && ('\\' != lParser.mPathPRJ[ lParser.mPathPRJLen-1 ]) && ('/' != lParser.mPathPRJ[ lParser.mPathPRJLen-1 ]) ;lParser.mPathPRJLen-- );
-
-	lOld = lParser.mPathPRJ[ lParser.mPathPRJLen ];
-	lParser.mPathPRJ[ lParser.mPathPRJLen ] = 0;
-	Drive_SetPath( lParser.mPathPRJ);
-	lParser.mPathPRJ[ lParser.mPathPRJLen ] = lOld;
-
-	lParser.mAssemblerOptionsLen=0;
-	lParser.mCompilerOptionsLen=0;
-	lParser.mLinkerOptionsLen=0;
-
-	lParser.mpFileName = apFileName;
-	lParser.mpExecutable=0;
-
-	lParser.mObjectBuiltCount = 0;
-	lParser.mObjectDateTimeNewest = 0;
-
-	lParser.mCompilerOptionsLen=(U16)String_StrLen(&lParser.mCompilerOptions[0]);
-
-	lpFileName = &lParser.mPathPRJ[ lParser.mPathPRJLen ];
-	if( File_Exists(lpFileName))
-	{
-		lParser.mSize = File_GetSize(lpFileName);
-		lParser.mpPRJ = mMEMALLOC( lParser.mSize +1);
-		if( lParser.mpPRJ )
+		Memory_Clear( sizeof(sProjectParser), &lParser );
+		lParser.mpParent = apParser;
+		if( ':' == apFileName[1])
 		{
-/*			char lOut[ 256 ];
-			char * lpExt;*/
-			File_LoadAt(lpFileName,lParser.mpPRJ);
-			lParser.mpPRJ[lParser.mSize]=0;
-/*
-			String_StrCpy( lOut, lpFileName );
-			lpExt = FileName_GetpExt(lOut);
-			String_StrCpy( lpExt, ".PLK");
-
-			FileBackedBuffer_Init( &lParser.mLinkerScript, lOut );*/
-			ParsePRJ(&lParser);
-			FileBackedBuffer_DeInit( &lParser.mLinkerScript );
-			Link(&lParser);
-
-			mMEMFREE(lParser.mpPRJ);
+			String_StrCpy( lParser.mPathPRJ, apFileName );
 		}
-	}
-	else
-	{
-		printf( "error\n");
-		printf( "file %s does not exist", apFileName);
-	}
-	DebugLog_Complete( &lParser );
-	if( apParser && apParser->mDebugLog.mOpenFlag )
-	{
-		Bios_PipeConsole( &apParser->mDebugLog.mBuffer[0], sizeof(apParser->mDebugLog.mBuffer) );
-	}
+		else
+		{
+			String_StrCpy( lParser.mPathPRJ, apParser->mPathPRJ );
+			String_StrCpy( &lParser.mPathPRJ[ apParser->mPathPRJLen ], apFileName );
+		}
+
+		lParser.mPathPRJLen = String_StrLen( lParser.mPathPRJ );
+		for(; (lParser.mPathPRJLen) > 0 && ('\\' != lParser.mPathPRJ[ lParser.mPathPRJLen-1 ]) && ('/' != lParser.mPathPRJ[ lParser.mPathPRJLen-1 ]) ;lParser.mPathPRJLen-- );
+
+		lOld = lParser.mPathPRJ[ lParser.mPathPRJLen ];
+		lParser.mPathPRJ[ lParser.mPathPRJLen ] = 0;
+		Drive_SetPath( lParser.mPathPRJ);
+		lParser.mPathPRJ[ lParser.mPathPRJLen ] = lOld;
+
+		lParser.mAssemblerOptionsLen=0;
+		lParser.mCompilerOptionsLen=0;
+		lParser.mLinkerOptionsLen=0;
+
+		lParser.mpFileName = apFileName;
+		lParser.mpExecutable=0;
+
+		lParser.mObjectBuiltCount = 0;
+		lParser.mObjectDateTimeNewest = 0;
+
+		lParser.mCompilerOptionsLen=(U16)String_StrLen(&lParser.mCompilerOptions[0]);
+
+		lpFileName = &lParser.mPathPRJ[ lParser.mPathPRJLen ];
+		if( File_Exists(lpFileName))
+		{
+			lParser.mSize = File_GetSize(lpFileName);
+			lParser.mpPRJ = mMEMALLOC( lParser.mSize +1);
+			if( lParser.mpPRJ )
+			{
+				File_LoadAt(lpFileName,lParser.mpPRJ);
+				lParser.mpPRJ[lParser.mSize]=0;
+				ParsePRJ(&lParser);
+				FileBackedBuffer_DeInit( &lParser.mLinkerScript );
+				Link(&lParser);
+
+				mMEMFREE(lParser.mpPRJ);
+			}
+		}
+		else
+		{
+			printf( "error\n");
+			printf( "file %s does not exist", apFileName);
+		}
+		DebugLog_Complete( &lParser );
+		if( apParser && apParser->mDebugLog.mOpenFlag )
+		{
+			Bios_PipeConsole( &apParser->mDebugLog.mBuffer[0], sizeof(apParser->mDebugLog.mBuffer) );
+		}
+	} while( lParser.mContinuousBuildFlag );
 
 	Drive_SetPath(lPath);
 }
 
-void	ProcessPBT( sProjectParser * apParser, const char * apFileName )
-{
-	U32 lSize = File_GetSize(apFileName);
-	U32 lOffset = 0;
-	char * lpText;
-
-
-	lpText = mMEMCALLOC( lSize+1 );
-	File_LoadAt(apFileName,lpText);
-	while( lOffset<lSize)
-	{
-		U32 lLineStart = 0;
-		U32 lLineLen = 0;
-
-		/* skip whitespace at start of line */
-		for(;lOffset<lSize && (13==lpText[lOffset]||10==lpText[lOffset]||' '==lpText[lOffset]||'\t'==lpText[lOffset]||0==lpText[lOffset]);lOffset++);
-		lLineStart = lOffset;
-		for(;13!=lpText[lOffset] && 10 !=lpText[lOffset] && lpText[lOffset] && lOffset<lSize;lOffset++);
-		for(;(lOffset>0)&&(' '==lpText[lOffset-1]||'\t'==lpText[lOffset-1]);lpText[--lOffset]=0);
-		if( lOffset<=lSize)
-		{
-			lpText[lOffset++]=0;
-		}
-		else
-		{
-
-			printf("end");
-		}
-
-		lLineLen = lOffset-lLineStart;
-		if( (lLineLen > 1) && ';' !=lpText[lLineStart] )
-		{
-			if( lLineLen > 3 && ('-'==lpText[lLineStart] && '='==lpText[lLineStart+2]) )
-			{
-				U32 i=0;
-				if( 'A' == lpText[lLineStart+1])
-				{
-					for( i=lLineStart+2; i<lOffset && '='!=lpText[i]; i++ );
-					if( '=' == lpText[i])
-					{
-						for( i++; i<lOffset && (' '==lpText[i] || '\t' ==lpText[i]); i++);
-						apParser->mpPureC = &lpText[i];
-#ifndef dEMBEDDED_PUREC
-						Drive_SetPath( &lpText[i] );
-#endif
-					}
-				}
-				else if( 'B' == lpText[lLineStart+1])
-				{
-					if( apParser->mDebugLog.mOpenFlag ) 
-					{
-						FileBackedBuffer_DeInit( &apParser->mDebugLog );
-						Bios_UnPipeConsole();
-					}
-					for( i=lLineStart+2; i<lOffset && '='!=lpText[i]; i++ );
-					if( '=' == lpText[i])
-					{
-						for( i++; i<lOffset && (' '==lpText[i] || '\t' ==lpText[i]); i++);
-						String_StrCpy( &apParser->mPathPRJ[ apParser->mPathPRJLen ], &lpText[i] );
-						FileBackedBuffer_Init( &apParser->mDebugLog, &apParser->mPathPRJ[0] );
-						Bios_PipeConsole( &apParser->mDebugLog.mBuffer[0], sizeof(apParser->mDebugLog.mBuffer) );
-					}
-
-				}
-				else
-				{
-					printf( "Warning: unknown option %s\n", &lpText[lLineStart]);
-				}
-			}
-			else
-			{
-				U32 i;
-				U32 lOldLen = apParser->mPathPRJLen;
-				
-				for( i=lLineStart; i<=lOffset; apParser->mPathPRJ[ (i-lLineStart) + apParser->mPathPRJLen ] = lpText[ i ],i++);
-				
-				for( i=apParser->mPathPRJLen; apParser->mPathPRJ[i]; i++);
-				for( ;i>0 && '\\' != apParser->mPathPRJ[ i-1] && '/' != apParser->mPathPRJ[i-1]; i-- );
-				apParser->mPathPRJLen=i;
-
-				ProcessPRJ( apParser, apParser->mPathPRJ);
-
-				apParser->mPathPRJLen =lOldLen;
-			}
-		}
-
-	}
-
-	if( apParser->mDebugLog.mOpenFlag ) 
-	{
-		FileBackedBuffer_DeInit( &apParser->mDebugLog );
-		Bios_UnPipeConsole();
-	}
-
-	mMEMFREE(lpText);
-
-}
 
 int		main( int argc, char **argv)
 {
@@ -871,7 +770,6 @@ int		main( int argc, char **argv)
 		for(lParser.mPathPRJLen=0; lParser.mPathPRJ[ lParser.mPathPRJLen ]; lParser.mPathPRJLen++ );
 		if( lParser.mPathPRJLen && '\\' != lParser.mPathPRJ[ lParser.mPathPRJLen-1])
 			lParser.mPathPRJ[ lParser.mPathPRJLen++ ]= '\\';
-/*		ProcessPBT( &lParser, argv[1]);*/
 		ProcessPRJ( &lParser, argv[1]);
 		Drive_SetPath( &lParser.mPathPRJ[0]);
 		GemDos_Fsetdta(gpOldDTA);
@@ -884,28 +782,8 @@ int		main( int argc, char **argv)
 	}
 
 
-#if 0
-	Drive_GetPath( 0, &lPath[0]);
-
-#if defined(dGODLIB_PLATFORM_WIN)
-	Drive_SetPath("C:\\ATARI_HD\\TOOLS\\CODE\\PURE_C");
-	lpH = Program_Load("PCC.TTP");
-	/*Program_Execute( lpH, "hello world");*/
-
-	ProcessPRJ(&lParser,"C:\\ATARI_HD\\SOURCE\\GITHUB\\GODLIB.SPL\\BOX\\BOX.PRJ");
-
-
-#else
-	Drive_SetPath("C:\\HD\\TOOLS\\CODE\\PURE_C");
-	/* lpH = Program_Load("PCC.TTP");
-	Program_Execute( lpH, "-V -IINCLUDE INCLUDE\\GODLIB\\AUDIO\\AUDIO.C"); */
-
-	ProcessPRJ(&lParser,"C:\\HD\\SOURCE\\GITHUB\\GODLIB.SPL\\BOX\\BOX.PRJ");
-#endif
-	Drive_SetPath( &lPath[0]);
-
-#endif
 	printf( "\nDone.");
 	GemDos_Cnecin();
+
 	return( 0 );
 }
