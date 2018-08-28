@@ -113,6 +113,14 @@ sGemDosDTA	* gpOldDTA = 0;
 
 void	ProcessPRJ(sProjectParser * apParser, const char * apFileName );
 
+char *	FileName_GetpExt( char * apFileName )
+{
+	U16 lLen = String_StrLen(apFileName);
+	while( lLen > 0 && '.' != apFileName[ lLen-1] )
+		lLen--;
+	return( lLen ? &apFileName[ lLen-1 ] : 0 );
+}
+
 void	FileBackedBuffer_Init( sFileBackedBuffer * apBuffer, const char * apFileName )
 {
 	apBuffer->mFileHandle = File_Create( apFileName);
@@ -380,24 +388,20 @@ void	ParseLine(sProjectParser * apParser, char * apLine)
 				{
 					if( !apParser->mpExecutable && *apLine )
 					{
+						char * lpExt;
 						char lOut[256];
-						U32 i;
-
+	
 						String_StrCpy( lOut, apParser->mPathPRJ );
 						String_StrCpy( &lOut[ apParser->mPathPRJLen ], apLine );
-						for( i=0; lOut[i]; i++ );
-						for( ; i && '.'!=lOut[i-1]; i--);
-						if( !String_StrCmpi(&lOut[i],"PRJ"))
+						lpExt = FileName_GetpExt(lOut);
+						if( !String_StrCmpi(lpExt,".PRJ"))
 						{
 							ProcessPRJ( apParser, apLine );
 						}
 						else
 						{
 							apParser->mpExecutable = apLine;
-							lOut[i++]='P';
-							lOut[i++]='L';
-							lOut[i++]='K';
-							lOut[i++]=0;
+							String_StrCpy(lpExt,".PLK");
 
 							apParser->mObjectCount=0;
 
@@ -687,8 +691,15 @@ void	ProcessPRJ(sProjectParser * apParser, const char * apFileName )
 
 	Drive_GetPath( 0, lPath );
 
-	String_StrCpy( lParser.mPathPRJ, apParser->mPathPRJ );
-	String_StrCpy( &lParser.mPathPRJ[ apParser->mPathPRJLen ], apFileName );
+	if( ':' == apFileName[1])
+	{
+		String_StrCpy( lParser.mPathPRJ, apFileName );
+	}
+	else
+	{
+		String_StrCpy( lParser.mPathPRJ, apParser->mPathPRJ );
+		String_StrCpy( &lParser.mPathPRJ[ apParser->mPathPRJLen ], apFileName );
+	}
 
 	lParser.mPathPRJLen = String_StrLen( lParser.mPathPRJ );
 	for(; (lParser.mPathPRJLen) > 0 && ('\\' != lParser.mPathPRJ[ lParser.mPathPRJLen-1 ]) && ('/' != lParser.mPathPRJ[ lParser.mPathPRJLen-1 ]) ;lParser.mPathPRJLen-- );
@@ -717,11 +728,16 @@ void	ProcessPRJ(sProjectParser * apParser, const char * apFileName )
 		lParser.mpPRJ = mMEMALLOC( lParser.mSize +1);
 		if( lParser.mpPRJ )
 		{
-			char lOut[ 256 ];
+/*			char lOut[ 256 ];
+			char * lpExt;*/
 			File_LoadAt(lpFileName,lParser.mpPRJ);
 			lParser.mpPRJ[lParser.mSize]=0;
+/*
+			String_StrCpy( lOut, lpFileName );
+			lpExt = FileName_GetpExt(lOut);
+			String_StrCpy( lpExt, ".PLK");
 
-			FileBackedBuffer_Init( &lParser.mLinkerScript, lOut );
+			FileBackedBuffer_Init( &lParser.mLinkerScript, lOut );*/
 			ParsePRJ(&lParser);
 			FileBackedBuffer_DeInit( &lParser.mLinkerScript );
 			Link(&lParser);
@@ -889,6 +905,7 @@ int		main( int argc, char **argv)
 	Drive_SetPath( &lPath[0]);
 
 #endif
-
+	printf( "\nDone.");
+	GemDos_Cnecin();
 	return( 0 );
 }
