@@ -16,6 +16,7 @@ Special character ;: is extension point for PRJ format
 #include <GODLIB\MEMORY\MEMORY.H>
 #include <GODLIB\PROGRAM\PROGRAM.H>
 #include <GODLIB\STRING\STRING.H>
+#include <GODLIB\STRING\STRPATH.H>
 
 #define dEMBEDDED_PUREC
 
@@ -70,10 +71,6 @@ typedef struct sFileBackedBuffer
 	char	mBuffer[ 1024 ];
 }sFileBackedBuffer;
 
-typedef struct sFileNameSpace
-{
-	char mChars[ 512 ];
-} sFileNameSpace;
 
 typedef struct sProjectParser
 {
@@ -93,7 +90,7 @@ typedef struct sProjectParser
 	U8							mVerboseFlag;
 	U8							mContinuousBuildFlag;
 	U8							mPadFlag;
-	char						mPathPRJ[512];
+	sStringPath					mPathPRJ;
 	char						mAssemblerOptions[128];
 	char						mCompilerOptions[128];
 	char						mLinkerOptions[128];
@@ -117,9 +114,16 @@ char *	FileName_GetpExt( char * apFileName )
 
 void	FileBackedBuffer_Init( sFileBackedBuffer * apBuffer, const char * apFileName )
 {
-	apBuffer->mFileHandle = File_Create( apFileName);
 	apBuffer->mOffset=0;
-	apBuffer->mOpenFlag=1;
+	apBuffer->mFileHandle = File_Create( apFileName);
+	if( !apBuffer->mFileHandle )
+	{
+		printf( "ERROR: couldn't open file: %s\n", apFileName);
+	}
+	else
+	{
+		apBuffer->mOpenFlag=1;
+	}
 }
 
 void	FileBackedBuffer_Write( sFileBackedBuffer * apBuffer )
@@ -160,9 +164,9 @@ void	FileBackedBuffer_StringAppend( sFileBackedBuffer * apBuffer, const char * a
 }
 
 
-int		BuildExistingFilename( sProjectParser * apParser, const char * apShortName, sFileNameSpace * apFullName )
+int		BuildExistingFilename( sProjectParser * apParser, const char * apShortName, sStringPath * apFullName )
 {
-	S16 i,j;
+	S16 i;
 	char * lpOpts = apParser->mCompilerOptions;
 #ifndef dGODLIB_PLATFORM_ATARI
 	char lPath[512];
@@ -170,28 +174,35 @@ int		BuildExistingFilename( sProjectParser * apParser, const char * apShortName,
 	printf( "curdir: %s\n",lPath);
 #endif
 
+	/* check if file exists in current directory */
+
 	String_StrCpy( apFullName->mChars, apShortName );
 	if( apParser->mVerboseFlag )
 		printf( "find: %s\n", apFullName->mChars);
 	if( File_Exists(apFullName->mChars ) ) 
 		return 1;
 
-	String_StrCpy( apFullName->mChars, apParser->mPathPRJ );
-	String_StrCpy( &apFullName->mChars[ apParser->mPathPRJLen ], apShortName );
+	/* check if file exists in PRJ directory */
+
+	StringPath_Copy( apFullName, &apParser->mPathPRJ );
+	StringPath_SetFileName( apFullName, apShortName );
 	if( apParser->mVerboseFlag )
 		printf( "find: %s\n", apFullName->mChars);
 	if( File_Exists(apFullName->mChars ) ) 
 		return 1;
 
+	/* check if file exists in PureC directory */
+
 	if( apParser->mpPureC )
 	{
-		String_StrCpy( apFullName->mChars, apParser->mpPureC );
-		String_StrAppend2( apFullName->mChars, "\\", apShortName );
+		StringPath_Combine( apFullName, apParser->mpPureC, apShortName );
 		if( apParser->mVerboseFlag )
 			printf( "find: %s\n", apFullName->mChars);
 		if( File_Exists(apFullName->mChars ) ) 
 			return 1;
 	}
+
+	/* check if file exists in CWD */
 
 	Drive_GetPath( 0, apFullName->mChars );
 	String_StrAppend2( apFullName->mChars, "\\", apShortName );
@@ -204,34 +215,35 @@ int		BuildExistingFilename( sProjectParser * apParser, const char * apShortName,
 	{
 		if( i>1 && '-' ==lpOpts[i-2] && 'I'==lpOpts[i-1])
 		{
-			String_StrCpy( apFullName->mChars, apParser->mPathPRJ );
 			do
 			{
-				S16 k=0;
-				j=0;
-				for( ;lpOpts && ' ' !=lpOpts[i] && ';'!=lpOpts[i]; apFullName->mChars[j++]=lpOpts[i++]);
-				if( j && '\\' !=apFullName->mChars[j-1])
-					apFullName->mChars[j++]='\\';
-				apFullName->mChars[j]=0;
-				String_StrAppend( apFullName->mChars, apShortName );
+				/* check if file exists in INCLUDE path */
+
+				char lOptOld;
+				const char * lpIncStart = &lpOpts[i];
+				for( ; lpOpts[i] && ' ' !=lpOpts[i] && ';' !=lpOpts[i];i++);
+				
+				lOptOld=lpOpts[i];
+				lpOpts[i]=0;
+				StringPath_Combine( apFullName, lpOpts, apShortName );
 				if( apParser->mVerboseFlag )
 					printf( "find: %s\n", apFullName->mChars);
 				if( File_Exists(apFullName->mChars))
 					return 1;
 
-				if( j )
-				{
-					j = (S16)String_StrLen( apFullName->mChars );
-					for( k=0; k<=j; k++ )
-						apFullName->mChars[ j+apParser->mPathPRJLen -k ] = apFullName->mChars[ j-k ];
-					apFullName->mChars[ apParser->mPathPRJLen+j]=0;
-					for( k=0; k<apParser->mPathPRJLen; k++ )
-						apFullName->mChars[k]=apParser->mPathPRJ[k];
-					if( apParser->mVerboseFlag )
-						printf( "find: %s\n", apFullName->mChars);
-					if( File_Exists(apFullName->mChars))
-						return 1;
-				}
+				/* check if file exists in PRJ + INCLUDE path */
+
+				StringPath_Copy( apFullName, &apParser->mPathPRJ );
+				apFullName->mChars[ apParser->mPathPRJLen ] = 0;
+				StringPath_Append( apFullName, lpOpts );
+				StringPath_Append( apFullName, apShortName );
+
+				if( apParser->mVerboseFlag )
+					printf( "find: %s\n", apFullName->mChars);
+				if( File_Exists(apFullName->mChars))
+					return 1;
+
+				lpOpts[i]=lOptOld;
 
 			} while(';'==lpOpts[i++]);
 		}
@@ -340,7 +352,7 @@ void	ShowDTA( sGemDosDTA * apDTA )
 
 void	ParseLine(sProjectParser * apParser, char * apLine)
 {
-	sFileNameSpace	lFileName;
+	sStringPath	lFileName;
 
 	/* check for our cheeky PRJ extension */
 	if( ';'== *apLine && ':' == apLine[1])
@@ -357,8 +369,9 @@ void	ParseLine(sProjectParser * apParser, char * apLine)
 					DebugLog_Complete( apParser );
 				}
 
-				String_StrCpy( &apParser->mPathPRJ[ apParser->mPathPRJLen ], &apLine[lOff+2] );
-				FileBackedBuffer_Init( &apParser->mDebugLog, &apParser->mPathPRJ[0] );
+				apParser->mPathPRJ.mChars[ apParser->mPathPRJLen ] =0;
+				StringPath_Append( &apParser->mPathPRJ, &apLine[lOff+2] );
+				FileBackedBuffer_Init( &apParser->mDebugLog, apParser->mPathPRJ.mChars );
 				Bios_PipeConsole( &apParser->mDebugLog.mBuffer[0], sizeof(apParser->mDebugLog.mBuffer) );
 			}
 			else if( 'K'==apLine[lOff])
@@ -390,29 +403,31 @@ void	ParseLine(sProjectParser * apParser, char * apLine)
 				{
 					if( !apParser->mpExecutable && *apLine )
 					{
-						char * lpExt;
-						char lOut[256];
-	
-						String_StrCpy( lOut, apParser->mPathPRJ );
-						String_StrCpy( &lOut[ apParser->mPathPRJLen ], apLine );
-						lpExt = FileName_GetpExt(lOut);
-						if( !String_StrCmpi(lpExt,".PRJ"))
+						const char * lpExt;
+
+						StringPath_Copy( &lFileName, &apParser->mPathPRJ );
+						lFileName.mChars[ apParser->mPathPRJLen]=0;
+						StringPath_Append( &lFileName, apLine );
+						lpExt = StringPath_GetpExt(&lFileName);
+						if( lpExt && !String_StrCmpi(lpExt,".PRJ"))
 						{
 							ProcessPRJ( apParser, apLine );
 						}
 						else
 						{
 							apParser->mpExecutable = apLine;
-							String_StrCpy(lpExt,".PLK");
+							StringPath_SetExt( &lFileName, ".PLK");
 
 							apParser->mObjectCount=0;
 
-							FileBackedBuffer_Init( &apParser->mLinkerScript, lOut );
+							FileBackedBuffer_Init( &apParser->mLinkerScript, lFileName.mChars );
 
 							FileBackedBuffer_StringAppend( &apParser->mLinkerScript, "-V -O=");
-							String_StrCpy( lOut, apParser->mPathPRJ );
-							String_StrCpy( &lOut[ apParser->mPathPRJLen ], apParser->mpExecutable );
-							FileBackedBuffer_StringAppend( &apParser->mLinkerScript, lOut);
+							StringPath_Copy( &lFileName, &apParser->mPathPRJ );
+							lFileName.mChars[ apParser->mPathPRJLen]=0;
+							StringPath_Append( &lFileName, apParser->mpExecutable );
+
+							FileBackedBuffer_StringAppend( &apParser->mLinkerScript, lFileName.mChars);
 
 							FileBackedBuffer_Append( &apParser->mLinkerScript, 13 );
 							FileBackedBuffer_Append( &apParser->mLinkerScript, 10 );
@@ -579,7 +594,7 @@ void	ParseLine(sProjectParser * apParser, char * apLine)
 					apParser->mAssemblerOptions[apParser->mAssemblerOptionsLen]=0;
 					apParser->mCompilerOptions[apParser->mCompilerOptionsLen]=0;
 					apParser->mLinkerOptions[apParser->mLinkerOptionsLen]=0;
-					apParser->mPathPRJ[ apParser->mPathPRJLen ] = 0;
+					apParser->mPathPRJ.mChars[ apParser->mPathPRJLen ] = 0;
 				}
 			}
 		}
@@ -628,7 +643,7 @@ void	Link( sProjectParser * apParser )
 		return;
 	}
 
-	sprintf( lOut, "-V -c=%s%s", apParser->mPathPRJ, apParser->mpExecutable );
+	sprintf( lOut, "-V -c=%s%s", apParser->mPathPRJ.mChars, apParser->mpExecutable );
 	if( apParser->mObjectBuiltCount || GemDos_Fsfirst( &lOut[6], dGEMDOS_FA_READONLY | dGEMDOS_FA_ARCHIVE ) )
 	{
 		lLinkFlag = 1;
@@ -696,21 +711,22 @@ void	ProcessPRJ(sProjectParser * apParser, const char * apFileName )
 		lParser.mpParent = apParser;
 		if( ':' == apFileName[1])
 		{
-			String_StrCpy( lParser.mPathPRJ, apFileName );
+			StringPath_Set( &lParser.mPathPRJ, apFileName );
 		}
 		else
 		{
-			String_StrCpy( lParser.mPathPRJ, apParser->mPathPRJ );
-			String_StrCpy( &lParser.mPathPRJ[ apParser->mPathPRJLen ], apFileName );
+			StringPath_Copy( &lParser.mPathPRJ, &apParser->mPathPRJ );
+			lParser.mPathPRJ.mChars[ apParser->mPathPRJLen ] = 0;
+			StringPath_Append( &lParser.mPathPRJ, apFileName );
 		}
 
-		lParser.mPathPRJLen = String_StrLen( lParser.mPathPRJ );
-		for(; (lParser.mPathPRJLen) > 0 && ('\\' != lParser.mPathPRJ[ lParser.mPathPRJLen-1 ]) && ('/' != lParser.mPathPRJ[ lParser.mPathPRJLen-1 ]) ;lParser.mPathPRJLen-- );
+		lParser.mPathPRJLen = String_StrLen( lParser.mPathPRJ.mChars );
+		for(; (lParser.mPathPRJLen) > 0 && ('\\' != lParser.mPathPRJ.mChars[ lParser.mPathPRJLen-1 ]) && ('/' != lParser.mPathPRJ.mChars[ lParser.mPathPRJLen-1 ]) ;lParser.mPathPRJLen-- );
 
-		lOld = lParser.mPathPRJ[ lParser.mPathPRJLen ];
-		lParser.mPathPRJ[ lParser.mPathPRJLen ] = 0;
-		Drive_SetPath( lParser.mPathPRJ);
-		lParser.mPathPRJ[ lParser.mPathPRJLen ] = lOld;
+		lOld = lParser.mPathPRJ.mChars[ lParser.mPathPRJLen ];
+		lParser.mPathPRJ.mChars[ lParser.mPathPRJLen ] = 0;
+		Drive_SetPath( lParser.mPathPRJ.mChars);
+		lParser.mPathPRJ.mChars[ lParser.mPathPRJLen ] = lOld;
 
 		lParser.mAssemblerOptionsLen=0;
 		lParser.mCompilerOptionsLen=0;
@@ -724,7 +740,7 @@ void	ProcessPRJ(sProjectParser * apParser, const char * apFileName )
 
 		lParser.mCompilerOptionsLen=(U16)String_StrLen(&lParser.mCompilerOptions[0]);
 
-		lpFileName = &lParser.mPathPRJ[ lParser.mPathPRJLen ];
+		lpFileName = &lParser.mPathPRJ.mChars[ lParser.mPathPRJLen ];
 		if( File_Exists(lpFileName))
 		{
 			lParser.mSize = File_GetSize(lpFileName);
@@ -764,14 +780,14 @@ int		main( int argc, char **argv)
 		gpOldDTA = GemDos_Fgetdta();
 		GemDos_Fsetdta(&gDTA);
 		Memory_Clear( sizeof(sProjectParser), &lParser );
-		lParser.mPathPRJ[0]=Drive_GetDrive() + 'A';
-		lParser.mPathPRJ[1]=':';
-		Drive_GetPath( 0, &lParser.mPathPRJ[2]);
-		for(lParser.mPathPRJLen=0; lParser.mPathPRJ[ lParser.mPathPRJLen ]; lParser.mPathPRJLen++ );
-		if( lParser.mPathPRJLen && '\\' != lParser.mPathPRJ[ lParser.mPathPRJLen-1])
-			lParser.mPathPRJ[ lParser.mPathPRJLen++ ]= '\\';
+		lParser.mPathPRJ.mChars[0]=Drive_GetDrive() + 'A';
+		lParser.mPathPRJ.mChars[1]=':';
+		Drive_GetPath( 0, &lParser.mPathPRJ.mChars[2]);
+		for(lParser.mPathPRJLen=0; lParser.mPathPRJ.mChars[ lParser.mPathPRJLen ]; lParser.mPathPRJLen++ );
+		if( lParser.mPathPRJLen && '\\' != lParser.mPathPRJ.mChars[ lParser.mPathPRJLen-1])
+			lParser.mPathPRJ.mChars[ lParser.mPathPRJLen++ ] = '\\';
 		ProcessPRJ( &lParser, argv[1]);
-		Drive_SetPath( &lParser.mPathPRJ[0]);
+		Drive_SetPath( &lParser.mPathPRJ.mChars[0]);
 		GemDos_Fsetdta(gpOldDTA);
 	}
 	else

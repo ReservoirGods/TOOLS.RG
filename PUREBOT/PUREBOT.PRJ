@@ -40,6 +40,7 @@ PUREBOT.TTP
 ..\..\GODLIB\MEMORY\MEMORY.C
 ..\..\GODLIB\PROGRAM\PROGRAM.C
 ..\..\GODLIB\STRING\STRING.C
+..\..\GODLIB\STRING\STRPATH.C
 
 ;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 ;	GODLIB LIBRARY MODULES (ASM)
