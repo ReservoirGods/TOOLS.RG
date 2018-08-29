@@ -350,6 +350,54 @@ void	ShowDTA( sGemDosDTA * apDTA )
 	printf( "%s %d-%d-%d\n", apDTA->mFileName, lYear, lMonth, lDay );
 }
 
+void	BuildOutputFileName( sProjectParser * apParser, const char * apFileName, sStringPath * apOut )
+{
+	U16 i;
+	const char * lpShortName = apFileName;
+	const char * lpExt;
+	char * lpOpts = 0;
+
+	for( i=0; apFileName[i]; i++ )
+	{
+		if( i && ('/'==apFileName[i-1] || '\\' == apFileName[i-1] ) )
+		{
+			lpShortName = &apFileName[i];
+		}
+	}
+	StringPath_Set( apOut, apFileName );
+	lpExt = StringPath_GetpExt(apOut);
+	if( lpExt )
+	{
+		if( !String_StrCmpi(lpExt, ".C") )
+		{
+			lpOpts = &apParser->mCompilerOptions[ 0 ];
+		}
+		else if( !String_StrCmpi(lpExt, ".S") )
+		{
+			lpOpts = &apParser->mAssemblerOptions[ 0 ];
+		}
+	}
+	if( lpOpts )
+	{
+		for( i=0; lpOpts[i]; i++ )
+		{
+			if( i>1 && '-'==lpOpts[i-2] && 'N'==lpOpts[i-1])
+			{
+				char * lpOP = &lpOpts[i];
+				char lOld;
+				for( ; lpOpts[i] && ']' != lpOpts[i] && ' ' != lpOpts[i]; i++ );
+				lOld = lpOpts[i];
+				lpOpts[i]=0;
+				StringPath_Combine( apOut, lpOP, lpShortName);
+				lpOpts[i]=lOld;
+				StringPath_SetExt( apOut, ".O");
+				return;
+			}
+		}
+	}
+	StringPath_SetExt( apOut, ".O");
+}
+
 void	ParseLine(sProjectParser * apParser, char * apLine)
 {
 	sStringPath	lFileName;
@@ -494,7 +542,6 @@ void	ParseLine(sProjectParser * apParser, char * apLine)
 				}
 				else
 				{
-
 					lpFile=lFileName.mChars;
 
 					for(;' '!=lpFile[lOff]&&'\t'!=lpFile[lOff]&&0!=lpFile[lOff];lOff++);
@@ -503,23 +550,19 @@ void	ParseLine(sProjectParser * apParser, char * apLine)
 					{
 						if( 0 == GemDos_Fsfirst( lpFile, dGEMDOS_FA_READONLY | dGEMDOS_FA_ARCHIVE ) )
 						{
+							sStringPath lOutFileName;
 							U32 lSrcDateTime;
 							U16 lBuildFlag = 1;
-							char lOld[2];
 
 							lSrcDateTime = gDTA.mDate;
 							lSrcDateTime <<= 16;
 							lSrcDateTime |= gDTA.mTime;
 
-							lOld[0]=lpFile[lOff];
-							lOld[1]=lpFile[lOff+1];
-
-							lpFile[lOff+0]='O';
-							lpFile[lOff+1]=0;
-							FileBackedBuffer_StringAppend( &apParser->mLinkerScript, lpFile );
+							BuildOutputFileName( apParser, lpFile, &lOutFileName );
+							FileBackedBuffer_StringAppend( &apParser->mLinkerScript, lOutFileName.mChars );
 
 							/*printf( "%d - %d -%s\n", gDTA.mDate, gDTA.mTime, gDTA.mFileName);*/
-							if( 0 == GemDos_Fsfirst( lpFile, dGEMDOS_FA_READONLY | dGEMDOS_FA_ARCHIVE ) )
+							if( 0 == GemDos_Fsfirst( lOutFileName.mChars, dGEMDOS_FA_READONLY | dGEMDOS_FA_ARCHIVE ) )
 							{
 								U32 lObjDateTime;
 								lObjDateTime = gDTA.mDate;
@@ -538,9 +581,6 @@ void	ParseLine(sProjectParser * apParser, char * apLine)
 									lBuildFlag = 1;
 								}
 							}
-
-							lpFile[lOff+0] = lOld[0];
-							lpFile[lOff+1] = lOld[1];
 
 /*							lBuildFlag=1;*/
 							if( lBuildFlag )
@@ -794,7 +834,7 @@ int		main( int argc, char **argv)
 	{
 		printf( "PUREBOT\n");
 		printf( "[c] 2018 Reservoir Gods\n");
-		printf( "usage: purebot <file.pbt>\n");
+		printf( "usage: purebot <file.prj>\n");
 	}
 
 
