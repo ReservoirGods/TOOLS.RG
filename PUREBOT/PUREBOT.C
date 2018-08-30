@@ -79,6 +79,7 @@ typedef struct sProjectParser
 	const char *				mpPureC;
 	char *						mpPRJ;
 	U32							mSize;
+	U32							mPRJDateTime;
 	U32							mObjectCount;
 	U32							mObjectDateTimeNewest;
 	U16							mObjectBuiltCount;
@@ -89,7 +90,7 @@ typedef struct sProjectParser
 	U8							mGather;
 	U8							mVerboseFlag;
 	U8							mContinuousBuildFlag;
-	U8							mPadFlag;
+	U8							mRebuildFlag;
 	sStringPath					mPathPRJ;
 	char						mAssemblerOptions[128];
 	char						mCompilerOptions[128];
@@ -338,6 +339,18 @@ void	DebugLog_Complete( sProjectParser * apParser )
 	}
 }
 
+U32		GetFileDateTime( const char * apFileName )
+{
+	U32 lDT = 0;
+	if( 0 == GemDos_Fsfirst( apFileName, dGEMDOS_FA_READONLY | dGEMDOS_FA_ARCHIVE ) )
+	{
+		lDT = gDTA.mDate;
+		lDT <<= 16;
+		lDT |= gDTA.mTime;
+	}
+	return( lDT );
+}
+
 void	ShowDTA( sGemDosDTA * apDTA )
 {
 	U16 lYear;
@@ -548,34 +561,28 @@ void	ParseLine(sProjectParser * apParser, char * apLine)
 					while(lOff>0 && '.'!=lpFile[lOff-1])lOff--;
 					if( lpFile[lOff] == 'C' || lpFile[lOff] == 'c' || lpFile[lOff] == 'S' || lpFile[lOff] == 's')
 					{
-						if( 0 == GemDos_Fsfirst( lpFile, dGEMDOS_FA_READONLY | dGEMDOS_FA_ARCHIVE ) )
+						U32 lSrcDateTime = GetFileDateTime( lpFile );
+						if( lSrcDateTime )
 						{
 							sStringPath lOutFileName;
-							U32 lSrcDateTime;
 							U16 lBuildFlag = 1;
+							U32 lObjDateTime;
 
-							lSrcDateTime = gDTA.mDate;
-							lSrcDateTime <<= 16;
-							lSrcDateTime |= gDTA.mTime;
 
 							BuildOutputFileName( apParser, lpFile, &lOutFileName );
 							FileBackedBuffer_StringAppend( &apParser->mLinkerScript, lOutFileName.mChars );
 
 							/*printf( "%d - %d -%s\n", gDTA.mDate, gDTA.mTime, gDTA.mFileName);*/
-							if( 0 == GemDos_Fsfirst( lOutFileName.mChars, dGEMDOS_FA_READONLY | dGEMDOS_FA_ARCHIVE ) )
+							lObjDateTime = GetFileDateTime( lOutFileName.mChars );
+							if( lObjDateTime )
 							{
-								U32 lObjDateTime;
-								lObjDateTime = gDTA.mDate;
-								lObjDateTime <<= 16;
-								lObjDateTime |= gDTA.mTime;
-
 								if( lObjDateTime > apParser->mObjectDateTimeNewest )
 									apParser->mObjectDateTimeNewest = lObjDateTime;
 
 								/* printf( "%lx %s\n", lObjDateTime, gDTA.mFileName);*/
 								lBuildFlag = 0;
 								/*printf( "%d - %d -%s\n", gDTA.mDate, gDTA.mTime, gDTA.mFileName);*/
-								if( lSrcDateTime >= lObjDateTime )
+								if( (lSrcDateTime >= lObjDateTime) || (apParser->mPRJDateTime >= lObjDateTime) )
 								{
 									printf( "newer so building\n");
 									lBuildFlag = 1;
@@ -677,27 +684,25 @@ void	Link( sProjectParser * apParser )
 	char lOut[ 256 ];
 	U32 i;
 	U16 lLinkFlag = 0;
+	U32 lExeDateTime;
 
 	if( !apParser->mpExecutable )
 	{
 		return;
 	}
+	
 
 	sprintf( lOut, "-V -c=%s%s", apParser->mPathPRJ.mChars, apParser->mpExecutable );
-	if( apParser->mObjectBuiltCount || GemDos_Fsfirst( &lOut[6], dGEMDOS_FA_READONLY | dGEMDOS_FA_ARCHIVE ) )
+	lExeDateTime = GetFileDateTime( &lOut[6]);
+	if( apParser->mObjectBuiltCount || !lExeDateTime )
 	{
 		lLinkFlag = 1;
 	}
 	else
 	{
-		U32 lExeDateTime;
-
 		lLinkFlag = 0;
-		lExeDateTime = gDTA.mDate;
-		lExeDateTime <<= 16;
-		lExeDateTime |= gDTA.mTime;
 
-		if( lExeDateTime < apParser->mObjectDateTimeNewest )
+		if( (lExeDateTime < apParser->mObjectDateTimeNewest) || (lExeDateTime < apParser->mPRJDateTime) )
 		{
 			printf( "objs %lx newer than exe %lx so linking\n", apParser->mObjectDateTimeNewest, lExeDateTime);
 			lLinkFlag = 1;
@@ -781,7 +786,8 @@ void	ProcessPRJ(sProjectParser * apParser, const char * apFileName )
 		lParser.mCompilerOptionsLen=(U16)String_StrLen(&lParser.mCompilerOptions[0]);
 
 		lpFileName = &lParser.mPathPRJ.mChars[ lParser.mPathPRJLen ];
-		if( File_Exists(lpFileName))
+		lParser.mPRJDateTime = GetFileDateTime( lpFileName );
+		if( lParser.mPRJDateTime )
 		{
 			lParser.mSize = File_GetSize(lpFileName);
 			lParser.mpPRJ = mMEMALLOC( lParser.mSize +1);
