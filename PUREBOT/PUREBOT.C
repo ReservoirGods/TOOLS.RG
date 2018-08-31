@@ -37,7 +37,7 @@ typedef struct sEmbeddedProgram
 sEmbeddedProgram	gPureCompiler =
 {
 	"PCC.TTP",
-	0x19e38,
+	0x19e38L,
 	0x3db4,
 	0x72e0,
 	PCC_Array
@@ -105,9 +105,11 @@ sGemDosDTA	* gpOldDTA = 0;
 
 void	ProcessPRJ(sProjectParser * apParser, const char * apFileName );
 
+#define mVERBOSE_MSG( _parser, _msg )	if( _parser->mVerboseFlag ) printf _msg
+
 char *	FileName_GetpExt( char * apFileName )
 {
-	U16 lLen = String_StrLen(apFileName);
+	U16 lLen = (U16)String_StrLen(apFileName);
 	while( lLen > 0 && '.' != apFileName[ lLen-1] )
 		lLen--;
 	return( lLen ? &apFileName[ lLen-1 ] : 0 );
@@ -175,11 +177,13 @@ int		BuildExistingFilename( sProjectParser * apParser, const char * apShortName,
 	printf( "curdir: %s\n",lPath);
 #endif
 
+	mVERBOSE_MSG( apParser, ("find: %s\n",apShortName) );
+
 	/* check if file exists in current directory */
 
 	String_StrCpy( apFullName->mChars, apShortName );
-	if( apParser->mVerboseFlag )
-		printf( "find: %s\n", apFullName->mChars);
+
+	mVERBOSE_MSG( apParser, (" : %s\n",apFullName->mChars) );
 	if( File_Exists(apFullName->mChars ) ) 
 		return 1;
 
@@ -187,8 +191,7 @@ int		BuildExistingFilename( sProjectParser * apParser, const char * apShortName,
 
 	StringPath_Copy( apFullName, &apParser->mPathPRJ );
 	StringPath_SetFileName( apFullName, apShortName );
-	if( apParser->mVerboseFlag )
-		printf( "find: %s\n", apFullName->mChars);
+	mVERBOSE_MSG( apParser, (" try: %s\n",apFullName->mChars) );
 	if( File_Exists(apFullName->mChars ) ) 
 		return 1;
 
@@ -197,8 +200,7 @@ int		BuildExistingFilename( sProjectParser * apParser, const char * apShortName,
 	if( apParser->mpPureC )
 	{
 		StringPath_Combine( apFullName, apParser->mpPureC, apShortName );
-		if( apParser->mVerboseFlag )
-			printf( "find: %s\n", apFullName->mChars);
+		mVERBOSE_MSG( apParser, (" : %s\n",apFullName->mChars) );
 		if( File_Exists(apFullName->mChars ) ) 
 			return 1;
 	}
@@ -207,8 +209,7 @@ int		BuildExistingFilename( sProjectParser * apParser, const char * apShortName,
 
 	Drive_GetPath( 0, apFullName->mChars );
 	String_StrAppend2( apFullName->mChars, "\\", apShortName );
-	if( apParser->mVerboseFlag )
-		printf( "find: %s\n", apFullName->mChars);
+	mVERBOSE_MSG( apParser, (" : %s\n",apFullName->mChars) );
 	if( File_Exists(apFullName->mChars ) ) 
 		return 1;
 
@@ -219,16 +220,13 @@ int		BuildExistingFilename( sProjectParser * apParser, const char * apShortName,
 			do
 			{
 				/* check if file exists in INCLUDE path */
-
 				char lOptOld;
-				const char * lpIncStart = &lpOpts[i];
 				for( ; lpOpts[i] && ' ' !=lpOpts[i] && ';' !=lpOpts[i];i++);
 				
 				lOptOld=lpOpts[i];
 				lpOpts[i]=0;
 				StringPath_Combine( apFullName, lpOpts, apShortName );
-				if( apParser->mVerboseFlag )
-					printf( "find: %s\n", apFullName->mChars);
+				mVERBOSE_MSG( apParser, (" : %s\n",apFullName->mChars) );
 				if( File_Exists(apFullName->mChars))
 					return 1;
 
@@ -239,8 +237,7 @@ int		BuildExistingFilename( sProjectParser * apParser, const char * apShortName,
 				StringPath_Append( apFullName, lpOpts );
 				StringPath_Append( apFullName, apShortName );
 
-				if( apParser->mVerboseFlag )
-					printf( "find: %s\n", apFullName->mChars);
+				mVERBOSE_MSG( apParser, (" : %s\n",apFullName->mChars) );
 				if( File_Exists(apFullName->mChars))
 					return 1;
 
@@ -259,8 +256,7 @@ void	EmbeddedProgram_Execute( sProjectParser * apParser, const sEmbeddedProgram 
 	U32	lSize;
 	U8 * lpData;
 
-	if( apParser->mVerboseFlag )
-		printf( "Executing: %s %s\n", apProg->mpName, apCommandLine);
+	mVERBOSE_MSG( apParser, ("%s %s\n", apProg->mpName, apCommandLine) );
 
 	lSize = apProg->mTextSize + apProg->mDataSize + apProg->mBssSize + sizeof(sBasePage);
 	lpData = mMEMCALLOC(lSize);
@@ -291,11 +287,12 @@ void	OptionsCopy( const char * apSource, char * apDest, U16 aDstLen )
 	apDest[j]=0;
 }
 
+
 void	DebugLog_InternalUpdate( sProjectParser * apParser )
 {
 	if( apParser )
 	{
-		apParser->mDebugLog.mOffset = Bios_GetPipeOffset();
+		apParser->mDebugLog.mOffset = (U16)Bios_GetPipeOffset();
 		if( apParser->mDebugLog.mOffset && apParser->mDebugLog.mOpenFlag )
 		{
 			if( apParser->mDebugLog.mOffset > 1024 )
@@ -306,6 +303,7 @@ void	DebugLog_InternalUpdate( sProjectParser * apParser )
 	}
 }
 
+
 void	DebugLog_Update( sProjectParser * apParser )
 {
 	sProjectParser * lpParser = apParser;
@@ -313,6 +311,7 @@ void	DebugLog_Update( sProjectParser * apParser )
 	for( ; lpParser && !lpParser->mDebugLog.mOpenFlag; lpParser = lpParser->mpParent );
 	DebugLog_InternalUpdate( lpParser );
 }
+
 
 void	DebugLog_Complete( sProjectParser * apParser )
 {
@@ -339,7 +338,8 @@ void	DebugLog_Complete( sProjectParser * apParser )
 	}
 }
 
-U32		GetFileDateTime( const char * apFileName )
+
+U32		GetFileDateTime( const sProjectParser * apParser, const char * apFileName )
 {
 	U32 lDT = 0;
 	if( 0 == GemDos_Fsfirst( apFileName, dGEMDOS_FA_READONLY | dGEMDOS_FA_ARCHIVE ) )
@@ -347,9 +347,11 @@ U32		GetFileDateTime( const char * apFileName )
 		lDT = gDTA.mDate;
 		lDT <<= 16;
 		lDT |= gDTA.mTime;
+		mVERBOSE_MSG( apParser, ("TimeStamp %lX %s\n", lDT, apFileName) );
 	}
 	return( lDT );
 }
+
 
 void	ShowDTA( sGemDosDTA * apDTA )
 {
@@ -362,6 +364,7 @@ void	ShowDTA( sGemDosDTA * apDTA )
 	lDay = (apDTA->mDate & 31);
 	printf( "%s %d-%d-%d\n", apDTA->mFileName, lYear, lMonth, lDay );
 }
+
 
 void	BuildOutputFileName( sProjectParser * apParser, const char * apFileName, sStringPath * apOut )
 {
@@ -433,6 +436,7 @@ void	ParseLine(sProjectParser * apParser, char * apLine)
 				apParser->mPathPRJ.mChars[ apParser->mPathPRJLen ] =0;
 				StringPath_Append( &apParser->mPathPRJ, &apLine[lOff+2] );
 				FileBackedBuffer_Init( &apParser->mDebugLog, apParser->mPathPRJ.mChars );
+				mVERBOSE_MSG( apParser, ("Log File:%s\n", apParser->mPathPRJ.mChars) );
 				Bios_PipeConsole( &apParser->mDebugLog.mBuffer[0], sizeof(apParser->mDebugLog.mBuffer) );
 			}
 			else if( 'K'==apLine[lOff])
@@ -498,12 +502,12 @@ void	ParseLine(sProjectParser * apParser, char * apLine)
 					{
 						if( 'C' == apLine[1] || 'c'==apLine[1])
 						{
-							OptionsCopy( &apLine[2], apParser->mCompilerOptions,sizeof(apParser->mCompilerOptions));
+							OptionsCopy( &apLine[2], apParser->mCompilerOptions, (U16)sizeof(apParser->mCompilerOptions));
 							apParser->mCompilerOptionsLen = (U16)String_StrLen(&apParser->mCompilerOptions[0]);
 						}
 						else if( 'L' == apLine[1] || 's'==apLine[1])
 						{
-							OptionsCopy( &apLine[2], apParser->mLinkerOptions, sizeof(apParser->mLinkerOptions ));
+							OptionsCopy( &apLine[2], apParser->mLinkerOptions, (U16)sizeof(apParser->mLinkerOptions ));
 							apParser->mLinkerOptionsLen = (U16)String_StrLen(&apParser->mLinkerOptions[0]);
 							FileBackedBuffer_StringAppend( &apParser->mLinkerScript, apParser->mLinkerOptions);
 
@@ -512,7 +516,7 @@ void	ParseLine(sProjectParser * apParser, char * apLine)
 						}
 						else if( 'S' == apLine[1] || 's'==apLine[1])
 						{
-							OptionsCopy( &apLine[2], apParser->mAssemblerOptions, sizeof(apParser->mAssemblerOptions) );
+							OptionsCopy( &apLine[2], apParser->mAssemblerOptions, (U16)sizeof(apParser->mAssemblerOptions) );
 							apParser->mAssemblerOptionsLen = (U16)String_StrLen(&apParser->mAssemblerOptions[0]);
 						}
 					}
@@ -537,15 +541,15 @@ void	ParseLine(sProjectParser * apParser, char * apLine)
 				{
 					if( 'C' == apLine[lOff] || 'c'==apLine[lOff])
 					{
-						OptionsCopy( &apLine[lOff+1], &apParser->mCompilerOptions[apParser->mCompilerOptionsLen], sizeof(apParser->mCompilerOptions) - apParser->mCompilerOptionsLen);
+						OptionsCopy( &apLine[lOff+1], &apParser->mCompilerOptions[apParser->mCompilerOptionsLen], (U16)sizeof(apParser->mCompilerOptions) - apParser->mCompilerOptionsLen);
 					}
 					else if( 'O' == apLine[lOff] || 'o'==apLine[lOff] || 'L'==apLine[lOff] || 'l' == apLine[lOff])
 					{
-						OptionsCopy( &apLine[lOff+1], &apParser->mLinkerOptions[apParser->mLinkerOptionsLen], sizeof(apParser->mLinkerOptions)-apParser->mLinkerOptionsLen);
+						OptionsCopy( &apLine[lOff+1], &apParser->mLinkerOptions[apParser->mLinkerOptionsLen], (U16)sizeof(apParser->mLinkerOptions)-apParser->mLinkerOptionsLen);
 					}
 					else if( 'S' == apLine[lOff] || 's'==apLine[lOff])
 					{
-						OptionsCopy( &apLine[lOff+1], &apParser->mAssemblerOptions[apParser->mAssemblerOptionsLen], sizeof(apParser->mAssemblerOptions)-apParser->mAssemblerOptionsLen);
+						OptionsCopy( &apLine[lOff+1], &apParser->mAssemblerOptions[apParser->mAssemblerOptionsLen], (U16)sizeof(apParser->mAssemblerOptions)-apParser->mAssemblerOptionsLen);
 					}
 				}
 
@@ -561,7 +565,7 @@ void	ParseLine(sProjectParser * apParser, char * apLine)
 					while(lOff>0 && '.'!=lpFile[lOff-1])lOff--;
 					if( lpFile[lOff] == 'C' || lpFile[lOff] == 'c' || lpFile[lOff] == 'S' || lpFile[lOff] == 's')
 					{
-						U32 lSrcDateTime = GetFileDateTime( lpFile );
+						U32 lSrcDateTime = GetFileDateTime( apParser, lpFile );
 						if( lSrcDateTime )
 						{
 							sStringPath lOutFileName;
@@ -573,7 +577,7 @@ void	ParseLine(sProjectParser * apParser, char * apLine)
 							FileBackedBuffer_StringAppend( &apParser->mLinkerScript, lOutFileName.mChars );
 
 							/*printf( "%d - %d -%s\n", gDTA.mDate, gDTA.mTime, gDTA.mFileName);*/
-							lObjDateTime = GetFileDateTime( lOutFileName.mChars );
+							lObjDateTime = GetFileDateTime( apParser, lOutFileName.mChars );
 							if( lObjDateTime )
 							{
 								if( lObjDateTime > apParser->mObjectDateTimeNewest )
@@ -596,28 +600,32 @@ void	ParseLine(sProjectParser * apParser, char * apLine)
 
 								if( 'C' == lpFile[lOff] || 'c'==lpFile[lOff])
 								{
-									sBasePage * lpH = 0;
 									sprintf( &lCmdLine[0], "%s%s", &apParser->mCompilerOptions[0], lpFile);
-									printf( "PCC.TTP %s\n",&lCmdLine[0]);
+									printf( "%s\n", lpFile );
 	#ifdef dEMBEDDED_PUREC
 									EmbeddedProgram_Execute( apParser, &gPureCompiler, lCmdLine );
 	#else
-									lpH = Program_Load("PCC.TTP");
-									Program_Execute(lpH,lCmdLine);
-									Program_UnLoad(lpH);
+									{
+										sBasePage * lpH = 0;
+										lpH = Program_Load("PCC.TTP");
+										Program_Execute(lpH,lCmdLine);
+										Program_UnLoad(lpH);
+									}
 	#endif
 								}
 								else if( 'S' == lpFile[lOff] || 's'==lpFile[lOff])
 								{
-									sBasePage * lpH = 0;
 									sprintf( &lCmdLine[0], "%s%s", &apParser->mAssemblerOptions[0], lpFile);
-									printf( "PASM.TTP %s\n",&lCmdLine[0]);
+									printf( "%s\n", lpFile );
 	#ifdef dEMBEDDED_PUREC
 									EmbeddedProgram_Execute( apParser, &gPureAssembler, lCmdLine );
 	#else
-									lpH = Program_Load("PASM.TTP");
-									Program_Execute(lpH,lCmdLine);
-									Program_UnLoad(lpH);
+									{
+										sBasePage * lpH = 0;
+										lpH = Program_Load("PASM.TTP");
+										Program_Execute(lpH,lCmdLine);
+										Program_UnLoad(lpH);
+									}
 	#endif
 								}
 							}
@@ -690,12 +698,13 @@ void	Link( sProjectParser * apParser )
 	{
 		return;
 	}
-	
 
 	sprintf( lOut, "-V -c=%s%s", apParser->mPathPRJ.mChars, apParser->mpExecutable );
-	lExeDateTime = GetFileDateTime( &lOut[6]);
+	mVERBOSE_MSG( apParser, ("TimeStamp %lX newest object\n",apParser->mObjectDateTimeNewest) );
+	lExeDateTime = GetFileDateTime( apParser, &lOut[6]);
 	if( apParser->mObjectBuiltCount || !lExeDateTime )
 	{
+		mVERBOSE_MSG( apParser, ("Linking due to built objects\n") );
 		lLinkFlag = 1;
 	}
 	else
@@ -704,6 +713,7 @@ void	Link( sProjectParser * apParser )
 
 		if( (lExeDateTime < apParser->mObjectDateTimeNewest) || (lExeDateTime < apParser->mPRJDateTime) )
 		{
+			mVERBOSE_MSG( apParser, ("Linking due to stale exe\n") );
 			printf( "objs %lx newer than exe %lx so linking\n", apParser->mObjectDateTimeNewest, lExeDateTime);
 			lLinkFlag = 1;
 		}
@@ -746,7 +756,7 @@ void	ProcessPRJ(sProjectParser * apParser, const char * apFileName )
 	char lOld;
 	sProjectParser	lParser;
 
-	printf( "Process: %s\n",apFileName);
+	printf( "%s\n",apFileName);
 
 	Drive_GetPath( 0, lPath );
 
@@ -765,7 +775,7 @@ void	ProcessPRJ(sProjectParser * apParser, const char * apFileName )
 			StringPath_Append( &lParser.mPathPRJ, apFileName );
 		}
 
-		lParser.mPathPRJLen = String_StrLen( lParser.mPathPRJ.mChars );
+		lParser.mPathPRJLen = (U16)String_StrLen( lParser.mPathPRJ.mChars );
 		for(; (lParser.mPathPRJLen) > 0 && ('\\' != lParser.mPathPRJ.mChars[ lParser.mPathPRJLen-1 ]) && ('/' != lParser.mPathPRJ.mChars[ lParser.mPathPRJLen-1 ]) ;lParser.mPathPRJLen-- );
 
 		lOld = lParser.mPathPRJ.mChars[ lParser.mPathPRJLen ];
@@ -786,7 +796,7 @@ void	ProcessPRJ(sProjectParser * apParser, const char * apFileName )
 		lParser.mCompilerOptionsLen=(U16)String_StrLen(&lParser.mCompilerOptions[0]);
 
 		lpFileName = &lParser.mPathPRJ.mChars[ lParser.mPathPRJLen ];
-		lParser.mPRJDateTime = GetFileDateTime( lpFileName );
+		lParser.mPRJDateTime = GetFileDateTime( &lParser, lpFileName );
 		if( lParser.mPRJDateTime )
 		{
 			lParser.mSize = File_GetSize(lpFileName);
