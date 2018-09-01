@@ -740,6 +740,7 @@ void	Link( sProjectParser * apParser )
 			Program_UnLoad(lpPage);
 		}
 #endif
+		printf( "Link finished\n");
 	}
 	else
 	{
