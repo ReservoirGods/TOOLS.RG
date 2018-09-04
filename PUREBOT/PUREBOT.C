@@ -92,8 +92,9 @@ typedef struct sProjectParser
 	U8							mContinuousBuildFlag;
 	U8							mRebuildFlag;
 	sStringPath					mPathPRJ;
+	sStringPath					mPathApp;
 	char						mAssemblerOptions[128];
-	char						mCompilerOptions[128];
+	char						mCompilerOptions[512];
 	char						mLinkerOptions[128];
 	sFileBackedBuffer			mLinkerScript;
 	sFileBackedBuffer			mDebugLog;
@@ -265,7 +266,7 @@ void	EmbeddedProgram_Execute( sProjectParser * apParser, const sEmbeddedProgram 
 		U32 lOffset = sizeof(sBasePage) - sizeof(sProgramHeader);
 		GodPack_DePack( apProg->mpData, lpData + lOffset );
 		Program_Init( (sBasePage*)lpData);
-		Program_Execute( (sBasePage*)lpData, apCommandLine );
+		Program_Execute( (sBasePage*)lpData, apCommandLine, apParser->mPathApp.mChars );
 		mMEMFREE(lpData);
 	}
 	else
@@ -342,7 +343,7 @@ void	DebugLog_Complete( sProjectParser * apParser )
 U32		GetFileDateTime( const sProjectParser * apParser, const char * apFileName )
 {
 	U32 lDT = 0;
-	if( 0 == GemDos_Fsfirst( apFileName, dGEMDOS_FA_READONLY | dGEMDOS_FA_ARCHIVE ) )
+	if( 0 == File_ReadFirst( apFileName, dGEMDOS_FA_READONLY | dGEMDOS_FA_ARCHIVE ) )
 	{
 		lDT = gDTA.mDate;
 		lDT <<= 16;
@@ -502,7 +503,7 @@ void	ParseLine(sProjectParser * apParser, char * apLine)
 					{
 						if( 'C' == apLine[1] || 'c'==apLine[1])
 						{
-							OptionsCopy( &apLine[2], apParser->mCompilerOptions, (U16)sizeof(apParser->mCompilerOptions));
+							OptionsCopy( &apLine[2], &apParser->mCompilerOptions[ apParser->mCompilerOptionsLen ], (U16)sizeof(apParser->mCompilerOptions));
 							apParser->mCompilerOptionsLen = (U16)String_StrLen(&apParser->mCompilerOptions[0]);
 						}
 						else if( 'L' == apLine[1] || 's'==apLine[1])
@@ -764,6 +765,7 @@ void	ProcessPRJ(sProjectParser * apParser, const char * apFileName )
 	do
 	{
 		Memory_Clear( sizeof(sProjectParser), &lParser );
+		StringPath_Copy( &lParser.mPathApp, &apParser->mPathApp );
 		lParser.mpParent = apParser;
 		if( ':' == apFileName[1])
 		{
@@ -835,14 +837,18 @@ int		main( int argc, char **argv)
 	{
 		sProjectParser	lParser;
 		gpOldDTA = GemDos_Fgetdta();
-		GemDos_Fsetdta(&gDTA);
+		File_SetDTA(&gDTA);
 		Memory_Clear( sizeof(sProjectParser), &lParser );
-		lParser.mPathPRJ.mChars[0]=Drive_GetDrive() + 'A';
+		lParser.mPathPRJ.mChars[0]=(U8)(Drive_GetDrive() + 'A');
 		lParser.mPathPRJ.mChars[1]=':';
 		Drive_GetPath( 0, &lParser.mPathPRJ.mChars[2]);
 		for(lParser.mPathPRJLen=0; lParser.mPathPRJ.mChars[ lParser.mPathPRJLen ]; lParser.mPathPRJLen++ );
 		if( lParser.mPathPRJLen && '\\' != lParser.mPathPRJ.mChars[ lParser.mPathPRJLen-1])
 			lParser.mPathPRJ.mChars[ lParser.mPathPRJLen++ ] = '\\';
+
+		lParser.mPathPRJ.mChars[ lParser.mPathPRJLen ] = 0;
+		StringPath_Combine( &lParser.mPathApp, lParser.mPathPRJ.mChars, "PUREBOT.TTP" );
+
 		ProcessPRJ( &lParser, argv[1]);
 		Drive_SetPath( &lParser.mPathPRJ.mChars[0]);
 		GemDos_Fsetdta(gpOldDTA);
