@@ -84,8 +84,8 @@
         Using( .ProjectCommon )
 
         .ProjectBasePath    = '..'
-        .ProjectInputPaths  = '..'
-        .ProjectFiles       = '..\..\tool.bff'
+        .ProjectInputPaths  =  {'..'}
+        .ProjectFiles       = { '..\..\tool.bff', '..\*.PRJ' }
         .ProjectOutput      = '$ProjectName$.vcxproj'
 
         .LocalDebuggerCommand           ='^$(SolutionDir)\..\^$(ProjectName)-^$(Configuration).exe'
