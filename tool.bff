@@ -1,5 +1,5 @@
 {
-    #define USING_VS2010
+    #define USING_VS2015
 
     .ProjectDir='$_WORKING_DIR_$\..'
     .ExePath="^$(SolutionDir)\..\^$(ProjectName)-MSVC9-x86-^$(Configuration).exe"
@@ -85,6 +85,7 @@
 
         .ProjectBasePath    = '..'
         .ProjectInputPaths  = '..'
+        .ProjectFiles       = '..\..\tool.bff'
         .ProjectOutput      = '$ProjectName$.vcxproj'
 
         .LocalDebuggerCommand           ='^$(SolutionDir)\..\^$(ProjectName)-^$(Configuration).exe'

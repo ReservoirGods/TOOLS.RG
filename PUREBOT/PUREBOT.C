@@ -415,6 +415,32 @@ void	BuildOutputFileName( sProjectParser * apParser, const char * apFileName, sS
 	StringPath_SetExt( apOut, ".O");
 }
 
+void	OptionsGrab( sProjectParser * apParser, char * apLine )
+{
+	if( '.' == *apLine )
+	{
+		if( 'C' == apLine[ 1 ] || 'c' == apLine[ 1 ] )
+		{
+			OptionsCopy( &apLine[ 2 ], &apParser->mCompilerOptions[ apParser->mCompilerOptionsLen ], ( U16 )sizeof( apParser->mCompilerOptions ) );
+			apParser->mCompilerOptionsLen = (U16)String_StrLen( &apParser->mCompilerOptions[ 0 ] );
+		}
+		else if( 'L' == apLine[ 1 ] || 's' == apLine[ 1 ] )
+		{
+			OptionsCopy( &apLine[ 2 ], &apParser->mLinkerOptions[ apParser->mLinkerOptionsLen ], ( U16 )sizeof( apParser->mLinkerOptions ) );
+			apParser->mLinkerOptionsLen = (U16)String_StrLen( &apParser->mLinkerOptions[ 0 ] );
+			FileBackedBuffer_StringAppend( &apParser->mLinkerScript, apParser->mLinkerOptions );
+
+			FileBackedBuffer_Append( &apParser->mLinkerScript, 13 );
+			FileBackedBuffer_Append( &apParser->mLinkerScript, 10 );
+		}
+		else if( 'S' == apLine[ 1 ] || 's' == apLine[ 1 ] )
+		{
+			OptionsCopy( &apLine[ 2 ], &apParser->mAssemblerOptions[ apParser->mAssemblerOptionsLen ], ( U16 )sizeof( apParser->mAssemblerOptions ) );
+			apParser->mAssemblerOptionsLen = (U16)String_StrLen( &apParser->mAssemblerOptions[ 0 ] );
+		}
+	}
+}
+
 void	ParseLine(sProjectParser * apParser, char * apLine)
 {
 	sStringPath	lFileName;
@@ -422,8 +448,8 @@ void	ParseLine(sProjectParser * apParser, char * apLine)
 	/* check for our cheeky PRJ extension */
 	if( ';'== *apLine && ':' == apLine[1])
 	{
-		U16 lOff = 0;
-		for( lOff=2; apLine[lOff] && '-'!=apLine[lOff]; lOff++);
+		U16 lOff = 2;
+/*		for( lOff=2; apLine[lOff] && '-'!=apLine[lOff]; lOff++);*/
 		if( '-' == apLine[lOff])
 		{
 			lOff++;
@@ -452,7 +478,10 @@ void	ParseLine(sProjectParser * apParser, char * apLine)
 			{
 				apParser->mVerboseFlag=1;
 			}
-
+		}
+		else
+		{
+			OptionsGrab( apParser, &apLine[ 2 ] );
 		}
 	}
 	else if(';' != *apLine && *apLine)
@@ -501,25 +530,7 @@ void	ParseLine(sProjectParser * apParser, char * apLine)
 					}
 					else if( '.' == *apLine)
 					{
-						if( 'C' == apLine[1] || 'c'==apLine[1])
-						{
-							OptionsCopy( &apLine[2], &apParser->mCompilerOptions[ apParser->mCompilerOptionsLen ], (U16)sizeof(apParser->mCompilerOptions));
-							apParser->mCompilerOptionsLen = (U16)String_StrLen(&apParser->mCompilerOptions[0]);
-						}
-						else if( 'L' == apLine[1] || 's'==apLine[1])
-						{
-							OptionsCopy( &apLine[2], apParser->mLinkerOptions, (U16)sizeof(apParser->mLinkerOptions ));
-							apParser->mLinkerOptionsLen = (U16)String_StrLen(&apParser->mLinkerOptions[0]);
-							FileBackedBuffer_StringAppend( &apParser->mLinkerScript, apParser->mLinkerOptions);
-
-							FileBackedBuffer_Append( &apParser->mLinkerScript, 13 );
-							FileBackedBuffer_Append( &apParser->mLinkerScript, 10 );
-						}
-						else if( 'S' == apLine[1] || 's'==apLine[1])
-						{
-							OptionsCopy( &apLine[2], apParser->mAssemblerOptions, (U16)sizeof(apParser->mAssemblerOptions) );
-							apParser->mAssemblerOptionsLen = (U16)String_StrLen(&apParser->mAssemblerOptions[0]);
-						}
+						OptionsGrab( apParser, apLine );
 					}
 				}
 			}
@@ -589,7 +600,7 @@ void	ParseLine(sProjectParser * apParser, char * apLine)
 								/*printf( "%d - %d -%s\n", gDTA.mDate, gDTA.mTime, gDTA.mFileName);*/
 								if( (lSrcDateTime >= lObjDateTime) || (apParser->mPRJDateTime >= lObjDateTime) )
 								{
-									printf( "newer so building\n");
+									mVERBOSE_MSG( apParser, ("newer so building\n") );
 									lBuildFlag = 1;
 								}
 							}
@@ -745,7 +756,7 @@ void	Link( sProjectParser * apParser )
 	}
 	else
 	{
-		printf( "Up to date, no linking.\n");
+		mVERBOSE_MSG( apParser, ( "Up to date, no linking.\n") );
 	}
 	DebugLog_Update( apParser );
 }
@@ -833,6 +844,8 @@ void	ProcessPRJ(sProjectParser * apParser, const char * apFileName )
 
 int		main( int argc, char **argv)
 {
+	printf( "PUREBOT 1.0\n" );
+	printf( "[c] 2018 Reservoir Gods\n\n" );
 	if( argc > 1 )
 	{
 		sProjectParser	lParser;
@@ -855,8 +868,6 @@ int		main( int argc, char **argv)
 	}
 	else
 	{
-		printf( "PUREBOT\n");
-		printf( "[c] 2018 Reservoir Gods\n");
 		printf( "usage: purebot <file.prj>\n");
 	}
 
