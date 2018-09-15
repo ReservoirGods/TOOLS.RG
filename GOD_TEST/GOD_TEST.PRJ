@@ -39,16 +39,22 @@ GOD_TEST.TOS
 ..\..\TOOLS.RG\PURE_C\LIB\PCSTART.O
 
 ;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+;	GODLIB UNIT TESTS
+;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+..\..\GODLIB\BASE\TEST\UT_BASE.C
+..\..\GODLIB\ENCRYPT\TEST\UTENCRYP.C
+..\..\GODLIB\LINKLIST\UNIT\UT_GODLL.C
+
+;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 ;	GODLIB LIBRARY MODULES (C)
 ;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
 ..\..\GODLIB\BASE\BASE.C
 ..\..\GODLIB\DRIVE\DRIVE.C
 ..\..\GODLIB\ENCRYPT\ENCRYPT.C
-..\..\GODLIB\ENCRYPT\TEST\UTENCRYP.C
 ..\..\GODLIB\GEMDOS\GEMDOS.C
 ..\..\GODLIB\FILE\FILE.C
-..\..\GODLIB\LINKLIST\UNIT\UT_GODLL.C
 ..\..\GODLIB\MEMORY\MEMORY.C
 ..\..\GODLIB\PROGRAM\PROGRAM.C
 ..\..\GODLIB\RANDOM\RANDOM.C
