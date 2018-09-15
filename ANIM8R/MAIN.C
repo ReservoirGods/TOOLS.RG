@@ -73,12 +73,6 @@ typedef	struct
 #  DATA
 ################################################################################### */
 
-/*
-U32			gScreenBase;
-U16 *		gpPhysic;
-U16 *		gpLogic;
-U16 *		gpScreenBase;
-*/
 sDegas *	gpDegas;
 sCommander	gCommands[ CMD_LIMIT ];
 
@@ -106,9 +100,6 @@ void	WaitSpace( void );
 * AUTHOR      : 03.01.01 PNK
 *-----------------------------------------------------------------------------------*/
 
-/*
-int	main( int argc, char * argv[] )
-*/
 S16	GodLib_Game_Main( S16 argc, char * argv[] )
 {
 	char * lpFileName;
@@ -425,21 +416,6 @@ U8	ParseFile( char * apFileName )
 void	InitScreen()
 {
 	Screen_Init( 320, 200, eGRAPHIC_COLOURMODE_4PLANE, eSCREEN_SCROLL_NONE );
-
-/*
-	U32	lScreenBase;
-
-	gpScreenBase  = (U16*)mMEMSCREENCALLOC( 64000L + 255L );
-	lScreenBase  = (U32)gpScreenBase;
-	lScreenBase += 255L;
-	lScreenBase &= 0xFFFFFF00L;
-
-	gpPhysic     = (U16*)lScreenBase;
-	lScreenBase += 32000L;
-	gpLogic      = (U16*)lScreenBase;
-
-	Video_SetPhysic( gpPhysic );
-*/
 }
 
 
@@ -452,7 +428,6 @@ void	InitScreen()
 void	DeInitScreen()
 {
 	Screen_DeInit();
-/*	mMEMSCREENFREE( gpScreenBase );*/
 }
 
 
@@ -523,13 +498,6 @@ void	AnimLoop()
 
 	while( !lExitFlag )
 	{
-/*
-		lpTemp   = Screen_GetpPhysic();
-		gpPhysic = Screen_GetpLogic();
-		gpLogic  = lpTemp;
-		Video_SetPhysic( gpPhysic );
-		Vbl_WaitVbl();
-*/
 		Screen_Update();
 		DrawFrame( gCommands[ CMD_FRAMES ].Numbers[ lFrameIndex ] );
 		
