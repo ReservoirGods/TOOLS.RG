@@ -1,0 +1,2 @@
+.SampleName="ANIM8R"
+#include "..\..\..\GODLIB.SPL\sample.bff"
