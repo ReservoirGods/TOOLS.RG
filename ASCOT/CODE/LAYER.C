@@ -411,6 +411,43 @@ void	Layer_RenderTiled( sLayer * apLayers,U16 * apScreen )
 
 #ifdef	WIN32
 
+void	Layer_Draw_2BP_Base( U8 * apText, U8 * apScreen, sFontAscot * apFont, S16 aWidth, S16 aHeight, S16 aTextWidth, S16 aTextStepX, U16 aColour )
+{
+	S16 tx, ty;
+	U8 * lpText = apText;
+	U8 * lpScreen = apScreen;
+
+	for( ty = 0; ty < aHeight; ty++ )
+	{
+		lpText = apText;
+		lpScreen = apScreen;
+		for( tx = 0; tx < aWidth; tx++ )
+		{
+			U8 * lpGfx = apFont->mpChar[ *lpText ];
+			U16 b, y;
+
+			for( y = 0; y < 8; y++ )
+			{
+				U8 g = *lpGfx++;
+				for( b = 0; b < 2; b++ )
+				{
+					U8 lFill = ( aColour & ( 1 << b ) ) ? 0 : g;
+					lpScreen[ b ] = lFill;
+				}
+			}
+
+			if( (U32)( lpScreen ) & 1 )
+				lpScreen += 3;
+			else
+				lpScreen++;
+
+			lpText += aTextStepX;
+		}
+		apScreen += ( 160 * 8 );
+		apText += aTextWidth;
+	}
+}
+
 void	Layer_Draw_2BP_Col1( U8 * apText, U8 * apScreen, sFontAscot * apFont, S16 aWidth, S16 aHeight, S16 aTextWidth, S16 aTextStepX ){
 	(void)apText; (void)apScreen; (void)apFont; (void)aWidth; (void)aHeight; (void)aTextWidth; (void)aTextStepX;
 }
@@ -447,7 +484,7 @@ void	Layer_Draw_4BP_Base( U8 * apText, U8 * apScreen, sFontAscot * apFont, S16 a
 			}
 
 			if( (U32)( lpScreen ) & 1 )
-				lpScreen += 3;
+				lpScreen += 7;
 			else
 				lpScreen++;
 
