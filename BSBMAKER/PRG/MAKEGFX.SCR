@@ -1,0 +1,14 @@
+[ SPRITE ]
+{
+src            = ROCKANIM.PI1
+msk            = ROCKMASK.PI1
+dst            = ROCKANIM.BSB
+x              = 0
+y              = 0
+width          = 32
+height         = 32
+planes         = 4
+canvaswidth    = 320
+framecount     = 16
+opaque         = 0
+}
