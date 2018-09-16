@@ -1,0 +1,20 @@
+.ProjectName="ASCOT"
+
+#include "..\..\..\GODLIB\FAST\head.bff"
+
+.ProjectOptions_Base =
+[
+	Using( .ProjectOptions_Win_Base )
+
+	.CompilerOptions 
+					+ ' /D dAUDIO_MIXER=1'
+					+ ' /D dCLI=1'
+					+ ' /D dEXEPTION_SCREEN=1'
+					+ ' /D dLINKFILE=1'
+					+ ' /D dGODLIB_PACKAGEMANGER=1'
+					+ ' /D dSCREENGRAB=1'
+]
+
+#include    "$GodLibDir$\FAST\Base.bff"
+#include    "$GodLibDir$\FAST\Combine.bff"
+
