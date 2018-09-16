@@ -1,2 +1,8 @@
-.SampleName="GOD_TEST"
-#include "..\..\tool.bff"
+.ProjectName="GOD_TEST"
+
+#include "..\..\..\GODLIB\FAST\head.bff"
+
+.ProjectOptions_Base = .ProjectOptions_Con_Base
+
+#include    "$GodLibDir$\FAST\Base.bff"
+#include    "$GodLibDir$\FAST\Combine.bff"

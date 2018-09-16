@@ -1,2 +1,8 @@
-.SampleName="PUREBOT"
-#include "..\..\tool.bff"
+.ProjectName="PUREBOT"
+
+#include "..\..\..\GODLIB\FAST\head.bff"
+
+.ProjectOptions_Base = .ProjectOptions_Con_Base
+
+#include    "$GodLibDir$\FAST\Base.bff"
+#include    "$GodLibDir$\FAST\Combine.bff"
