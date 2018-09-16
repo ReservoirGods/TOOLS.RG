@@ -1,5 +1,5 @@
 ;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-;	ANIM8R TOOL
+;	MAKELINK TOOL
 ;
 ;	Expected folder structure:
 ;   |
@@ -10,7 +10,7 @@
 
 ;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 ;	SPECIAL OPTIONS FOR PUREBOT
-;:-B=ANIM8R.LOG
+;:-B=MAKELINK.LOG
 ; -V
 ;:.C[ -NOUT ]
 ;:.S[ -NOUT ]
@@ -20,7 +20,7 @@
 ;	OUTPUT FILENAME
 ;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
-PRG/ANIM8R.TTP
+PRG\MAKELINK.TTP
 
 ;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 ;	OPTIONS
@@ -38,48 +38,27 @@ PRG/ANIM8R.TTP
 
 ..\..\TOOLS.RG\PURE_C\LIB\PCSTART.S
 
+
 ;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-;	GODLIB LIBRARY MODULES (C)
+;	GODLIB LIBRARY MODULES
 ;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
-..\..\GODLIB\AUDIO\AUDIO.C
 ..\..\GODLIB\BASE\BASE.C
-..\..\GODLIB\BLITTER\BLITTER.C
-..\..\GODLIB\COOKIE\COOKIE.C
-..\..\GODLIB\FADE\FADE.C
 ..\..\GODLIB\FILE\FILE.C
-..\..\GODLIB\FONT\FONT.C
-..\..\GODLIB\GRAPHIC\GRAPHIC.C
 ..\..\GODLIB\GEMDOS\GEMDOS.C
-..\..\GODLIB\IKBD\IKBD.C
-..\..\GODLIB\MAIN\GOD_MAIN.C
+..\..\GODLIB\LINKFILE\LINKFILE.C
 ..\..\GODLIB\MEMORY\MEMORY.C
-..\..\GODLIB\MFP\MFP.C
-..\..\GODLIB\PLATFORM\PLATFORM.C
-..\..\GODLIB\RANDOM\RANDOM.C
-..\..\GODLIB\SCREEN\SCREEN.C
-..\..\GODLIB\SYSTEM\SYSTEM.C
-..\..\GODLIB\VBL\VBL.C
-..\..\GODLIB\VIDEO\VIDEO.C
-..\..\GODLIB\VIDEO\VIDEL.C
-..\..\GODLIB\XBIOS\XBIOS.C
+..\..\GODLIB\PACKER\PACKER.C
+
 
 ;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-;	GODLIB LIBRARY MODULES (ASM)
+;	GODLIB LIBRARY (ASM)
 ;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
-..\..\GODLIB\AUDIO\AUDIO_S.S
 ..\..\GODLIB\GEMDOS\GEMDOS_S.S
-..\..\GODLIB\GRAPHIC\GRF_4_S.S
-..\..\GODLIB\GRAPHIC\GRF_B4_S.S
-..\..\GODLIB\IKBD\IKBD_S.S
 ..\..\GODLIB\MEMORY\MEMORY_S.S
-..\..\GODLIB\MFP\MFP_S.S
-..\..\GODLIB\SYSTEM\SYSTEM_S.S
-..\..\GODLIB\VBL\VBL_S.S
-..\..\GODLIB\VECTOR\VECTOR_S.S
-..\..\GODLIB\VIDEO\VIDEO_S.S
-..\..\GODLIB\XBIOS\XBIOS_S.S
+..\..\GODLIB\PACKER\PACKER_S.S
+
 
 ;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 ;	MAIN CODE
@@ -94,4 +73,3 @@ MAIN.C
 ..\..\TOOLS.RG\PURE_C\LIB\PCSTDLIB.LIB       ; standard library
 
 ;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-
