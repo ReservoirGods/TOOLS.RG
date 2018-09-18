@@ -1,5 +1,4 @@
 @echo off
-pushd
 for /D %%i in (*) do (
 	if exist "%%i\FAST" (
 		pushd "%%i\FAST"
@@ -7,4 +6,3 @@ for /D %%i in (*) do (
 		popd
 	)
 )
-popd
