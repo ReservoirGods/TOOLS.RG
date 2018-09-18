@@ -1,0 +1,12 @@
+.ProjectName="GODVIEW"
+
+#include "..\..\..\GODLIB\FAST\head.bff"
+
+.ProjectOptions_Base =
+[
+	Using( .ProjectOptions_Win_Base )
+	.CompilerOptions + ' /D dGODLIB_16BPP=1'
+ ]
+
+#include    "$GodLibDir$\FAST\Base.bff"
+#include    "$GodLibDir$\FAST\Combine.bff"
