@@ -1,0 +1,195 @@
+;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+;	TILEEDIT TOOL
+;
+;	Expected folder structure:
+;   |
+;	..\GODLIB
+;	..\TOOLS.RG
+;	..\GODLIB.SPL\TILEEDIT\TILEEDIT.PRJ
+;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+;	SPECIAL OPTIONS FOR PUREBOT
+;:-B=TILEEDIT.LOG
+; -V
+;:.C[ -NOUT ]
+;:.S[ -NOUT ]
+;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+;	OUTPUT FILENAME
+;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+PRG\TILEEDIT.TOS
+
+;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+;	OPTIONS
+;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+.C [ -8 -G -M -P -W-par -I..\..\TOOLS.RG\PURE_C\INCLUDE -I..\.. ]
+.L [ -F -G ]
+.S [ -1 -2 -8 -S -Y -NOUT ]
+
+=
+
+;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+;	STARTUP MODULE
+;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+..\..\TOOLS.RG\PURE_C\LIB\PCSTART.O
+
+
+;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+;	GODLIB LIBRARY MODULES
+;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+..\..\GODLIB\ASSERT\ASSERT.C
+..\..\GODLIB\ASSET\ASSET.C
+..\..\GODLIB\ASSET\CONTEXT.C
+..\..\GODLIB\ASSET\PACKAGE.C
+..\..\GODLIB\ASSET\PKG_DIR.C
+..\..\GODLIB\ASSET\PKG_LNK.C
+..\..\GODLIB\ASSET\RELOCATE.C
+..\..\GODLIB\AUDIO\AMIXER.C
+..\..\GODLIB\AUDIO\AUDIO.C
+..\..\GODLIB\BASE\BASE.C
+..\..\GODLIB\BLITTER\BLITTER.C
+..\..\GODLIB\CHUNKY\CHUNKY.C
+..\..\GODLIB\CLI\CLI.C
+..\..\GODLIB\CLOCK\CLOCK.C
+..\..\GODLIB\COOKIE\COOKIE.C
+..\..\GODLIB\DEBUGLOG\DEBUGLOG.C
+..\..\GODLIB\DRIVE\DRIVE.C
+..\..\GODLIB\EXCEPT\EXCEPT.C
+..\..\GODLIB\GEMDOS\GEMDOS.C
+..\..\GODLIB\FADE\FADE.C
+..\..\GODLIB\FADE\FADE_GOD.C
+..\..\GODLIB\FONT\FONT.C
+..\..\GODLIB\FONT8X8\FONT8X8.C
+..\..\GODLIB\FONT8X8\FONTDATA.C
+..\..\GODLIB\FILE\FILE.C
+..\..\GODLIB\GRAPHIC\GRAPHIC.C
+..\..\GODLIB\GUI\GUI.C
+..\..\GODLIB\GUI\GUIDATA.C
+..\..\GODLIB\GUI\GUIEDIT.C
+..\..\GODLIB\GUI\GUIFS.C
+..\..\GODLIB\GUI\GUIPARSE.C
+..\..\GODLIB\GUI\R_GUI.C
+..\..\GODLIB\HASHLIST\HASHLIST.C
+..\..\GODLIB\HASHTREE\HASHTREE.C
+..\..\GODLIB\IKBD\IKBD.C
+..\..\GODLIB\INPUT\INPUT.C
+..\..\GODLIB\LINKFILE\LINKFILE.C
+..\..\GODLIB\MAIN\GOD_MAIN.C
+..\..\GODLIB\MEMORY\MEMORY.C
+..\..\GODLIB\MFP\MFP.C
+..\..\GODLIB\PACKER\GODPACK.C
+..\..\GODLIB\PACKER\PACKER.C
+..\..\GODLIB\PICTYPES\DEGAS.C
+..\..\GODLIB\PICTYPES\GFX.C
+..\..\GODLIB\PROFILER\PROFILER.C
+..\..\GODLIB\RANDOM\RANDOM.C
+..\..\GODLIB\SPRITE\SPRITE.C
+..\..\GODLIB\STRING\STRING.C
+..\..\GODLIB\STRING\STRLIST.C
+..\..\GODLIB\SCRNGRAB\SCRNGRAB.C
+..\..\GODLIB\SYSTEM\SYSTEM.C
+..\..\GODLIB\TOKENISE\TOKENISE.C
+..\..\GODLIB\VBL\VBL.C
+..\..\GODLIB\VIDEO\VIDEO.C
+..\..\GODLIB\VIDEO\VIDEL.C
+..\..\GODLIB\XBIOS\XBIOS.C
+
+
+;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+;	GODLIB LIBRARY MODULES (ASM)
+;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+..\..\GODLIB\AUDIO\AMIXER_S.S
+..\..\GODLIB\AUDIO\AUDIO_S.S
+..\..\GODLIB\CLOCK\CLOCK_S.S
+..\..\GODLIB\EXCEPT\EXCEPT_S.S
+..\..\GODLIB\GEMDOS\GEMDOS_S.S
+..\..\GODLIB\GRAPHIC\GRF_4_S.S
+..\..\GODLIB\GRAPHIC\GRF_B4_S.S
+..\..\GODLIB\FADE\FADE_S.S
+..\..\GODLIB\IKBD\IKBD_S.S
+..\..\GODLIB\MEMORY\MEMORY_S.S
+..\..\GODLIB\MFP\MFP_S.S
+..\..\GODLIB\PACKER\LZ77B_S.S
+..\..\GODLIB\PACKER\PACKER_S.S
+..\..\GODLIB\PACKER\RLE_S.S
+..\..\GODLIB\PROFILER\PROFILES.S
+..\..\GODLIB\SCRNGRAB\SCRGRABS.S
+..\..\GODLIB\SYSTEM\SYSTEM_S.S
+..\..\GODLIB\VBL\VBL_S.S
+..\..\GODLIB\VIDEO\VIDEO_S.S
+..\..\GODLIB\VECTOR\VECTOR_S.S
+..\..\GODLIB\XBIOS\XBIOS_S.S
+..\..\GODLIB\WIPE\WIPE_S.S
+
+
+;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+;	KERNEL MODULES
+;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+CODE\BUILD.C
+CODE\KERNEL.C
+CODE\MAIN.C
+CODE\EDITMENU.C
+CODE\IMG_MENU.C
+CODE\MAINMENU.C
+CODE\PLATFORM.C
+CODE\TILEMAP.C
+CODE\TM_PROJ.C
+CODE\R_CUSTOM.C
+CODE\R_FNT.C
+CODE\R_SCREEN.C
+CODE\R_SPR.C
+
+
+;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+;	GAME MODULES
+;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+
+;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+;	GAME MODULES ( ASM )
+;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+
+;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+;	FRONTEND MODULES
+;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+
+;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+;	AUDIO MODULES
+;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+
+;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+;	AUDIO MODULES ( ASM )
+;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+
+;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+;	RENDER MODULES
+;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+
+;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+;	RENDER MODULES ( ASM )
+;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+
+;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+;	PURE C LIBRARIES
+;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+..\..\TOOLS.RG\PURE_C\LIB\PCEXTLIB.LIB       ; floating point library
+..\..\TOOLS.RG\PURE_C\LIB\PCFLTLIB.LIB       ; floating point library
+..\..\TOOLS.RG\PURE_C\LIB\PCSTDLIB.LIB       ; standard library
+
+
+;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@

@@ -1,0 +1,312 @@
+<ASSET name="ASS_CURSOR">
+{
+FILENAME = "CURSOR.BSB"
+CONTEXT = "GUI_GFX"
+}
+
+<ASSET name="ASS_FONT6X6">
+{
+FILENAME = "FONT6X6.BFB"
+CONTEXT = "GUI_GFX"
+}
+
+<ASSET name="ASS_FONT8X8">
+{
+FILENAME = "FONT8X8.BFB"
+CONTEXT = "GUI_GFX"
+}
+
+<ASSET name="ASS_FONT8X16">
+{
+FILENAME = "FONT8X16.BFB"
+CONTEXT = "GUI_GFX"
+}
+
+<ASSET name="ASS_CLOSE">
+{
+FILENAME = "CLOSE.BSB"
+CONTEXT = "GUI_GFX"
+}
+
+<ASSET name="ASS_UP">
+{
+FILENAME = "UP.BSB"
+CONTEXT = "GUI_GFX"
+}
+
+<ASSET name="ASS_DOWN">
+{
+FILENAME = "DOWN.BSB"
+CONTEXT = "GUI_GFX"
+}
+
+<ASSET name="ASS_LEFT">
+{
+FILENAME = "LEFT.BSB"
+CONTEXT = "GUI_GFX"
+}
+
+<ASSET name="ASS_RIGHT">
+{
+FILENAME = "RIGHT.BSB"
+CONTEXT = "GUI_GFX"
+}
+
+<BUTTON name="BUTT_EXIT">
+{
+X = 10
+Y = 20
+WIDTH = 16
+HEIGHT = 16
+BUTTONTYPE = "SWITCH"
+SPRITE_ASSET = "ASS_CLOSE"
+}
+
+<BUTTON name="BUTT_OPEN">
+{
+X             = 40
+Y             = 20
+WIDTH         = 60
+HEIGHT        = 16
+BUTTONTYPE    = "HOVER"
+STRING_TITLE  = "OPEN ME"
+STRING_ALIGNH = "CENTRE"
+STRING_ALIGNV = "CENTRE"
+}
+
+<BUTTON name="BUTT_EDIT">
+{
+X             = 128
+Y             = 20
+WIDTH         = 100
+HEIGHT        = 16
+BUTTONTYPE    = "TEXTLINE"
+STRING_VAR    = "VAR_HELLOWORLD"
+STRING_ALIGNH = "CENTRE"
+STRING_ALIGNV = "CENTRE"
+}
+
+<BUTTON name="BUTT_HOVER">
+{
+X             = 8
+Y             = 8
+WIDTH         = 50
+HEIGHT        = 16
+BUTTONTYPE    = "HOVER"
+STRING_TITLE  = "HOVER"
+STRING_ALIGNH = "CENTRE"
+STRING_ALIGNV = "CENTRE"
+}
+
+<BUTTON name="BUTT_SWITCH">
+{
+X             = 8
+Y             = 60
+WIDTH         = 50
+HEIGHT        = 16
+BUTTONTYPE    = "SWITCH"
+STRING_TITLE  = "SWITCH"
+STRING_ALIGNH = "CENTRE"
+STRING_ALIGNV = "CENTRE"
+}
+
+<BUTTON name="BUTT_BOTT">
+{
+X             = 8
+Y             = 188
+WIDTH         = 50
+HEIGHT        = 10
+BUTTONTYPE    = "SPRING"
+STRING_TITLE  = "SPRING"
+STRING_ALIGNH = "CENTRE"
+STRING_ALIGNV = "CENTRE"
+}
+
+<BUTTON name="BUTT_SLIDER_UP">
+{
+X             = 0
+Y             = 0
+WIDTH         = 0
+HEIGHT        = 10
+BUTTONTYPE    = "SPRING"
+SPRITE_ASSET  = "ASS_UP"
+}
+
+<BUTTON name="BUTT_SLIDER_DOWN">
+{
+X             = 0
+Y             = -10
+WIDTH         = 0
+HEIGHT        = 0
+BUTTONTYPE    = "SPRING"
+SPRITE_ASSET  = "ASS_DOWN"
+}
+
+<BUTTON name="BUTT_SLIDER_BACKADD">
+{
+X             = 0
+Y             = 10
+WIDTH         = 0
+HEIGHT        = 10
+BUTTONTYPE    = "SPRING"
+}
+
+<BUTTON name="BUTT_SLIDER_BACKSUB">
+{
+X             = 0
+Y             = 40
+WIDTH         = 0
+HEIGHT        = -10
+BUTTONTYPE    = "SPRING"
+}
+
+<BUTTON name="BUTT_SLIDER_MAIN">
+{
+X             = 0
+Y             = 20
+WIDTH         = 0
+HEIGHT        = 16
+BUTTONTYPE    = "SLIDERY"
+}
+
+
+<BUTTON name="BUTT_SLIDER_BACKSUB">
+{
+X             = 0
+Y             = 10
+WIDTH         = 0
+HEIGHT        = -10
+BUTTONTYPE    = "SPRING"
+}
+
+<BUTTONSTYLE name="STYLE_DEF">
+{
+FILL_NORMAL   = "fill_normal"
+FILL_SELECTED = "fill_selected"
+FILL_LOCKED   = "fill_normal"
+}
+
+<COLOUR name="col0">
+{
+PALINDEX = 0
+}
+
+<COLOUR name="col1">
+{
+PALINDEX = 1
+}
+
+<COLOUR name="col2">
+{
+PALINDEX = 2
+}
+
+<COLOUR name="col3">
+{
+PALINDEX = 3
+}
+
+<CURSOR name="mouse">
+{
+ASSET = "ASS_CURSOR"
+}
+
+<FILL name="fill_normal">
+{
+COLOUR_MAIN = "col0"
+COLOUR_TL0  = "col1"
+COLOUR_TL1  = "col2"
+COLOUR_BR0  = "col3"
+COLOUR_BR1  = "col3"
+}
+
+<FILL name="fill_selected">
+{
+COLOUR_MAIN = "col2"
+COLOUR_TL0  = "col3"
+COLOUR_TL1  = "col3"
+COLOUR_BR0  = "col2"
+COLOUR_BR1  = "col1"
+}
+
+<FONTGROUP name="fontgroup_def">
+{
+NORMAL = "ASS_FONT6X6"
+LOCKED = "ASS_FONT6X6"
+SELECTED = "ASS_FONT6X6"
+}
+
+<SLIDER name="SLIDER_TEST">
+{
+X             = 20
+Y             = 80
+WIDTH         = 16
+HEIGHT        = 100
+SIZEMIN       = 16
+BUTTONSIZE    = 10
+SLIDERTYPE    = "VERTICAL"
+WINDOW        = "WND_SUB"
+BUTTONADD     = "BUTT_SLIDER_UP"
+BUTTONSUB     = "BUTT_SLIDER_DOWN"
+BUTTONMAIN    = "BUTT_SLIDER_MAIN"
+BUTTONBACKADD = "BUTT_SLIDER_BACKADD"
+BUTTONBACKSUB = "BUTT_SLIDER_BACKSUB"
+}
+
+<VALUE name ="VALUE_SCROLLX">
+{
+VAR      = "VAR_SCROLLX"
+VALUEMAX = "VAR_SCROLLXMAX"
+}
+
+<VAR name ="VAR_HELLOWORLD">
+{
+NAME = "TILEEDIT\HELLOWORLD"
+TYPE = "STRING"
+}
+
+<VAR name ="VAR_SCROLLX">
+{
+NAME = "TILEEDIT\SCROLLX"
+TYPE = "S16"
+}
+
+<VAR name ="VAR_SCROLLXMAX">
+{
+NAME = "TILEEDIT\SCROLLXMAX"
+TYPE = "S16"
+}
+
+<WINDOW name ="MAIN">
+{
+X           = 0
+Y           = 0
+WIDTH       = 0
+HEIGHT      = 0
+BUTTONSTYLE = "STYLE_DEF"
+FILL        = "fill_normal"
+FONTGROUP   = "fontgroup_def"
+BUTTON      = "BUTT_EXIT"
+BUTTON      = "BUTT_OPEN"
+BUTTON      = "BUTT_EDIT"
+SLIDER      = "SLIDER_TEST"
+WINDOW      = "WND_SUB"
+}
+
+<WINDOW name="WND_SUB">
+{
+X            = 160
+Y            = 100
+WIDTH        = 100
+HEIGHT       = 80
+CANVASX      = 0
+CANVASY      = 8
+CANVASWIDTH  = 100
+CANVASHEIGHT = 200
+BUTTONSTYLE  = "STYLE_DEF"
+FILL         = "fill_normal"
+FONTGROUP    = "fontgroup_def"
+BUTTON       = "BUTT_HOVER"
+BUTTON       = "BUTT_SWITCH"
+BUTTON       = "BUTT_BOTT"
+}

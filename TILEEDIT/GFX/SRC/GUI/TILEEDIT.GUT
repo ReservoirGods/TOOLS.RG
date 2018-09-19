@@ -1,0 +1,1430 @@
+<ACTION name="ACT_FSCLOSE">
+{
+ACTION       = "WINDOW_CLOSE"
+WINDOW_CLOSE = "WND_FS"
+}
+<ASSET name="ASS_CURSOR">
+{
+FILENAME = "CURSOR.BSB"
+CONTEXT = "GUI_GFX"
+}
+
+<ASSET name="ASS_FONT6X6">
+{
+FILENAME = "FONT6X6.BFB"
+CONTEXT = "GUI_GFX"
+}
+
+<ASSET name="ASS_FONT8X8">
+{
+FILENAME = "FONT8X8.BFB"
+CONTEXT = "GUI_GFX"
+}
+
+<ASSET name="ASS_FONT8X16">
+{
+FILENAME = "FONT8X16.BFB"
+CONTEXT = "GUI_GFX"
+}
+
+<ASSET name="ASS_CLOSE">
+{
+FILENAME = "CLOSE.BSB"
+CONTEXT = "GUI_GFX"
+}
+
+<ASSET name="ASS_UP">
+{
+FILENAME = "UP.BSB"
+CONTEXT = "GUI_GFX"
+}
+
+<ASSET name="ASS_DOWN">
+{
+FILENAME = "DOWN.BSB"
+CONTEXT = "GUI_GFX"
+}
+
+<ASSET name="ASS_LEFT">
+{
+FILENAME = "LEFT.BSB"
+CONTEXT = "GUI_GFX"
+}
+
+<ASSET name="ASS_RIGHT">
+{
+FILENAME = "RIGHT.BSB"
+CONTEXT = "GUI_GFX"
+}
+
+<BUTTON name="BUTT_WNDTITLE">
+{ 
+X               = 0
+Y               = 0
+WIDTH           = 0
+HEIGHT          = 16
+STRING_ALIGNH   = "CENTRE"
+STRING_ALIGNV   = "CENTRE"
+STRING_VAR_NAME = "GUI\FS\TITLE"
+STRING_VAR_TYPE = "STRING"
+}
+
+<BUTTON name="BUTT_FOLDERBACK">
+{
+X            = 10
+Y            = 20
+WIDTH        = 16
+HEIGHT       = 16
+BUTTONTYPE   = "SPRING"
+SPRITE_ASSET = "ASS_CLOSE"
+}
+
+<BUTTON name="BUTT_FS_OK">
+{
+X             = 20
+Y             = -20
+WIDTH         = 60
+HEIGHT        = 16
+BUTTONTYPE    = "SPRING"
+STRING_TITLE  = "OK"
+STRING_ALIGNH = "CENTRE"
+STRING_ALIGNV = "CENTRE"
+ONLEFTCLICK   = "ACT_FSCLOSE"
+}
+
+<BUTTON name="BUTT_FS_CANCEL">
+{
+X             = 100
+Y             = -20
+WIDTH         = 60
+HEIGHT        = 16
+BUTTONTYPE    = "SPRING"
+STRING_TITLE  = "CANCEL"
+STRING_ALIGNH = "CENTRE"
+STRING_ALIGNV = "CENTRE"
+ONLEFTCLICK   = "ACT_FSCLOSE"
+}
+
+<BUTTON name="BUTT_OPEN">
+{
+X             = 40
+Y             = 20
+WIDTH         = 60
+HEIGHT        = 16
+BUTTONTYPE    = "HOVER"
+STRING_TITLE  = "OPEN ME"
+STRING_ALIGNH = "CENTRE"
+STRING_ALIGNV = "CENTRE"
+}
+
+<BUTTON name="BUTT_FILENAME">
+{
+X               = 40
+Y               = 20
+WIDTH           = 100
+HEIGHT          = 16
+BUTTONTYPE      = "TEXTLINE"
+STRING_ALIGNH   = "CENTRE"
+STRING_ALIGNV   = "CENTRE"
+STRING_VAR_NAME = "GUI\FS\FILENAME"
+STRING_VAR_TYPE = "STRING"
+}
+
+<BUTTON name="BUTT_FILEMASK">
+{
+X               = 160
+Y               = 20
+WIDTH           = 60
+HEIGHT          = 16
+BUTTONTYPE      = "TEXTLINE"
+STRING_ALIGNH   = "CENTRE"
+STRING_ALIGNV   = "CENTRE"
+STRING_VAR_NAME = "GUI\FS\FILEMASK"
+STRING_VAR_TYPE = "STRING"
+}
+
+<BUTTON name="BUTT_FILEPATH">
+{
+X               = 18
+Y               = 40
+WIDTH           = -2
+HEIGHT          = 16
+BUTTONTYPE      = "TEXTLINE"
+STRING_ALIGNH   = "RIGHT"
+STRING_ALIGNV   = "CENTRE"
+STRING_VAR_NAME = "GUI\FS\FILEPATH"
+STRING_VAR_TYPE = "STRING"
+}
+
+<BUTTON name="BUTT_DRIVE">
+{
+X               = 2
+Y               = 40
+WIDTH           = 16
+HEIGHT          = 16
+BUTTONTYPE      = "TEXTLINE"
+STRING_ALIGNH   = "CENTRE"
+STRING_ALIGNV   = "CENTRE"
+STRING_VAR_NAME = "GUI\FS\DRIVE"
+STRING_VAR_TYPE = "STRING"
+}
+
+<BUTTON name="BUTT_SWITCH">
+{
+X             = 8
+Y             = 60
+WIDTH         = 50
+HEIGHT        = 16
+BUTTONTYPE    = "SWITCH"
+STRING_TITLE  = "SWITCH"
+STRING_ALIGNH = "CENTRE"
+STRING_ALIGNV = "CENTRE"
+}
+
+<BUTTON name="BUTT_BOTT">
+{
+X             = 8
+Y             = 188
+WIDTH         = 50
+HEIGHT        = 10
+BUTTONTYPE    = "SPRING"
+STRING_TITLE  = "SPRING"
+STRING_ALIGNH = "CENTRE"
+STRING_ALIGNV = "CENTRE"
+}
+
+<BUTTON name="BUTT_SLIDER_UP">
+{
+X             = 0
+Y             = 0
+WIDTH         = 0
+HEIGHT        = 10
+BUTTONTYPE    = "SPRING"
+SPRITE_ASSET  = "ASS_UP"
+}
+
+<BUTTON name="BUTT_SLIDER_DOWN">
+{
+X             = 0
+Y             = -10
+WIDTH         = 0
+HEIGHT        = 0
+BUTTONTYPE    = "SPRING"
+SPRITE_ASSET  = "ASS_DOWN"
+}
+
+<BUTTON name="BUTT_SLIDER_BACKADD">
+{
+X             = 0
+Y             = 10
+WIDTH         = 0
+HEIGHT        = 10
+BUTTONTYPE    = "SPRING"
+BUTTONSTYLE   = "STYLE_BACK"
+}
+
+<BUTTON name="BUTT_SLIDER_BACKSUB">
+{
+X             = 0
+Y             = 40
+WIDTH         = 0
+HEIGHT        = -10
+BUTTONTYPE    = "SPRING"
+BUTTONSTYLE   = "STYLE_BACK"
+}
+
+<BUTTON name="BUTT_SLIDER_MAIN">
+{
+X             = 0
+Y             = 20
+WIDTH         = 0
+HEIGHT        = 16
+BUTTONTYPE    = "SLIDERY"
+}
+
+
+<BUTTON name="BUTT_SLIDER_BACKSUB">
+{
+X             = 0
+Y             = 10
+WIDTH         = 0
+HEIGHT        = -10
+BUTTONTYPE    = "SPRING"
+}
+
+<BUTTONSTYLE name="STYLE_DEF">
+{
+FILL_NORMAL   = "fill_normal"
+FILL_SELECTED = "fill_selected"
+FILL_LOCKED   = "fill_normal"
+}
+
+<BUTTONSTYLE name="STYLE_BACK">
+{
+FILL_NORMAL   = "fill_back"
+FILL_SELECTED = "fill_selected"
+FILL_LOCKED   = "fill_normal"
+}
+
+<BUTTONSTYLE name="STYLE_BLANK">
+{
+FILL_NORMAL   = "fill_blank"
+FILL_SELECTED = "fill_blanksel"
+FILL_LOCKED   = "fill_blank"
+}
+
+<COLOUR name="col0">
+{
+PALINDEX = 0
+}
+
+<COLOUR name="col1">
+{
+PALINDEX = 1
+}
+
+<COLOUR name="col2">
+{
+PALINDEX = 2
+}
+
+<COLOUR name="col3">
+{
+PALINDEX = 3
+}
+
+<CURSOR name="mouse">
+{
+ASSET = "ASS_CURSOR"
+}
+
+<FILL name="fill_normal">
+{
+COLOUR_MAIN = "col0"
+COLOUR_TL0  = "col1"
+COLOUR_TL1  = "col2"
+COLOUR_BR0  = "col3"
+COLOUR_BR1  = "col3"
+}
+
+<FILL name="fill_selected">
+{
+COLOUR_MAIN = "col2"
+COLOUR_TL0  = "col3"
+COLOUR_TL1  = "col3"
+COLOUR_BR0  = "col2"
+COLOUR_BR1  = "col1"
+}
+
+<FILL name="fill_back">
+{
+COLOUR_MAIN = "col1"
+COLOUR_TL0  = "col3"
+COLOUR_TL1  = "col3"
+COLOUR_BR0  = "col2"
+COLOUR_BR1  = "col1"
+}
+
+<FILL name="fill_blank">
+{
+COLOUR_MAIN = "col0"
+COLOUR_TL0  = "col0"
+COLOUR_TL1  = "col0"
+COLOUR_BR0  = "col0"
+COLOUR_BR1  = "col0"
+}
+
+<FILL name="fill_blanksel">
+{
+COLOUR_MAIN = "col2"
+COLOUR_TL0  = "col2"
+COLOUR_TL1  = "col2"
+COLOUR_BR0  = "col2"
+COLOUR_BR1  = "col2"
+}
+
+
+
+<FONTGROUP name="fontgroup_def">
+{
+NORMAL = "ASS_FONT6X6"
+LOCKED = "ASS_FONT6X6"
+SELECTED = "ASS_FONT6X6"
+}
+
+<SLIDER name="SLIDER_FILELISTY">
+{
+X             = -18
+Y             = 60
+WIDTH         = 16
+HEIGHT        = -20
+SIZEMIN       = 16
+BUTTONSIZE    = 10
+SLIDERTYPE    = "VERTICAL"
+WINDOW        = "WND_FILELIST"
+BUTTONADD     = "BUTT_SLIDER_UP"
+BUTTONSUB     = "BUTT_SLIDER_DOWN"
+BUTTONMAIN    = "BUTT_SLIDER_MAIN"
+BUTTONBACKADD = "BUTT_SLIDER_BACKADD"
+BUTTONBACKSUB = "BUTT_SLIDER_BACKSUB"
+}
+
+
+<VALUE name ="VALUE_SCROLLX">
+{
+VAR     = "VAR_SCROLLX"
+VAR_MAX = "VAR_SCROLLXMAX"
+}
+
+<VAR name ="VAR_SCROLLX">
+{
+NAME = "TILEEDIT\SCROLLX"
+TYPE = "S16"
+}
+
+<VAR name ="VAR_SCROLLXMAX">
+{
+NAME = "TILEEDIT\SCROLLXMAX"
+TYPE = "S16"
+}
+
+<WINDOW name ="WND_MAINMENU">
+{
+X           = 120
+Y           = 40
+WIDTH       = 80
+HEIGHT      = 120
+BUTTONSTYLE = "STYLE_DEF"
+FILL        = "fill_normal"
+FONTGROUP   = "fontgroup_def"
+BUTTON      = "BUTT_MM_EDIT"
+BUTTON      = "BUTT_MM_LOADMAP"
+BUTTON      = "BUTT_MM_SAVEMAP"
+BUTTON      = "BUTT_MM_LOADPRJ"
+BUTTON      = "BUTT_MM_SAVEPRJ"
+BUTTON      = "BUTT_MM_EXIT"
+KEYACTION   = "KEY_MM_EXIT"
+}
+
+<WINDOW name ="WND_EXIT">
+{
+X           = 80
+Y           = 70
+WIDTH       = 160
+HEIGHT      = 60
+BUTTONSTYLE = "STYLE_DEF"
+FILL        = "fill_normal"
+FONTGROUP   = "fontgroup_def"
+BUTTON      = "BUTT_EXIT_TITLE"
+BUTTON      = "BUTT_EXIT_SURE"
+BUTTON      = "BUTT_EXIT_YES"
+BUTTON      = "BUTT_EXIT_NO"
+}
+
+
+
+
+<WINDOW name ="WND_FS">
+{
+X           = 0
+Y           = 0
+WIDTH       = 0
+HEIGHT      = 0
+BUTTONSTYLE = "STYLE_DEF"
+FILL        = "fill_normal"
+FONTGROUP   = "fontgroup_def"
+BUTTON      = "BUTT_WNDTITLE"
+BUTTON      = "BUTT_FS_OK"
+BUTTON      = "BUTT_FS_CANCEL"
+BUTTON      = "BUTT_FOLDERBACK"
+BUTTON      = "BUTT_DRIVE"
+BUTTON      = "BUTT_FILEMASK"
+BUTTON      = "BUTT_FILENAME"
+BUTTON      = "BUTT_FILEPATH"
+SLIDER      = "SLIDER_FILELISTY"
+WINDOW      = "WND_FILELIST"
+}
+
+<WINDOW name="WND_FILELIST">
+{
+X            = 4
+Y            = 60
+WIDTH        = -20
+HEIGHT       = -20
+CANVASX      = 0
+CANVASY      = 0
+CANVASWIDTH  = 100
+CANVASHEIGHT = 120
+BUTTONSTYLE  = "STYLE_BLANK"
+FILL         = "fill_normal"
+FONTGROUP    = "fontgroup_def"
+BUTTON       = "BUTT_SWITCH"
+BUTTON       = "BUTT_BOTT"
+}
+
+////////////////////////////////////////////////////////////////////
+// MAIN MENU
+////////////////////////////////////////////////////////////////////
+
+<ACTION name="ACT_MM_EDIT">
+{
+WINDOW_CLOSE = "WND_MAINMENU"
+WINDOW_OPEN  = "WND_EDIT"
+}
+
+<ACTION name="ACT_MM_EXIT">
+{
+WINDOW_CLOSE = "WND_MAINMENU"
+WINDOW_OPEN  = "WND_EXIT"
+}
+
+<KEYACTION name="KEY_MM_EXIT">
+{
+SCANCODE  = "F10"
+CONDITION = "PRESSED"
+ACTION    = "ACT_MM_EXIT"
+}
+
+<BUTTON name="BUTT_MM_EDIT">
+{
+X             = 4
+Y             = 20
+WIDTH         = -4
+HEIGHT        = 12
+BUTTONTYPE    = "SPRING"
+STRING_TITLE  = "EDIT"
+STRING_ALIGNH = "CENTRE"
+STRING_ALIGNV = "CENTRE"
+ONLEFTCLICK   = "ACT_MM_EDIT"
+}
+
+<BUTTON name="BUTT_MM_LOADMAP">
+{
+X             = 4
+Y             = 34
+WIDTH         = -4
+HEIGHT        = 12
+BUTTONTYPE    = "SPRING"
+STRING_TITLE  = "LOAD MAP"
+STRING_ALIGNH = "CENTRE"
+STRING_ALIGNV = "CENTRE"
+}
+
+<BUTTON name="BUTT_MM_SAVEMAP">
+{
+X             = 4
+Y             = 48
+WIDTH         = -4
+HEIGHT        = 12
+BUTTONTYPE    = "SPRING"
+STRING_TITLE  = "SAVE MAP"
+STRING_ALIGNH = "CENTRE"
+STRING_ALIGNV = "CENTRE"
+}
+
+<BUTTON name="BUTT_MM_LOADPRJ">
+{
+X             = 4
+Y             = 62
+WIDTH         = -4
+HEIGHT        = 12
+BUTTONTYPE    = "SPRING"
+STRING_TITLE  = "LOAD PRJ"
+STRING_ALIGNH = "CENTRE"
+STRING_ALIGNV = "CENTRE"
+}
+
+<BUTTON name="BUTT_MM_SAVEPRJ">
+{
+X             = 4
+Y             = 76
+WIDTH         = -4
+HEIGHT        = 12
+BUTTONTYPE    = "SPRING"
+STRING_TITLE  = "SAVE PRJ"
+STRING_ALIGNH = "CENTRE"
+STRING_ALIGNV = "CENTRE"
+}
+
+<BUTTON name="BUTT_MM_EXIT">
+{
+X             = 4
+Y             = 90
+WIDTH         = -4
+HEIGHT        = 12
+BUTTONTYPE    = "SPRING"
+STRING_TITLE  = "EXIT"
+STRING_ALIGNH = "CENTRE"
+STRING_ALIGNV = "CENTRE"
+ONLEFTCLICK   = "ACT_MM_EXIT"
+}
+
+
+////////////////////////////////////////////////////////////////////
+// EXIT
+////////////////////////////////////////////////////////////////////
+
+<ACTION name="ACT_EXIT_YES">
+{
+ACTION       = "APP_EXIT"
+WINDOW_CLOSE = "WND_EXIT"
+}
+
+<ACTION name="ACT_EXIT_NO">
+{
+WINDOW_CLOSE = "WND_EXIT"
+WINDOW_OPEN  = "WND_MAINMENU"
+}
+
+<BUTTON name="BUTT_EXIT_TITLE">
+{
+X             = 0
+Y             = 0
+WIDTH         = 0
+HEIGHT        = 12
+BUTTONTYPE    = "NONE"
+STRING_TITLE  = "EXIT APPLICATION"
+STRING_ALIGNH = "CENTRE"
+STRING_ALIGNV = "CENTRE"
+}
+
+<BUTTON name="BUTT_EXIT_SURE">
+{
+X             = 0
+Y             = 20
+WIDTH         = 0
+HEIGHT        = 12
+BUTTONTYPE    = "NONE"
+BUTTONSTYLE   = "STYLE_BLANK"
+STRING_TITLE  = "ARE YOU SURE?"
+STRING_ALIGNH = "CENTRE"
+STRING_ALIGNV = "CENTRE"
+}
+
+<BUTTON name="BUTT_EXIT_YES">
+{
+X             = 10
+Y             = 40
+WIDTH         = 40
+HEIGHT        = 12
+BUTTONTYPE    = "SPRING"
+STRING_TITLE  = "YES"
+STRING_ALIGNH = "CENTRE"
+STRING_ALIGNV = "CENTRE"
+ONLEFTCLICK   = "ACT_EXIT_YES"
+}
+
+<BUTTON name="BUTT_EXIT_NO">
+{
+X             = 100
+Y             = 40
+WIDTH         = 40
+HEIGHT        = 12
+BUTTONTYPE    = "SPRING"
+STRING_TITLE  = "NO"
+STRING_ALIGNH = "CENTRE"
+STRING_ALIGNV = "CENTRE"
+ONLEFTCLICK   = "ACT_EXIT_NO"
+}
+
+
+
+////////////////////////////////////////////////////////////////////
+// EDIT MENU
+////////////////////////////////////////////////////////////////////
+
+<ACTION name="ACT_EDIT_LEFT">
+{
+ACTION   = "ADD"
+CONSTANT = -1
+VALUE    = "VAL_EDIT_MAPX" 
+}
+
+<ACTION name="ACT_EDIT_UP">
+{
+ACTION   = "ADD"
+CONSTANT = -1
+VALUE    = "VAL_EDIT_MAPY" 
+}
+
+<ACTION name="ACT_EDIT_DOWN">
+{
+ACTION   = "ADD"
+CONSTANT = 1
+VALUE    = "VAL_EDIT_MAPY" 
+}
+
+<ACTION name="ACT_EDIT_RIGHT">
+{
+ACTION   = "ADD"
+CONSTANT = 1
+VALUE    = "VAL_EDIT_MAPX" 
+}
+
+<ACTION name="ACT_EDIT_PAGELEFT">
+{
+ACTION   = "ADD"
+CONSTANT = -19
+VALUE    = "VAL_EDIT_MAPX" 
+}
+
+<ACTION name="ACT_EDIT_PAGEUP">
+{
+ACTION   = "ADD"
+CONSTANT = -11
+VALUE    = "VAL_EDIT_MAPY" 
+}
+
+<ACTION name="ACT_EDIT_PAGEDOWN">
+{
+ACTION   = "ADD"
+CONSTANT = 11
+VALUE    = "VAL_EDIT_MAPY" 
+}
+
+<ACTION name="ACT_EDIT_PAGERIGHT">
+{
+ACTION   = "ADD"
+CONSTANT = 19
+VALUE    = "VAL_EDIT_MAPX" 
+}
+
+<ACTION name="ACT_EDIT_EXIT">
+{
+WINDOW_CLOSE = "WND_EDIT"
+WINDOW_OPEN  = "WND_MAINMENU"
+}
+
+<ACTION name="ACT_EDIT_PICK">
+{
+WINDOW_CLOSE = "WND_EDIT"
+WINDOW_OPEN  = "WND_IMGMENU"
+}
+
+<ACTION name="ACT_EDIT_MAP">
+{
+WINDOW_CLOSE = "WND_EDIT"
+WINDOW_OPEN  = "WND_MAP"
+}
+
+<KEYACTION name="KEY_EDIT_LEFT">
+{
+SCANCODE  = "LEFT"
+CONDITION = "PRESSED"
+ACTION    = "ACT_EDIT_LEFT"
+}
+
+<KEYACTION name="KEY_EDIT_RIGHT">
+{
+SCANCODE  = "RIGHT"
+CONDITION = "PRESSED"
+ACTION    = "ACT_EDIT_RIGHT"
+}
+
+<KEYACTION name="KEY_EDIT_DOWN">
+{
+SCANCODE  = "DOWN"
+CONDITION = "PRESSED"
+ACTION    = "ACT_EDIT_DOWN"
+}
+
+<KEYACTION name="KEY_EDIT_UP">
+{
+SCANCODE  = "UP"
+CONDITION = "PRESSED"
+ACTION    = "ACT_EDIT_UP"
+}
+
+
+<KEYACTION name="KEY_EDIT_PAGELEFT">
+{
+SPECIAL   = "SHIFT"
+SCANCODE  = "LEFT"
+CONDITION = "PRESSED"
+ACTION    = "ACT_EDIT_PAGELEFT"
+}
+
+<KEYACTION name="KEY_EDIT_PAGERIGHT">
+{
+SPECIAL   = "SHIFT"
+SCANCODE  = "RIGHT"
+CONDITION = "PRESSED"
+ACTION    = "ACT_EDIT_PAGERIGHT"
+}
+
+<KEYACTION name="KEY_EDIT_PAGEDOWN">
+{
+SPECIAL   = "SHIFT"
+SCANCODE  = "DOWN"
+CONDITION = "PRESSED"
+ACTION    = "ACT_EDIT_PAGEDOWN"
+}
+
+<KEYACTION name="KEY_EDIT_PAGEUP">
+{
+SPECIAL   = "SHIFT"
+SCANCODE  = "UP"
+CONDITION = "PRESSED"
+ACTION    = "ACT_EDIT_PAGEUP"
+}
+
+<KEYACTION name="KEY_EDIT_PICK">
+{
+SCANCODE  = "SPACE"
+CONDITION = "PRESSED"
+ACTION    = "ACT_EDIT_PICK"
+}
+
+<BUTTON name="BUTT_EDIT_LEFT">
+{
+X             = 26
+Y             = 0
+WIDTH         = 20
+HEIGHT        = 20
+BUTTONTYPE    = "SPRING"
+SPRITE_X      = 4
+SPRITE_Y      = 4
+SPRITE_ASSET  = "ASS_LEFT"
+ONLEFTCLICK   = "ACT_EDIT_LEFT"
+ONRIGHTCLICK  = "ACT_EDIT_PAGELEFT"
+}
+
+<BUTTON name="BUTT_EDIT_UP">
+{
+X             = 48
+Y             = 0
+WIDTH         = 20
+HEIGHT        = 20
+BUTTONTYPE    = "SPRING"
+SPRITE_X      = 4
+SPRITE_Y      = 4
+SPRITE_ASSET  = "ASS_UP"
+ONLEFTCLICK   = "ACT_EDIT_UP"
+ONRIGHTCLICK  = "ACT_EDIT_PAGEUP"
+}
+
+<BUTTON name="BUTT_EDIT_DOWN">
+{
+X             = 70
+Y             = 0
+WIDTH         = 20
+HEIGHT        = 20
+BUTTONTYPE    = "SPRING"
+SPRITE_X      = 4
+SPRITE_Y      = 4
+SPRITE_ASSET  = "ASS_DOWN"
+ONLEFTCLICK   = "ACT_EDIT_DOWN"
+ONRIGHTCLICK  = "ACT_EDIT_PAGEDOWN"
+}
+
+<BUTTON name="BUTT_EDIT_RIGHT">
+{
+X             = 92
+Y             = 0
+WIDTH         = 20
+HEIGHT        = 20
+BUTTONTYPE    = "SPRING"
+SPRITE_X      = 4
+SPRITE_Y      = 4
+SPRITE_ASSET  = "ASS_RIGHT"
+ONLEFTCLICK   = "ACT_EDIT_RIGHT"
+ONRIGHTCLICK  = "ACT_EDIT_PAGERIGHT"
+}
+
+<BUTTON name="BUTT_EDIT_OPT">
+{
+X             = 120
+Y             = 0
+WIDTH         = 40
+HEIGHT        = 24
+BUTTONTYPE    = "SPRING"
+STRING_TITLE  = "OPT"
+STRING_ALIGNH = "CENTRE"
+STRING_ALIGNV = "CENTRE"
+ONLEFTCLICK   = "ACT_EDIT_MAP"
+}
+
+<BUTTON name="BUTT_EDIT_BACK">
+{
+X             = 0
+Y             = 0
+WIDTH         = 16
+HEIGHT        = 16
+BUTTONTYPE    = "SPRING"
+SPRITE_X      = 4
+SPRITE_Y      = 4
+SPRITE_ASSET  = "ASS_CLOSE"
+ONLEFTCLICK   = "ACT_EDIT_EXIT"
+}
+
+<BUTTON name="BUTT_EDIT_PICK">
+{
+X             = 244
+Y             = 0
+WIDTH         = 0
+HEIGHT        = 24
+BUTTONTYPE    = "SPRING"
+STRING_TITLE  = "PICK"
+STRING_ALIGNH = "CENTRE"
+STRING_ALIGNV = "CENTRE"
+ONLEFTCLICK   = "ACT_EDIT_PICK"
+ONRIGHTCLICK  = "ACT_EDIT_MAP"
+}
+
+<BUTTON name="BUTT_EDIT_MAPX">
+{
+X               = 170
+Y               = 0
+WIDTH           = 20
+HEIGHT          = 12
+BUTTONTYPE      = "NONE"
+BUTTONSTYLE     = "STYLE_BLANK"
+STRING_VAR_NAME = "TILEEDIT\EDITMENU\MAPX"
+STRING_VAR_TYPE = "S32"
+}
+
+<BUTTON name="BUTT_EDIT_MAPY">
+{
+X               = 170
+Y               = 13
+WIDTH           = 20
+HEIGHT          = 12
+BUTTONTYPE      = "NONE"
+BUTTONSTYLE     = "STYLE_BLANK"
+STRING_VAR_NAME = "TILEEDIT\EDITMENU\MAPY"
+STRING_VAR_TYPE = "S32"
+}
+
+<BUTTON name="BUTT_EDIT_MAIN">
+{
+X             = 0
+Y             = 26
+WIDTH         = 0
+HEIGHT        = 0
+BUTTONTYPE    = "CUSTOM"
+SUBTYPE       = 2
+}
+
+<VAR name="VAR_EDIT_MAPX">
+{
+NAME = "TILEEDIT\EDITMENU\MAPX"
+TYPE = "S32"
+}
+
+<VAR name="VAR_EDIT_MAPY">
+{
+NAME = "TILEEDIT\EDITMENU\MAPY"
+TYPE = "S32"
+}
+
+<VAR name="VAR_EDIT_MAPXMAX">
+{
+NAME = "TILEEDIT\EDITMENU\MAPXMAX"
+TYPE = "S32"
+}
+
+<VAR name="VAR_EDIT_MAPYMAX">
+{
+NAME = "TILEEDIT\EDITMENU\MAPYMAX"
+TYPE = "S32"
+}
+
+<VALUE name="VAL_EDIT_MAPX">
+{
+VAR      = "VAR_EDIT_MAPX"
+VAR_MAX  = "VAR_EDIT_MAPXMAX
+MIN      = 0
+}
+
+<VALUE name="VAL_EDIT_MAPY">
+{
+VAR      = "VAR_EDIT_MAPY"
+VAR_MAX  = "VAR_EDIT_MAPYMAX
+MIN      = 0
+}
+
+<WINDOW name ="WND_EDIT">
+{
+X           = 0
+Y           = 0
+WIDTH       = 0
+HEIGHT      = 0
+BUTTONSTYLE = "STYLE_DEF"
+FILL        = "fill_normal"
+FONTGROUP   = "fontgroup_def"
+BUTTON      = "BUTT_EDIT_LEFT"
+BUTTON      = "BUTT_EDIT_UP"
+BUTTON      = "BUTT_EDIT_DOWN"
+BUTTON      = "BUTT_EDIT_RIGHT"
+BUTTON      = "BUTT_EDIT_BACK"
+BUTTON      = "BUTT_EDIT_PICK"
+BUTTON      = "BUTT_EDIT_MAPX"
+BUTTON      = "BUTT_EDIT_MAPY"
+BUTTON      = "BUTT_EDIT_MAIN"
+BUTTON      = "BUTT_EDIT_OPT"
+KEYACTION   = "KEY_EDIT_UP"
+KEYACTION   = "KEY_EDIT_DOWN"
+KEYACTION   = "KEY_EDIT_LEFT"
+KEYACTION   = "KEY_EDIT_RIGHT"
+KEYACTION   = "KEY_EDIT_PICK"
+KEYACTION   = "KEY_EDIT_PAGEUP"
+KEYACTION   = "KEY_EDIT_PAGEDOWN"
+KEYACTION   = "KEY_EDIT_PAGELEFT"
+KEYACTION   = "KEY_EDIT_PAGERIGHT"
+}
+
+////////////////////////////////////////////////////////////////////
+// IMAGE MENU
+////////////////////////////////////////////////////////////////////
+
+<ACTION name="ACT_IMG_PREV">
+{
+ACTION   = "ADD"
+CONSTANT = -1
+VALUE    = "VAL_IMGINDEX" 
+}
+
+<ACTION name="ACT_IMG_BACK">
+{
+WINDOW_CLOSE = "WND_IMGMENU"
+WINDOW_OPEN  = "WND_EDIT"
+}
+
+<ACTION name="ACT_IMG_NEXT">
+{
+ACTION   = "ADD"
+CONSTANT = 1
+VALUE    = "VAL_IMGINDEX" 
+}
+
+<KEYACTION name="KEY_IMG_PREV">
+{
+SCANCODE  = "LEFT"
+CONDITION = "PRESSED"
+ACTION    = "ACT_IMG_PREV"
+}
+
+<KEYACTION name="KEY_IMG_NEXT">
+{
+SCANCODE  = "RIGHT"
+CONDITION = "PRESSED"
+ACTION    = "ACT_IMG_NEXT"
+}
+
+<WINDOW name ="WND_IMGMENU">
+{
+X           = 0
+Y           = 0
+WIDTH       = 0
+HEIGHT      = 0
+BUTTONSTYLE = "STYLE_DEF"
+FILL        = "fill_normal"
+FONTGROUP   = "fontgroup_def"
+BUTTON      = "BUTT_IMG_PREV"
+BUTTON      = "BUTT_IMG_INDEX"
+BUTTON      = "BUTT_IMG_NEXT"
+BUTTON      = "BUTT_IMG_BACK"
+BUTTON      = "BUTT_IMG_LOAD"
+BUTTON      = "BUTT_IMG_MAIN"
+KEYACTION   = "KEY_IMG_PREV"
+KEYACTION   = "KEY_IMG_NEXT"
+}
+
+<BUTTON name="BUTT_IMG_PREV">
+{
+X             = 0
+Y             = 0
+WIDTH         = 12
+HEIGHT        = 12
+BUTTONTYPE    = "SPRING"
+SPRITE_ASSET  = "ASS_LEFT"
+SPRITE_X      = 2
+ONLEFTCLICK   = "ACT_IMG_PREV"
+}
+
+<BUTTON name="BUTT_IMG_INDEX">
+{
+X               = 16
+Y               = 0
+WIDTH           = 16
+HEIGHT          = 12
+BUTTONTYPE      = "NONE"
+STRING_VAR_NAME = "TILEEDIT\IMAGEMENU\IMAGEINDEX"
+STRING_VAR_TYPE = "S32"
+}
+
+<BUTTON name="BUTT_IMG_NEXT">
+{
+X             = 34
+Y             = 0
+WIDTH         = 12
+HEIGHT        = 12
+BUTTONTYPE    = "SPRING"
+SPRITE_ASSET  = "ASS_RIGHT"
+SPRITE_X      = 2
+ONLEFTCLICK   = "ACT_IMG_NEXT"
+}
+
+<BUTTON name="BUTT_IMG_LOAD">
+{
+X             = 46
+Y             = 0
+WIDTH         = 40
+HEIGHT        = 12
+BUTTONTYPE    = "SPRING"
+STRING_TITLE  = "LOAD"
+STRING_ALIGNH = "CENTRE"
+STRING_ALIGNV = "CENTRE"
+}
+
+<BUTTON name="BUTT_IMG_BACK">
+{
+X             = 90
+Y             = 0
+WIDTH         = 40
+HEIGHT        = 12
+BUTTONTYPE    = "SPRING"
+STRING_TITLE  = "BACK"
+STRING_ALIGNH = "CENTRE"
+STRING_ALIGNV = "CENTRE"
+ONLEFTCLICK   = "ACT_IMG_BACK"
+}
+
+<BUTTON name="BUTT_IMG_MAIN">
+{
+X             = 0
+Y             = 16
+WIDTH         = 0
+HEIGHT        = 0
+BUTTONTYPE    = "CUSTOM"
+SUBTYPE       = 1
+STRING_TITLE  = "BACK"
+STRING_VAR_NAME = "TILEEDIT\IMAGEMENU\IMAGEINDEX"
+STRING_VAR_TYPE = "S32"
+ONLEFTCLICK     = "ACT_IMG_BACK"
+}
+
+<VAR name="VAR_IMGINDEX">
+{
+NAME =  "TILEEDIT\IMAGEMENU\IMAGEINDEX"
+TYPE = "S32"
+}
+
+<VAR name="VAR_IMGINDEXMAX">
+{
+NAME =  "TILEEDIT\IMAGEMENU\IMAGEINDEXMAX"
+TYPE = "S32"
+}
+
+<VALUE name="VAL_IMGINDEX">
+{
+VAR      = "VAR_IMGINDEX"
+MAX      = 15
+MIN      = 0
+}
+
+
+////////////////////////////////////////////////////////////////////
+// MAP MENU
+////////////////////////////////////////////////////////////////////
+
+<ACTION name="ACT_MAP_EXIT">
+{
+WINDOW_CLOSE = "WND_MAP"
+WINDOW_OPEN  = "WND_EDIT"
+}
+
+<ACTION name="ACT_MAP_DEL_DOWN">
+{
+ACTION       = "SET_CONSTANT"
+CONSTANT     = 1
+VALUE        = "VAL_MAP_DEL"
+WINDOW_CLOSE = "WND_MAP"
+WINDOW_OPEN  = "WND_EDIT"
+}
+
+<ACTION name="ACT_MAP_DEL_LEFT">
+{
+ACTION       = "SET_CONSTANT"
+CONSTANT     = 2
+VALUE        = "VAL_MAP_DEL"
+WINDOW_CLOSE = "WND_MAP"
+WINDOW_OPEN  = "WND_EDIT"
+}
+
+<ACTION name="ACT_MAP_DEL_RIGHT">
+{
+ACTION       = "SET_CONSTANT"
+CONSTANT     = 3
+VALUE        = "VAL_MAP_DEL"
+WINDOW_CLOSE = "WND_MAP"
+WINDOW_OPEN  = "WND_EDIT"
+}
+
+<ACTION name="ACT_MAP_DEL_UP">
+{
+ACTION       = "SET_CONSTANT"
+CONSTANT     = 4
+VALUE        = "VAL_MAP_DEL"
+WINDOW_CLOSE = "WND_MAP"
+WINDOW_OPEN  = "WND_EDIT"
+}
+
+<ACTION name="ACT_MAP_INS_DOWN">
+{
+ACTION       = "SET_CONSTANT"
+CONSTANT     = 1
+VALUE        = "VAL_MAP_INS"
+WINDOW_CLOSE = "WND_MAP"
+WINDOW_OPEN  = "WND_EDIT"
+}
+
+<ACTION name="ACT_MAP_INS_LEFT">
+{
+ACTION       = "SET_CONSTANT"
+CONSTANT     = 2
+VALUE        = "VAL_MAP_INS"
+WINDOW_CLOSE = "WND_MAP"
+WINDOW_OPEN  = "WND_EDIT"
+}
+
+<ACTION name="ACT_MAP_INS_RIGHT">
+{
+ACTION       = "SET_CONSTANT"
+CONSTANT     = 3
+VALUE        = "VAL_MAP_INS"
+WINDOW_CLOSE = "WND_MAP"
+WINDOW_OPEN  = "WND_EDIT"
+}
+
+<ACTION name="ACT_MAP_INS_UP">
+{
+ACTION       = "SET_CONSTANT"
+CONSTANT     = 4
+VALUE        = "VAL_MAP_INS"
+WINDOW_CLOSE = "WND_MAP"
+WINDOW_OPEN  = "WND_EDIT"
+}
+
+<BUTTON name="BUTT_MAP_INSTOP">
+{
+X             = 0
+Y             = 30
+WIDTH         = 0
+HEIGHT        = 12
+BUTTONTYPE    = "SPRING"
+STRING_TITLE  = "INS TOP"
+STRING_ALIGNH = "CENTRE"
+STRING_ALIGNV = "CENTRE"
+ONLEFTCLICK   = "ACT_MAP_INS_UP"
+}
+
+<BUTTON name="BUTT_MAP_INSLEFT">
+{
+X             = 0
+Y             = 45
+WIDTH         = 0
+HEIGHT        = 12
+BUTTONTYPE    = "SPRING"
+STRING_TITLE  = "INS LEFT"
+STRING_ALIGNH = "CENTRE"
+STRING_ALIGNV = "CENTRE"
+ONLEFTCLICK   = "ACT_MAP_INS_LEFT"
+}
+
+<BUTTON name="BUTT_MAP_INSBOT">
+{
+X             = 0
+Y             = 60
+WIDTH         = 0
+HEIGHT        = 12
+BUTTONTYPE    = "SPRING"
+STRING_TITLE  = "INS BOT"
+STRING_ALIGNH = "CENTRE"
+STRING_ALIGNV = "CENTRE"
+ONLEFTCLICK   = "ACT_MAP_INS_DOWN"
+}
+
+<BUTTON name="BUTT_MAP_INSRIGHT">
+{
+X             = 0
+Y             = 75
+WIDTH         = 0
+HEIGHT        = 12
+BUTTONTYPE    = "SPRING"
+STRING_TITLE  = "INS RIGHT"
+STRING_ALIGNH = "CENTRE"
+STRING_ALIGNV = "CENTRE"
+ONLEFTCLICK   = "ACT_MAP_INS_RIGHT"
+}
+
+<BUTTON name="BUTT_MAP_DELTOP">
+{
+X             = 0
+Y             = 90
+WIDTH         = 0
+HEIGHT        = 12
+BUTTONTYPE    = "SPRING"
+STRING_TITLE  = "DEL TOP"
+STRING_ALIGNH = "CENTRE"
+STRING_ALIGNV = "CENTRE"
+ONLEFTCLICK   = "ACT_MAP_DEL_UP"
+}
+
+<BUTTON name="BUTT_MAP_DELLEFT">
+{
+X             = 0
+Y             = 105
+WIDTH         = 0
+HEIGHT        = 12
+BUTTONTYPE    = "SPRING"
+STRING_TITLE  = "DEL LEFT"
+STRING_ALIGNH = "CENTRE"
+STRING_ALIGNV = "CENTRE"
+ONLEFTCLICK   = "ACT_MAP_DEL_LEFT"
+}
+
+<BUTTON name="BUTT_MAP_DELBOT">
+{
+X             = 0
+Y             = 120
+WIDTH         = 0
+HEIGHT        = 12
+BUTTONTYPE    = "SPRING"
+STRING_TITLE  = "DEL BOT"
+STRING_ALIGNH = "CENTRE"
+STRING_ALIGNV = "CENTRE"
+ONLEFTCLICK   = "ACT_MAP_DEL_DOWN"
+}
+
+<BUTTON name="BUTT_MAP_DELRIGHT">
+{
+X             = 0
+Y             = 135
+WIDTH         = 0
+HEIGHT        = 12
+BUTTONTYPE    = "SPRING"
+STRING_TITLE  = "DEL RIGHT"
+STRING_ALIGNH = "CENTRE"
+STRING_ALIGNV = "CENTRE"
+ONLEFTCLICK   = "ACT_MAP_DEL_RIGHT"
+}
+
+<BUTTON name="BUTT_MAP_BACK">
+{
+X             = 0
+Y             = 0
+WIDTH         = 16
+HEIGHT        = 16
+BUTTONTYPE    = "SPRING"
+STRING_ALIGNH = "CENTRE"
+STRING_ALIGNV = "CENTRE"
+SPRITE_X      = 4
+SPRITE_Y      = 4
+SPRITE_ASSET  = "ASS_CLOSE"
+ONLEFTCLICK   = "ACT_MAP_EXIT"
+}
+
+<BUTTON name="BUTT_MAP_WIDTH">
+{
+X               = -20
+Y               = 0
+WIDTH           = 0
+HEIGHT          = 12
+BUTTONTYPE    = "NONE"
+BUTTONSTYLE   = "STYLE_BLANK
+STRING_VAR_NAME = "TILEEDIT\EDITMENU\MAPWIDTH"
+STRING_VAR_TYPE = "U16"
+STRING_ALIGNH = "LEFT"
+STRING_ALIGNV = "CENTRE"
+}
+
+<BUTTON name="BUTT_MAP_HEIGHT">
+{
+X               = -20
+Y               = 12
+WIDTH           = 0
+HEIGHT          = 12
+BUTTONTYPE    = "NONE"
+BUTTONSTYLE   = "STYLE_BLANK
+STRING_VAR_NAME = "TILEEDIT\EDITMENU\MAPHEIGHT"
+STRING_VAR_TYPE = "U16"
+STRING_ALIGNH = "LEFT"
+STRING_ALIGNV = "CENTRE"
+}
+
+<BUTTON name="BUTT_MAP_WIDTHLAB">
+{
+X               = 20
+Y               = 0
+WIDTH           = -22
+HEIGHT          = 12
+BUTTONTYPE    = "NONE"
+BUTTONSTYLE   = "STYLE_BLANK
+STRING_TITLE  = "WIDTH"
+STRING_ALIGNH = "RIGHT"
+STRING_ALIGNV = "CENTRE"
+}
+
+<BUTTON name="BUTT_MAP_HEIGHTLAB">
+{
+X               = 20
+Y               = 12
+WIDTH           = -22
+HEIGHT          = 12
+BUTTONTYPE    = "NONE"
+BUTTONSTYLE   = "STYLE_BLANK
+STRING_TITLE  = "HEIGHT"
+STRING_ALIGNH = "RIGHT"
+STRING_ALIGNV = "CENTRE"
+}
+
+<WINDOW name="WND_MAP">
+{
+X           = 110
+Y           = 20
+WIDTH       = 100
+HEIGHT      = 160
+BUTTONSTYLE = "STYLE_DEF"
+FILL        = "fill_normal"
+FONTGROUP   = "fontgroup_def"
+BUTTON      = "BUTT_MAP_INSTOP"
+BUTTON      = "BUTT_MAP_INSBOT"
+BUTTON      = "BUTT_MAP_INSLEFT"
+BUTTON      = "BUTT_MAP_INSRIGHT"
+BUTTON      = "BUTT_MAP_DELTOP"
+BUTTON      = "BUTT_MAP_DELBOT"
+BUTTON      = "BUTT_MAP_DELLEFT"
+BUTTON      = "BUTT_MAP_DELRIGHT"
+BUTTON      = "BUTT_MAP_BACK"
+BUTTON      = "BUTT_MAP_WIDTHLAB"
+BUTTON      = "BUTT_MAP_WIDTH"
+BUTTON      = "BUTT_MAP_HEIGHTLAB"
+BUTTON      = "BUTT_MAP_HEIGHT"
+}
+
+<VAR name="VAR_MAP_DEL">
+{
+NAME = "TILEEDIT\MAPMENU\DEL"
+TYPE = "U16"
+}
+
+<VAR name="VAR_MAP_INS">
+{
+NAME = "TILEEDIT\MAPMENU\INS"
+TYPE = "U16"
+}
+
+<VALUE name="VAL_MAP_DEL">
+{
+VAR      = "VAR_MAP_DEL"
+MAX      = 5
+MIN      = 0
+}
+
+<VALUE name="VAL_MAP_INS">
+{
+VAR      = "VAR_MAP_INS"
+MAX      = 5
+MIN      = 0
+}

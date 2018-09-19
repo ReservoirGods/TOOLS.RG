@@ -1,0 +1,141 @@
+[ FONT ]
+{
+src            = SRC\GUI\FONT8X8.PI1
+msk            = SRC\GUI\MASKS\FONT8X8.PI1
+dst            = DST\GUI\FONT8X8.BFB
+charfirstvalue = 0
+charlastvalue  = 127
+x              = 0
+y              = 0
+stepx          = 16
+stepy          = 8
+width          = 16
+height         = 8
+planes         = 4
+canvaswidth    = 320
+framecount     = 128
+}
+[ FONT ]
+{
+src            = SRC\GUI\FONT8X16.PI1
+msk            = SRC\GUI\MASKS\FONT8X16.PI1
+dst            = DST\GUI\FONT8X16.BFB
+charfirstvalue = 0
+charlastvalue  = 127
+x              = 0
+y              = 0
+stepx          = 16
+stepy          = 16
+width          = 16
+height         = 16
+planes         = 4
+canvaswidth    = 320
+framecount     = 128
+}
+[ SPRITE ]
+{
+src         = SRC\GUI\CURSOR.PI1
+msk         = SRC\GUI\MASKS\CURSOR.PI1
+dst         = DST\GUI\CURSOR.BSB
+x           = 0
+y           = 0
+stepx       = 0
+stepy       = 0
+width       = 16
+height      = 16
+planes      = 4
+canvaswidth = 320
+framecount  = 1
+}
+[ SPRITE ]
+{
+src         = SRC\GUI\BUTTONS.PI1
+msk         = SRC\GUI\MASKS\BUTTONS.PI1
+dst         = DST\GUI\CLOSE.BSB
+x           = 0
+y           = 0
+stepx       = 16
+stepy       = 0
+width       = 16
+height      = 16
+planes      = 4
+canvaswidth = 320
+framecount  = 3
+}
+[ SPRITE ]
+{
+src         = SRC\GUI\BUTTONS.PI1
+msk         = SRC\GUI\MASKS\BUTTONS.PI1
+dst         = DST\GUI\UP.BSB
+x           = 0
+y           = 16
+stepx       = 16
+stepy       = 0
+width       = 16
+height      = 16
+planes      = 4
+canvaswidth = 320
+framecount  = 3
+}
+[ SPRITE ]
+{
+src         = SRC\GUI\BUTTONS.PI1
+msk         = SRC\GUI\MASKS\BUTTONS.PI1
+dst         = DST\GUI\DOWN.BSB
+x           = 0
+y           = 32
+stepx       = 16
+stepy       = 0
+width       = 16
+height      = 16
+planes      = 4
+canvaswidth = 320
+framecount  = 3
+}
+[ SPRITE ]
+{
+src         = SRC\GUI\BUTTONS.PI1
+msk         = SRC\GUI\MASKS\BUTTONS.PI1
+dst         = DST\GUI\RIGHT.BSB
+x           = 0
+y           = 48
+stepx       = 16
+stepy       = 0
+width       = 16
+height      = 16
+planes      = 4
+canvaswidth = 320
+framecount  = 3
+}
+[ SPRITE ]
+{
+src         = SRC\GUI\BUTTONS.PI1
+msk         = SRC\GUI\MASKS\BUTTONS.PI1
+dst         = DST\GUI\LEFT.BSB
+x           = 0
+y           = 64
+stepx       = 16
+stepy       = 0
+width       = 16
+height      = 16
+planes      = 4
+canvaswidth = 320
+framecount  = 3
+}
+[ FONT ]
+{
+src            = SRC\GUI\FONT6X6.PI1
+msk            = SRC\GUI\MASKS\FONT6X6.PI1
+dst            = DST\GUI\FONT6X6.BFB
+charfirstvalue = 0
+charlastvalue  = 127
+x              = 0
+y              = 0
+stepx          = 16
+stepy          = 6
+width          = 16
+height         = 6
+planes         = 4
+canvaswidth    = 320
+framecount     = 128
+}
