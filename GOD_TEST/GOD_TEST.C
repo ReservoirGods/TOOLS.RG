@@ -14,7 +14,8 @@
 	UNIT_TEST_ITEM( Base )				\
 	UNIT_TEST_ITEM( Encrypt )			\
 	UNIT_TEST_ITEM( LinkedList )		\
-	UNIT_TEST_ITEM( Registry )
+	UNIT_TEST_ITEM( Registry )			\
+	UNIT_TEST_ITEM( String )
 
 
 /* ###################################################################################
