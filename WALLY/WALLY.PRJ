@@ -43,6 +43,7 @@ PRG\WALLY.TTP
 ;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
 ..\..\GODLIB\BASE\BASE.C
+..\..\GODLIB\DRIVE\DRIVE.C
 ..\..\GODLIB\FILE\FILE.C
 ..\..\GODLIB\GEMDOS\GEMDOS.C
 ..\..\GODLIB\MEMORY\MEMORY.C

@@ -46,6 +46,7 @@ GOD_TEST.TOS
 ..\..\GODLIB\ENCRYPT\TEST\UTENCRYP.C
 ..\..\GODLIB\LINKLIST\UNIT\UT_GODLL.C
 ..\..\GODLIB\REGISTRY\TEST\UT_REGIS.C
+..\..\GODLIB\STRING\TEST\UT_STR.C
 
 ;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 ;	GODLIB LIBRARY MODULES (C)
