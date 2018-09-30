@@ -605,6 +605,9 @@ void	ParseLine(sProjectParser * apParser, char * apLine)
 								}
 							}
 
+							StringPath_GetDirectory( &lOutFileName, &lOutFileName );
+							Drive_CreateDirectory( lOutFileName.mChars );
+
 /*							lBuildFlag=1;*/
 							if( lBuildFlag )
 							{
