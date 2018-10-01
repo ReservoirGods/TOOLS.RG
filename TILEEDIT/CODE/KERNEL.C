@@ -10,7 +10,6 @@
 #include	"MAINMENU.H"
 
 #include	"R_CUSTOM.H"
-#include	"R_SCREEN.H"
 
 #include	<GODLIB\ASSET\ASSET.H>
 #include	<GODLIB\ASSET\PACKAGE.H>
@@ -23,6 +22,7 @@
 #include	<GODLIB\IKBD\IKBD.H>
 #include	<GODLIB\HASHTREE\HASHTREE.H>
 #include	<GODLIB\MEMORY\MEMORY.H>
+#include	<GODLIB\SCREEN\SCREEN.H>
 #include	<GODLIB\STRING\STRING.H>
 #include	<GODLIB\SYSTEM\SYSTEM.H>
 #include	<GODLIB\VIDEO\VIDEO.H>
@@ -110,7 +110,9 @@ void	TileEdit_Kernel_Init( void )
 	Build_CliPrintfLine1( "DATE  : %s", __DATE__ );
 	Build_CliPrintfLine1( "TIME  : %s", __TIME__ );
 
-	RenderScreen_Init();
+/*	RenderScreen_Init();*/
+	Screen_Init( 320, 200, eGRAPHIC_COLOURMODE_4PLANE, eSCREEN_SCROLL_NONE );
+
 
 	System_SetSnapShotFlag( 0 );
 	Build_CliCmdInit( "mem", Kernel_CLI_mem );
@@ -153,7 +155,8 @@ void	TileEdit_Kernel_DeInit( void )
 	RenderGui_DeInit();
 	GuiFS_DeInit( &gKernelHashTree );
 	Gui_DeInit();
-	RenderScreen_DeInit();
+/*	RenderScreen_DeInit();*/
+	Screen_DeInit();
 
 	TileEdit_Kernel_VarsDeInit();
 	HashTree_DeInit( &gKernelHashTree );
@@ -168,21 +171,28 @@ void	TileEdit_Kernel_DeInit( void )
 
 void	TileEdit_Kernel_Main( void )
 {
+	U16 lPal[ 16 ] = { 0xFFFF, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 };
 	Build_CliPrintLine( "kernel main" );
 
-	TileEdit_Kernel_SetShutdownFlag( 0 );
+	Video_SetPalST( lPal );
+	Video_SetNextPalST( lPal );
 
+	TileEdit_Kernel_SetShutdownFlag( 0 );
 	while( !TileEdit_Kernel_GetShutdownFlag() )
 	{
+
 		Memory_Validate();
 		PackageManager_Update();
 		if( !Gui_Update() )
 		{
 			TileEdit_Kernel_RequestShutdown();
 		}
-		RenderScreen_Update();
+		Screen_Update();
+		RenderGui_Update( Screen_GetpLogicGraphic() );
+/*
 		RenderScreen_GetpGraphic()->mpVRAM = RenderScreen_GetpLogic();
 		RenderGui_Update( RenderScreen_GetpGraphic() );
+*/
 		IKBD_Update();
 	}
 }

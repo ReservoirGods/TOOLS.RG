@@ -41,7 +41,7 @@ enum
 
 typedef	struct	sImageMenuAsset
 {
-	sString *	mpFileName;
+	sString 	mFileName;
 	sDegas *	mpDegas;
 } sImageMenuAsset;
 
@@ -93,7 +93,7 @@ void	ImageMenu_Init( sHashTree * apTree )
 
 	for( i=0; i<dIMGMENU_IMG_LIMIT; i++ )
 	{
-		gImgClass.mAssets[ i ].mpFileName = String_Create( "TEST.PI1" );
+		String_Create( &gImgClass.mAssets[ i ].mFileName,  "TEST.PI1" );
 	}
 
 	GuiFSInfo_Init( &gImgClass.mFS, "LOAD IMAGE", "*.PI1", "TEST.PI1" );
@@ -123,7 +123,7 @@ void	ImageMenu_DeInit( void )
 
 	for( i=0; i<dIMGMENU_IMG_LIMIT; i++ )
 	{
-		String_Destroy( gImgClass.mAssets[ i ].mpFileName );
+		String_Destroy( &gImgClass.mAssets[ i ].mFileName );
 	}	
 	GuiFSInfo_DeInit( &gImgClass.mFS );
 }
@@ -268,7 +268,7 @@ char *	ImageMenu_GetpImageName( const U16 aImageIndex )
 
 	if( aImageIndex < dIMGMENU_IMG_LIMIT )
 	{
-		lpChars = gImgClass.mAssets[ aImageIndex ].mpFileName->mpChars;
+		lpChars = gImgClass.mAssets[ aImageIndex ].mFileName.mpChars;
 	}
 	else
 	{
@@ -301,13 +301,13 @@ void ImageMenu_ImageLoad(const U16 aImageIndex,const char * apFileName)
 {
 	if( (aImageIndex < dIMGMENU_IMG_LIMIT) && (apFileName) )
 	{
-		String_Update( gImgClass.mAssets[ aImageIndex ].mpFileName, apFileName );
+		String_Update( &gImgClass.mAssets[ aImageIndex ].mFileName, apFileName );
 		if( gImgClass.mAssets[ aImageIndex ].mpDegas )
 		{
 			File_UnLoad( gImgClass.mAssets[ aImageIndex ].mpDegas );
 			gImgClass.mAssets[ aImageIndex ].mpDegas = 0;
 		}
-		gImgClass.mAssets[ aImageIndex ].mpDegas = File_Load( gImgClass.mAssets[ aImageIndex ].mpFileName->mpChars );
+		gImgClass.mAssets[ aImageIndex ].mpDegas = File_Load( gImgClass.mAssets[ aImageIndex ].mFileName.mpChars );
 		if( gImgClass.mAssets[ aImageIndex ].mpDegas )
 		{
 			Video_SetPalST( &gImgClass.mAssets[ aImageIndex ].mpDegas->mHeader.mPalette[0] );

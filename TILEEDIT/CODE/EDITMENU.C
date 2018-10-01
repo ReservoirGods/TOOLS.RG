@@ -72,7 +72,7 @@ typedef	struct	sEditMenuClass
 {
 	sHashTree *				mpTree;
 	sTileMap				mTileMap;
-	sString *				mpMapFileName;
+	sString 				mMapFileName;
 	sHashTreeVar *			mpVars[ eEM_VAR_LIMIT ];
 	sHashTreeVar *			mpButtMain;
 	sHashTreeVarClient *	mpVarClients[ eEM_VARCLIENT_LIMIT ];
@@ -125,7 +125,7 @@ void	EditMenu_Init( sHashTree * apTree )
 	gEditMenuClass.mMapXmax = gEditMenuClass.mTileMap.mBlocksX - 20;
 	gEditMenuClass.mMapYmax = gEditMenuClass.mTileMap.mBlocksX - 12;
 
-	gEditMenuClass.mpVars[ eEM_VAR_FILENAME  ] = HashTree_VarInit( apTree, "TILEEDIT\\EDITMENU\\FILENAME",	sizeof(sString*),	&gEditMenuClass.mpMapFileName );
+	gEditMenuClass.mpVars[ eEM_VAR_FILENAME  ] = HashTree_VarInit( apTree, "TILEEDIT\\EDITMENU\\FILENAME",	sizeof(sString*),	&gEditMenuClass.mMapFileName );
 	gEditMenuClass.mpVars[ eEM_VAR_MAPWIDTH  ] = HashTree_VarInit( apTree, "TILEEDIT\\EDITMENU\\MAPWIDTH",	sizeof(U16),		&gEditMenuClass.mTileMap.mBlocksX );
 	gEditMenuClass.mpVars[ eEM_VAR_MAPHEIGHT ] = HashTree_VarInit( apTree, "TILEEDIT\\EDITMENU\\MAPHEIGHT",	sizeof(U16),		&gEditMenuClass.mTileMap.mBlocksY );
 	gEditMenuClass.mpVars[ eEM_VAR_MAPX      ] = HashTree_VarInit( apTree, "TILEEDIT\\EDITMENU\\MAPX",		sizeof(U32),		&gEditMenuClass.mMapX );
@@ -142,7 +142,7 @@ void	EditMenu_Init( sHashTree * apTree )
 	gEditMenuClass.mpVarClients[ eEM_VARCLIENT_INS      ] = HashTree_VarClientRegister( apTree, "TILEEDIT\\MAPMENU\\INS",			EditMenu_Ins_OnWrite, 0, 0, 0 );
 	gEditMenuClass.mpVarClients[ eEM_VARCLIENT_MAPX     ] = HashTree_VarClientRegister( apTree, "TILEEDIT\\EDITMENU\\MAPX",			EditMenu_MapX_OnWrite, 0, 0, 0 );
 	gEditMenuClass.mpVarClients[ eEM_VARCLIENT_MAPX     ] = HashTree_VarClientRegister( apTree, "TILEEDIT\\EDITMENU\\MAPY",			EditMenu_MapY_OnWrite, 0, 0, 0 );
-	gEditMenuClass.mpMapFileName = String_Create( "TEST.MAP" );
+	String_Create( &gEditMenuClass.mMapFileName, "TEST.MAP" );
 }
 
 
@@ -156,7 +156,7 @@ void	EditMenu_DeInit( void )
 {
 	U16	i;
 
-	String_Destroy( gEditMenuClass.mpMapFileName );
+	String_Destroy( &gEditMenuClass.mMapFileName );
 
 	HashTree_VarUnRegister( gEditMenuClass.mpTree, gEditMenuClass.mpButtMain );
 
@@ -186,7 +186,7 @@ void	EditMenu_MapLoad( char * apFileName )
 
 	if( apFileName )	
 	{
-		String_Update( gEditMenuClass.mpMapFileName, apFileName );
+		String_Update( &gEditMenuClass.mMapFileName, apFileName );
 
 		lpTileFile = File_Load( apFileName );
 		if( lpTileFile )
@@ -236,7 +236,7 @@ void EditMenu_MapSave(char * apFileName)
 	sTileMap *	lpMap;
 	U32			lSize;
 
-	String_Update( gEditMenuClass.mpMapFileName, apFileName );
+	String_Update( &gEditMenuClass.mMapFileName, apFileName );
 
 	lpMap = TileMap_Serialise( &gEditMenuClass.mTileMap );
 	if( lpMap )
@@ -346,7 +346,7 @@ U32 EditMenu_GetMapY(void)
 
 const char * EditMenu_GetpMapFileName(void)
 {
-	return( gEditMenuClass.mpMapFileName->mpChars );	
+	return( gEditMenuClass.mMapFileName.mpChars );	
 }
 
 
