@@ -93,7 +93,7 @@ void	ImageMenu_Init( sHashTree * apTree )
 
 	for( i=0; i<dIMGMENU_IMG_LIMIT; i++ )
 	{
-		String_Create( &gImgClass.mAssets[ i ].mFileName,  "TEST.PI1" );
+		String_Init( &gImgClass.mAssets[ i ].mFileName,  "TEST.PI1" );
 	}
 
 	GuiFSInfo_Init( &gImgClass.mFS, "LOAD IMAGE", "*.PI1", "TEST.PI1" );
@@ -123,7 +123,7 @@ void	ImageMenu_DeInit( void )
 
 	for( i=0; i<dIMGMENU_IMG_LIMIT; i++ )
 	{
-		String_Destroy( &gImgClass.mAssets[ i ].mFileName );
+		String_DeInit( &gImgClass.mAssets[ i ].mFileName );
 	}	
 	GuiFSInfo_DeInit( &gImgClass.mFS );
 }
@@ -217,7 +217,7 @@ void ImageMenu_OnLoadFS(sGuiFSInfo * apFS)
 		{
 			lpString = GuiFSInfo_FullNameBuild( &gImgClass.mFS );
 			ImageMenu_ImageLoad( (U16)gImgClass.mImageIndex, lpString->mpChars );
-			String_Destroy( lpString );
+			String_DeInit( lpString );
 		}
 	}		
 }

@@ -309,7 +309,7 @@ void MainMenu_OnLoadMapFS(sGuiFSInfo * apFS)
 		{
 			lpString = GuiFSInfo_FullNameBuild( apFS );
 			EditMenu_MapLoad( lpString->mpChars );
-			String_Destroy( lpString );
+			String_DeInit( lpString );
 		}
 	}
 }
@@ -331,7 +331,7 @@ void MainMenu_OnSaveMapFS(sGuiFSInfo * apFS)
 		{
 			lpString = GuiFSInfo_FullNameBuild( apFS );
 			EditMenu_MapSave( lpString->mpChars );
-			String_Destroy( lpString );
+			String_DeInit( lpString );
 		}
 	}
 	
@@ -354,7 +354,7 @@ void MainMenu_OnLoadPrjFS(sGuiFSInfo * apFS)
 		{
 			lpString = GuiFSInfo_FullNameBuild( apFS );
 			TileMapProject_Load( lpString->mpChars );
-			String_Destroy( lpString );
+			String_DeInit( lpString );
 		}
 	}
 	
@@ -377,7 +377,7 @@ void MainMenu_OnSavePrjFS(sGuiFSInfo * apFS)
 		{
 			lpString = GuiFSInfo_FullNameBuild( apFS );
 			TileMapProject_Save( lpString->mpChars );
-			String_Destroy( lpString );
+			String_DeInit( lpString );
 		}
 	}
 	

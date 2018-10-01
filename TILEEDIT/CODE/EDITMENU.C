@@ -142,7 +142,7 @@ void	EditMenu_Init( sHashTree * apTree )
 	gEditMenuClass.mpVarClients[ eEM_VARCLIENT_INS      ] = HashTree_VarClientRegister( apTree, "TILEEDIT\\MAPMENU\\INS",			EditMenu_Ins_OnWrite, 0, 0, 0 );
 	gEditMenuClass.mpVarClients[ eEM_VARCLIENT_MAPX     ] = HashTree_VarClientRegister( apTree, "TILEEDIT\\EDITMENU\\MAPX",			EditMenu_MapX_OnWrite, 0, 0, 0 );
 	gEditMenuClass.mpVarClients[ eEM_VARCLIENT_MAPX     ] = HashTree_VarClientRegister( apTree, "TILEEDIT\\EDITMENU\\MAPY",			EditMenu_MapY_OnWrite, 0, 0, 0 );
-	String_Create( &gEditMenuClass.mMapFileName, "TEST.MAP" );
+	String_Init( &gEditMenuClass.mMapFileName, "TEST.MAP" );
 }
 
 
@@ -156,7 +156,7 @@ void	EditMenu_DeInit( void )
 {
 	U16	i;
 
-	String_Destroy( &gEditMenuClass.mMapFileName );
+	String_DeInit( &gEditMenuClass.mMapFileName );
 
 	HashTree_VarUnRegister( gEditMenuClass.mpTree, gEditMenuClass.mpButtMain );
 
