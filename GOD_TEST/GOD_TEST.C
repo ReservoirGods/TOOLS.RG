@@ -3,6 +3,7 @@
 ################################################################################### */
 
 #include	<GODLIB\UNITTEST\UNITTEST.H>
+#include	<GODLIB\DEBUGLOG\DEBUGLOG.H>
 #include	<GODLIB\GEMDOS\GEMDOS.H>
 
 
@@ -13,6 +14,7 @@
 #define	UNIT_TESTS_LIST					\
 	UNIT_TEST_ITEM( Base )				\
 	UNIT_TEST_ITEM( Encrypt )			\
+	UNIT_TEST_ITEM( Lexer )				\
 	UNIT_TEST_ITEM( LinkedList )		\
 	UNIT_TEST_ITEM( Registry )			\
 	UNIT_TEST_ITEM( String )
@@ -57,10 +59,14 @@ int		main( int argc, char **argv )
 	printf( "GodLib Unit Tests\n" );
 	printf( "(c) 2018 Reservoir Gods\n\n" );
 
+	DebugLog_Init( eDebugLog_File | eDebugLog_Screen, "UNITTEST.LOG" );
+
 	/* invoke unit tests*/
 #define	UNIT_TEST_ITEM( _aName )  UnitTest##_aName();
 	UNIT_TESTS_LIST
 #undef	UNIT_TEST_ITEM
+
+	DebugLog_DeInit();
 
 	printf( "\nDone.\n" );
 	GemDos_Cnecin();

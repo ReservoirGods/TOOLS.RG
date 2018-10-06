@@ -2,7 +2,11 @@
 
 #include "..\..\..\GODLIB\FAST\head.bff"
 
-.ProjectOptions_Base = .ProjectOptions_Con_Base
+.ProjectOptions_Base =
+[
+	Using( .ProjectOptions_Con_Base )
+	.CompilerOptions	+ ' /D dDEBUGLOG'
+]
 
 #include    "$GodLibDir$\FAST\Base.bff"
 #include    "$GodLibDir$\FAST\Combine.bff"
