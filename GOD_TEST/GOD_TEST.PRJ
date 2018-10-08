@@ -3,8 +3,7 @@
 ;
 ;	Expected folder structure:
 ;		GODLIB
-;		TOOLS.RG
-;		GODLIB.SPL\COOKIJAR\COOKIJAR.PRJ
+;		TOOLS.RG\GOD_TEST\GOD_TEST.PRJ
 ;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
 ;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
@@ -45,6 +44,7 @@ GOD_TEST.TOS
 
 ..\..\GODLIB\BASE\TEST\UT_BASE.C
 ..\..\GODLIB\ENCRYPT\TEST\UTENCRYP.C
+..\..\GODLIB\LEXER\TEST\UT_JSON.C
 ..\..\GODLIB\LEXER\TEST\UT_LEXER.C
 ..\..\GODLIB\LINKLIST\UNIT\UT_GODLL.C
 ..\..\GODLIB\REGISTRY\TEST\UT_REGIS.C
@@ -60,6 +60,7 @@ GOD_TEST.TOS
 ..\..\GODLIB\DEBUGLOG\DEBUGLOG.C
 ..\..\GODLIB\GEMDOS\GEMDOS.C
 ..\..\GODLIB\FILE\FILE.C
+..\..\GODLIB\LEXER\JSON.C
 ..\..\GODLIB\LEXER\LEXER.C
 ..\..\GODLIB\MEMORY\MEMORY.C
 ..\..\GODLIB\PROGRAM\PROGRAM.C

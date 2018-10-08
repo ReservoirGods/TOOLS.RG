@@ -5,6 +5,7 @@
 #include	<GODLIB\UNITTEST\UNITTEST.H>
 #include	<GODLIB\DEBUGLOG\DEBUGLOG.H>
 #include	<GODLIB\GEMDOS\GEMDOS.H>
+#include	<GODLIB\MEMORY\MEMORY.H>
 
 
 /* ###################################################################################
@@ -14,10 +15,12 @@
 #define	UNIT_TESTS_LIST					\
 	UNIT_TEST_ITEM( Base )				\
 	UNIT_TEST_ITEM( Encrypt )			\
+	UNIT_TEST_ITEM( JSON )				\
 	UNIT_TEST_ITEM( Lexer )				\
 	UNIT_TEST_ITEM( LinkedList )		\
 	UNIT_TEST_ITEM( Registry )			\
 	UNIT_TEST_ITEM( String )
+
 
 
 /* ###################################################################################
@@ -66,6 +69,7 @@ int		main( int argc, char **argv )
 	UNIT_TESTS_LIST
 #undef	UNIT_TEST_ITEM
 
+	Memory_ShowCurrentRecords();
 	DebugLog_DeInit();
 
 	printf( "\nDone.\n" );
