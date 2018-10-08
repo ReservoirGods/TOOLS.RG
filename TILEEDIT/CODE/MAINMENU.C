@@ -153,7 +153,7 @@ void MainMenu_OnLoadMap(sHashTreeVarClient * apClient)
 		{
 			GuiButton_DeSelect( (sGuiButton*)lpEvent->mpInfo );
 
-			String_Update( &gMainMenuClass.mFSs[ eMM_FS_MAP ].mTitle, "LOAD MAP" );
+			String_SetStaticNT( &gMainMenuClass.mFSs[ eMM_FS_MAP ].mTitle, "LOAD MAP" );
 			gMainMenuClass.mFSs[ eMM_FS_MAP ].mpCB = MainMenu_OnLoadMapFS;
 			GuiFS_Open( &gMainMenuClass.mFSs[ eMM_FS_MAP ] );
 		}
@@ -179,7 +179,7 @@ void MainMenu_OnSaveMap(sHashTreeVarClient * apClient)
 		{
 			GuiButton_DeSelect( (sGuiButton*)lpEvent->mpInfo );
 
-			String_Update( &gMainMenuClass.mFSs[ eMM_FS_MAP ].mTitle, "SAVE MAP" );
+			String_SetStaticNT( &gMainMenuClass.mFSs[ eMM_FS_MAP ].mTitle, "SAVE MAP" );
 			gMainMenuClass.mFSs[ eMM_FS_MAP ].mpCB = MainMenu_OnSaveMapFS;
 			GuiFS_Open( &gMainMenuClass.mFSs[ eMM_FS_MAP ] );
 		}
@@ -206,7 +206,7 @@ void MainMenu_OnLoadPrj(sHashTreeVarClient * apClient)
 		{
 			GuiButton_DeSelect( (sGuiButton*)lpEvent->mpInfo );
 
-			String_Update( &gMainMenuClass.mFSs[ eMM_FS_PRJ ].mTitle, "LOAD PROJECT" );
+			String_SetStaticNT( &gMainMenuClass.mFSs[ eMM_FS_PRJ ].mTitle, "LOAD PROJECT" );
 			gMainMenuClass.mFSs[ eMM_FS_PRJ ].mpCB = MainMenu_OnLoadPrjFS;
 			GuiFS_Open( &gMainMenuClass.mFSs[ eMM_FS_PRJ ] );
 		}
@@ -233,7 +233,7 @@ void MainMenu_OnSavePrj(sHashTreeVarClient * apClient)
 		{
 			GuiButton_DeSelect( (sGuiButton*)lpEvent->mpInfo );
 
-			String_Update( &gMainMenuClass.mFSs[ eMM_FS_PRJ ].mTitle, "SAVE PROJECT" );
+			String_SetStaticNT( &gMainMenuClass.mFSs[ eMM_FS_PRJ ].mTitle, "SAVE PROJECT" );
 			gMainMenuClass.mFSs[ eMM_FS_PRJ ].mpCB = MainMenu_OnSavePrjFS;
 			GuiFS_Open( &gMainMenuClass.mFSs[ eMM_FS_PRJ ] );
 		}
@@ -259,7 +259,7 @@ void MainMenu_OnLoadBin(sHashTreeVarClient * apClient)
 		{
 			GuiButton_DeSelect( (sGuiButton*)lpEvent->mpInfo );
 
-			String_Update( &gMainMenuClass.mFSs[ eMM_FS_MAP ].mTitle, "LOAD BIN" );
+			String_SetStaticNT( &gMainMenuClass.mFSs[ eMM_FS_MAP ].mTitle, "LOAD BIN" );
 			gMainMenuClass.mFSs[ eMM_FS_BIN ].mpCB = MainMenu_OnLoadBinFS;
 			GuiFS_Open( &gMainMenuClass.mFSs[ eMM_FS_BIN ] );
 		}
@@ -285,7 +285,7 @@ void MainMenu_OnSaveBin(sHashTreeVarClient * apClient)
 		{
 			GuiButton_DeSelect( (sGuiButton*)lpEvent->mpInfo );
 
-			String_Update( &gMainMenuClass.mFSs[ eMM_FS_MAP ].mTitle, "SAVE BIN" );
+			String_SetStaticNT( &gMainMenuClass.mFSs[ eMM_FS_MAP ].mTitle, "SAVE BIN" );
 			gMainMenuClass.mFSs[ eMM_FS_BIN ].mpCB = MainMenu_OnSaveBinFS;
 			GuiFS_Open( &gMainMenuClass.mFSs[ eMM_FS_BIN ] );
 		}

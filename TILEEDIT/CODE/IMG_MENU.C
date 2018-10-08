@@ -301,7 +301,7 @@ void ImageMenu_ImageLoad(const U16 aImageIndex,const char * apFileName)
 {
 	if( (aImageIndex < dIMGMENU_IMG_LIMIT) && (apFileName) )
 	{
-		String_Update( &gImgClass.mAssets[ aImageIndex ].mFileName, apFileName );
+		String_Set( &gImgClass.mAssets[ aImageIndex ].mFileName, apFileName );
 		if( gImgClass.mAssets[ aImageIndex ].mpDegas )
 		{
 			File_UnLoad( gImgClass.mAssets[ aImageIndex ].mpDegas );

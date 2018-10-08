@@ -186,7 +186,7 @@ void	EditMenu_MapLoad( char * apFileName )
 
 	if( apFileName )	
 	{
-		String_Update( &gEditMenuClass.mMapFileName, apFileName );
+		String_Set( &gEditMenuClass.mMapFileName, apFileName );
 
 		lpTileFile = File_Load( apFileName );
 		if( lpTileFile )
@@ -236,7 +236,7 @@ void EditMenu_MapSave(char * apFileName)
 	sTileMap *	lpMap;
 	U32			lSize;
 
-	String_Update( &gEditMenuClass.mMapFileName, apFileName );
+	String_Set( &gEditMenuClass.mMapFileName, apFileName );
 
 	lpMap = TileMap_Serialise( &gEditMenuClass.mTileMap );
 	if( lpMap )
