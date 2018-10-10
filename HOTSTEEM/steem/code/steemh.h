@@ -37,7 +37,7 @@ EXT bool mmu_confused;        //144
 EXT unsigned long hbl_count INIT(0);
 
 // Don't forget to update this in the resource file too!
-EXT const char *stem_version_text INIT("3.2.2");
+EXT const char *stem_version_text INIT("3.3.0");
 
 #define STEEM_EMAIL "steem@gmx.net"
 #define STEEM_WEB "http:/""/steem.atari.st/"

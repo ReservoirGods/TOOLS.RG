@@ -903,6 +903,7 @@ void ASMCALL io_write_b(MEM_ADDRESS addr,BYTE io_src_b)
             draw_set_jumps_and_source();
             break;
           case 0xffc11d: emudetect_overscans_fixed=bool(io_src_b); break;
+		  case 0xffc11e: fast_forward=bool(io_src_b); break;
         }
         if (addr<0xffc120) break; // No exception!
       }
