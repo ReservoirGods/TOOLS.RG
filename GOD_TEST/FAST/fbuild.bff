@@ -6,6 +6,8 @@
 [
 	Using( .ProjectOptions_Con_Base )
 	.CompilerOptions	+ ' /D dDEBUGLOG'
+						+ ' /D dMEMORY_TRACK'
+						+ ' /D dDEBUG'
 ]
 
 #include    "$GodLibDir$\FAST\Base.bff"

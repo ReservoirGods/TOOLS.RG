@@ -17,6 +17,7 @@ Special character ;: is extension point for PRJ format
 #include <GODLIB\PROGRAM\PROGRAM.H>
 #include <GODLIB\STRING\STRING.H>
 #include <GODLIB\STRING\STRPATH.H>
+#include <GODLIB\SYSTEM\SYSTEM.H>
 
 #define dEMBEDDED_PUREC
 
@@ -847,8 +848,20 @@ void	ProcessPRJ(sProjectParser * apParser, const char * apFileName )
 
 int		main( int argc, char **argv)
 {
+	U8 lOldFF = 0;
+
 	printf( "PUREBOT 1.0\n" );
 	printf( "[c] 2018 Reservoir Gods\n\n" );
+
+	GemDos_Super(0);
+	System_Init();
+	if( EMU_STEEM == System_GetEMU())
+	{
+		printf( "Emu version: %x\n", System_GetEmuVersion());
+		lOldFF = System_GetFastForwardFlag();
+		System_SetFastForwardFlag(1);
+	}
+
 	if( argc > 1 )
 	{
 		sProjectParser	lParser;
@@ -874,6 +887,10 @@ int		main( int argc, char **argv)
 		printf( "usage: purebot <file.prj>\n");
 	}
 
+	if( EMU_STEEM == System_GetEMU())
+	{
+		System_SetFastForwardFlag(lOldFF);
+	}
 
 	printf( "\nDone.");
 	GemDos_Cnecin();

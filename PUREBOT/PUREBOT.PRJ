@@ -3,8 +3,15 @@
 ;
 ;	Expected folder structure:
 ;		GODLIB
-;		TOOLS.RG
-;		GODLIB.SPL\COOKIJAR\COOKIJAR.PRJ
+;		TOOLS.RG\PUREBOT\PUREBOT.PRJ
+;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+;	SPECIAL OPTIONS FOR PUREBOT
+;:-B=PUREBOT.LOG
+; -V
+;:.C[ -NOUT ]
+;:.S[ -NOUT ]
 ;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
 ;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
@@ -34,13 +41,17 @@ PUREBOT.TTP
 ;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
 ..\..\GODLIB\BASE\BASE.C
+..\..\GODLIB\COOKIE\COOKIE.C
 ..\..\GODLIB\DRIVE\DRIVE.C
 ..\..\GODLIB\GEMDOS\GEMDOS.C
 ..\..\GODLIB\FILE\FILE.C
 ..\..\GODLIB\MEMORY\MEMORY.C
+..\..\GODLIB\MFP\MFP.C
 ..\..\GODLIB\PROGRAM\PROGRAM.C
 ..\..\GODLIB\STRING\STRING.C
 ..\..\GODLIB\STRING\STRPATH.C
+..\..\GODLIB\SYSTEM\SYSTEM.C
+..\..\GODLIB\VBL\VBL.C
 
 ;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 ;	GODLIB LIBRARY MODULES (ASM)
@@ -49,7 +60,12 @@ PUREBOT.TTP
 ..\..\GODLIB\BIOS\BIOS_S.S
 ..\..\GODLIB\GEMDOS\GEMDOS_S.S
 ..\..\GODLIB\MEMORY\MEMORY_S.S
+..\..\GODLIB\MFP\MFP_S.S
 ..\..\GODLIB\PROGRAM\PROG_S.S
+..\..\GODLIB\SYSTEM\SYSTEM_S.S
+..\..\GODLIB\VBL\VBL_S.S
+..\..\GODLIB\XBIOS\XBIOS.C
+..\..\GODLIB\XBIOS\XBIOS_S.S
 
 ;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 ;	EMBEDDED PROGRAM SUPPORT
