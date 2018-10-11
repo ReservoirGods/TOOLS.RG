@@ -25,9 +25,9 @@ GOD_TEST.TOS
 ;	OPTIONS
 ;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
-.C [ -8 -G -M -P -W-par -I..\..\TOOLS.RG\PURE_C\INCLUDE -I..\.. ]
+.C [ -G -M -P -W-par -I..\..\TOOLS.RG\PURE_C\INCLUDE -I..\.. ]
 .L [ -F -G -S=20384 ]
-.S [ -1 -2 -8 -S -Y ]
+.S [ -1 -2 -S -Y ]
 
 .C [ -DdDEBUGLOG ]
 =

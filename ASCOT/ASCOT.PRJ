@@ -28,7 +28,7 @@ PRG\ASCOT.TOS
 ;	OPTIONS
 ;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
-.C [ -8 -G -M -P -W-par -I..\..\TOOLS.RG\PURE_C\INCLUDE -I..\.. ]
+.C [ -G -M -P -W-par -I..\..\TOOLS.RG\PURE_C\INCLUDE -I..\.. ]
 .C [ -DdAUDIO_MIXER=1 ]
 .C [ -DdCLI=1 ]
 .C [ -DdEXCEPTION_SCREEN=1 ]
@@ -36,7 +36,7 @@ PRG\ASCOT.TOS
 .C [ -DdLINKFILE=1 ]
 .C [ -DdGODLIB_PACKAGEMANGER=1 ]
 .L [ -F -G ]
-.S [ -1 -2 -8 -S -Y ]
+.S [ -1 -2 -S -Y ]
 
 =
 
