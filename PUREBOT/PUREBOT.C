@@ -192,7 +192,7 @@ int		BuildExistingFilename( sProjectParser * apParser, const char * apShortName,
 
 	/* check if file exists in PRJ directory */
 
-	StringPath_Copy( apFullName, &apParser->mPathPRJ );
+	StringPath_Set( apFullName, &apParser->mPathPRJ );
 	StringPath_SetFileName( apFullName, apShortName );
 	mVERBOSE_MSG( apParser, (" try: %s\n",apFullName->mChars) );
 	if( File_Exists(apFullName->mChars ) ) 
@@ -235,7 +235,7 @@ int		BuildExistingFilename( sProjectParser * apParser, const char * apShortName,
 
 				/* check if file exists in PRJ + INCLUDE path */
 
-				StringPath_Copy( apFullName, &apParser->mPathPRJ );
+				StringPath_Set( apFullName, &apParser->mPathPRJ );
 				apFullName->mChars[ apParser->mPathPRJLen ] = 0;
 				StringPath_Append( apFullName, lpOpts );
 				StringPath_Append( apFullName, apShortName );
@@ -383,8 +383,8 @@ void	BuildOutputFileName( sProjectParser * apParser, const char * apFileName, sS
 			lpShortName = &apFileName[i];
 		}
 	}
-	StringPath_Set( apOut, apFileName );
-	lpExt = StringPath_GetpExt(apOut);
+	StringPath_SetNT( apOut, apFileName );
+	lpExt = StringPath_GetpExt(apOut->mChars);
 	if( lpExt )
 	{
 		if( !String_StrCmpi(lpExt, ".C") )
@@ -502,10 +502,10 @@ void	ParseLine(sProjectParser * apParser, char * apLine)
 					{
 						const char * lpExt;
 
-						StringPath_Copy( &lFileName, &apParser->mPathPRJ );
+						StringPath_Set( &lFileName, &apParser->mPathPRJ );
 						lFileName.mChars[ apParser->mPathPRJLen]=0;
 						StringPath_Append( &lFileName, apLine );
-						lpExt = StringPath_GetpExt(&lFileName);
+						lpExt = StringPath_GetpExt(lFileName.mChars);
 						if( lpExt && !String_StrCmpi(lpExt,".PRJ"))
 						{
 							ProcessPRJ( apParser, apLine );
@@ -520,7 +520,7 @@ void	ParseLine(sProjectParser * apParser, char * apLine)
 							FileBackedBuffer_Init( &apParser->mLinkerScript, lFileName.mChars );
 
 							FileBackedBuffer_StringAppend( &apParser->mLinkerScript, "-V -O=");
-							StringPath_Copy( &lFileName, &apParser->mPathPRJ );
+							StringPath_Set( &lFileName, &apParser->mPathPRJ );
 							lFileName.mChars[ apParser->mPathPRJLen]=0;
 							StringPath_Append( &lFileName, apParser->mpExecutable );
 
@@ -607,7 +607,7 @@ void	ParseLine(sProjectParser * apParser, char * apLine)
 								}
 							}
 
-							StringPath_GetDirectory( &lOutFileName, &lOutFileName );
+							StringPath_GetDirectory( &lOutFileName, lOutFileName.mChars );
 							Drive_CreateDirectory( lOutFileName.mChars );
 
 /*							lBuildFlag=1;*/
@@ -781,15 +781,15 @@ void	ProcessPRJ(sProjectParser * apParser, const char * apFileName )
 	do
 	{
 		Memory_Clear( sizeof(sProjectParser), &lParser );
-		StringPath_Copy( &lParser.mPathApp, &apParser->mPathApp );
+		StringPath_Set( &lParser.mPathApp, &apParser->mPathApp );
 		lParser.mpParent = apParser;
 		if( ':' == apFileName[1])
 		{
-			StringPath_Set( &lParser.mPathPRJ, apFileName );
+			StringPath_SetNT( &lParser.mPathPRJ, apFileName );
 		}
 		else
 		{
-			StringPath_Copy( &lParser.mPathPRJ, &apParser->mPathPRJ );
+			StringPath_Set( &lParser.mPathPRJ, &apParser->mPathPRJ );
 			lParser.mPathPRJ.mChars[ apParser->mPathPRJLen ] = 0;
 			StringPath_Append( &lParser.mPathPRJ, apFileName );
 		}
