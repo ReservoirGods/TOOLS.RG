@@ -79,5 +79,6 @@ MAIN.C
 
 ..\..\TOOLS.RG\PURE_C\LIB\PCEXTLIB.LIB       ; standard library
 ..\..\TOOLS.RG\PURE_C\LIB\PCSTDLIB.LIB       ; standard library
+..\..\TOOLS.RG\PURE_C\LIB\PCFLTLIB.LIB       ; floating point library
 
 ;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
