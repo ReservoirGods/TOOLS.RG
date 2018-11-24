@@ -44,11 +44,14 @@ PRG\MAKELINK.TTP
 ;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
 ..\..\GODLIB\BASE\BASE.C
+..\..\GODLIB\DRIVE\DRIVE.C
 ..\..\GODLIB\FILE\FILE.C
 ..\..\GODLIB\GEMDOS\GEMDOS.C
 ..\..\GODLIB\LINKFILE\LINKFILE.C
 ..\..\GODLIB\MEMORY\MEMORY.C
 ..\..\GODLIB\PACKER\PACKER.C
+..\..\GODLIB\STRING\STRING.C
+..\..\GODLIB\STRING\STRPATH.C
 
 
 ;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
