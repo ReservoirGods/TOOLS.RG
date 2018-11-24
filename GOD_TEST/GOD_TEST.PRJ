@@ -43,6 +43,7 @@ GOD_TEST.TOS
 ;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
 ..\..\GODLIB\BASE\TEST\UT_BASE.C
+..\..\GODLIB\DISK\TEST\UT_DISK.C
 ..\..\GODLIB\ENCRYPT\TEST\UTENCRYP.C
 ..\..\GODLIB\LEXER\TEST\UT_JSON.C
 ..\..\GODLIB\LEXER\TEST\UT_LEXER.C
