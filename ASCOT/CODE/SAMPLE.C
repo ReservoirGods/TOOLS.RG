@@ -12,8 +12,8 @@
 #  DATA
 ################################################################################### */
 
-sHashList		gSampleList;
-sRelocater *	gpSampleRelocater;
+sHashList	gSampleList;
+sRelocater	gSampleRelocater;
 
 
 /* ###################################################################################
@@ -39,7 +39,7 @@ void	Sample_ItemInit( void * apItem );
 void	SampleManager_Init( void )
 {
 	HashList_Init( &gSampleList, sizeof( sAscotSpl ), Sample_ItemInit, 0 );
-	gpSampleRelocater = Relocater_Create( "SPL", Sample_RelocIsType, Sample_RelocDoInit, Sample_RelocDoDeInit, 0, 0 );	
+	Relocater_Init( &gSampleRelocater, "SPL", Sample_RelocIsType, Sample_RelocDoInit, Sample_RelocDoDeInit, 0, 0 );
 }
 
 
@@ -51,7 +51,7 @@ void	SampleManager_Init( void )
 
 void	SampleManager_DeInit( void )
 {
-	Relocater_Destroy( gpSampleRelocater );
+	Relocater_DeInit( &gSampleRelocater );
 	HashList_DeInit( &gSampleList );	
 }
 

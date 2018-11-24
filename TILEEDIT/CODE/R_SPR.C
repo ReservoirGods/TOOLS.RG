@@ -12,7 +12,7 @@
 #  DATA
 ################################################################################### */
 
-sRelocater *	gpRSPRReloc;
+sRelocater	gRSPRReloc;
 
 
 /* ###################################################################################
@@ -35,7 +35,7 @@ U32	RSPR_DoRelocate( void * apData, const U32 aSize, const U32 aID );
 
 void	RenderSprite_Init( void )
 {
-	gpRSPRReloc = Relocater_Create( "BSB", RSPR_IsType, 0, 0, RSPR_DoRelocate, 0 );
+	Relocater_Init( &gRSPRReloc, "BSB", RSPR_IsType, 0, 0, RSPR_DoRelocate, 0 );
 }
 
 
@@ -47,7 +47,7 @@ void	RenderSprite_Init( void )
 
 void	RenderSprite_DeInit( void )
 {
-	Relocater_Destroy( gpRSPRReloc );
+	Relocater_DeInit( &gRSPRReloc );
 }
 
 

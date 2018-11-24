@@ -13,8 +13,8 @@
 #  DATA
 ################################################################################### */
 
-sHashList		gMusicMonList;
-sRelocater *	gpMusicMonRelocater;
+sHashList	gMusicMonList;
+sRelocater 	gMusicMonRelocater;
 
 
 /* ###################################################################################
@@ -50,7 +50,7 @@ void	MusicMonManager_Init( void )
 	HashList_Init( &gMusicMonList, sizeof(sMusicMonTune), MusicMon_ItemInit, 0 );
 	MusicMonManager_Stop();
 
-	gpMusicMonRelocater = Relocater_Create( "MOD", MusicMon_RelocIsType, MusicMon_RelocDoInit, MusicMon_RelocDoDeInit, 0, 0 );
+	Relocater_Init( &gMusicMonRelocater, "MOD", MusicMon_RelocIsType, MusicMon_RelocDoInit, MusicMon_RelocDoDeInit, 0, 0 );
 }
 
 
@@ -62,7 +62,7 @@ void	MusicMonManager_Init( void )
 
 void	MusicMonManager_DeInit( void )
 {
-	Relocater_Destroy( gpMusicMonRelocater );
+	Relocater_DeInit( &gMusicMonRelocater );
 
 	Vbl_RemoveCall( MusicMon_Vbl );
 	MusicMonManager_Stop();

@@ -12,7 +12,7 @@
 #  DATA
 ################################################################################### */
 
-sRelocater *	gpRFontReloc;
+sRelocater gRFontReloc;
 
 
 /* ###################################################################################
@@ -35,7 +35,7 @@ U32	RFONT_DoRelocate( void * apData, const U32 aSize, const U32 aID );
 
 void	RenderFont_Init( void )
 {
-	gpRFontReloc = Relocater_Create( "BFB", RFONT_IsType, 0, 0, RFONT_DoRelocate, 0 );	
+	Relocater_Init( &gRFontReloc, "BFB", RFONT_IsType, 0, 0, RFONT_DoRelocate, 0 );
 }
 
 
@@ -47,7 +47,7 @@ void	RenderFont_Init( void )
 
 void	RenderFont_DeInit( void )
 {
-	Relocater_Destroy( gpRFontReloc );
+	Relocater_DeInit( &gRFontReloc );
 }
 
 

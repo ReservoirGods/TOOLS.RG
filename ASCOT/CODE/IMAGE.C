@@ -12,8 +12,8 @@
 #  DATA
 ################################################################################### */
 
-sHashList		gImageList;
-sRelocater *	gpImageRelocater;
+sHashList	gImageList;
+sRelocater	gImageRelocater;
 
 
 /* ###################################################################################
@@ -39,7 +39,7 @@ void	Image_ItemInit( void * apItem );
 void	ImageManager_Init( void )
 {
 	HashList_Init( &gImageList, sizeof( sImage ), Image_ItemInit, 0 );
-	gpImageRelocater = Relocater_Create( "PI1", Image_RelocIsType, Image_RelocDoInit, Image_RelocDoDeInit, 0, 0 );
+	Relocater_Init( &gImageRelocater, "PI1", Image_RelocIsType, Image_RelocDoInit, Image_RelocDoDeInit, 0, 0 );
 }
 
 
@@ -51,7 +51,7 @@ void	ImageManager_Init( void )
 
 void	ImageManager_DeInit( void )
 {
-	Relocater_Destroy( gpImageRelocater );
+	Relocater_DeInit( &gImageRelocater );
 	HashList_DeInit( &gImageList );
 }
 

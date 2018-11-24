@@ -19,8 +19,8 @@
 #  DATA
 ################################################################################### */
 
-sHashList		gFrameList;
-sRelocater *	gpFrameRelocater;
+sHashList	gFrameList;
+sRelocater	gFrameRelocater;
 
 
 /* ###################################################################################
@@ -52,7 +52,7 @@ void	Frame_ItemDeInit( void * apItem );
 void	FrameManager_Init( void )
 {
 	HashList_Init( &gFrameList, sizeof( sFrame ), Frame_ItemInit, Frame_ItemDeInit );	
-	gpFrameRelocater = Relocater_Create( "FRM", Frame_RelocIsType, Frame_RelocDoInit, Frame_RelocDoDeInit, 0, 0 );
+	Relocater_Init( &gFrameRelocater, "FRM", Frame_RelocIsType, Frame_RelocDoInit, Frame_RelocDoDeInit, 0, 0 );
 }
 
 
@@ -65,7 +65,7 @@ void	FrameManager_Init( void )
 void	FrameManager_DeInit( void )
 {
 	HashList_DeInit( &gFrameList );	
-	Relocater_Destroy( gpFrameRelocater );
+	Relocater_DeInit( &gFrameRelocater );
 }
 
 
