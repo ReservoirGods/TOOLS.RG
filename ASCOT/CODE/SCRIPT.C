@@ -21,7 +21,7 @@
 #  DATA
 ################################################################################### */
 
-sAssetClient *	gpScriptAsset;
+sAssetClient	gScriptAsset;
 sScriptReel		gScriptReel;
 sScriptControl	gScriptControl;
 
@@ -697,7 +697,9 @@ void	Script_Init( sScriptControl * apScript )
 
 void	ScriptManager_Init( void )
 {
-	gpScriptAsset = AssetClient_Register( "ANIM.SPT", "CONTEXT1", Script_OnLoad, Script_OnUnLoad, 0 );
+	gScriptAsset.OnLoad = Script_OnLoad;
+	gScriptAsset.OnUnLoad = Script_OnUnLoad;
+	AssetClient_Init( &gScriptAsset, "ANIM.SPT", "CONTEXT1",  0 );
 	ScriptReel_Init( &gScriptReel );
 	Script_Init( &gScriptControl );
 	gScriptControl.mpReel = &gScriptReel;
@@ -712,7 +714,7 @@ void	ScriptManager_Init( void )
 
 void	ScriptManager_DeInit( void )
 {
-	AssetClient_UnRegister( gpScriptAsset );	
+	AssetClient_DeInit( &gScriptAsset );
 	ScriptReel_DeInit( &gScriptReel );
 }
 

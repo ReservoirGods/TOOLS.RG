@@ -12,8 +12,8 @@
 #  DATA
 ################################################################################### */
 
-sFontAscot			gFont;
-sAssetClient *	gpFontAsset;
+sFontAscot		gFont;
+sAssetClient	gFontAsset;
 
 
 /* ###################################################################################
@@ -37,7 +37,9 @@ void	Font_FixUp( sFontAscot * apFont,sDegas * apPic );
 
 void	Font_Init( void )
 {
-	gpFontAsset = AssetClient_Register( "FONT8X8.PI1", "CONTEXT1", Font_OnLoad, Font_OnUnLoad, 0 );	
+	gFontAsset.OnLoad = Font_OnLoad;
+	gFontAsset.OnUnLoad = Font_OnUnLoad;
+	AssetClient_Init( &gFontAsset, "FONT8X8.PI1", "CONTEXT1", 0 );
 }
 
 
@@ -49,7 +51,7 @@ void	Font_Init( void )
 
 void	Font_DeInit( void )
 {
-	AssetClient_UnRegister( gpFontAsset );
+	AssetClient_DeInit( &gFontAsset );
 }
 
 
