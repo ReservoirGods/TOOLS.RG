@@ -48,7 +48,7 @@ enum
 U16				gKernelShutdownFlag;
 U16				gKernelState;
 sPackage		gGuiPackage;
-sAssetClient *	gpGubAsset;
+sAssetClient	gGubAsset;
 sGuiData *		gpGuiData;
 sHashTree		gKernelHashTree;
 sHashTreeVar *	gpKernelVars[ eKERNEL_VAR_LIMIT ];
@@ -128,7 +128,9 @@ void	TileEdit_Kernel_Init( void )
 	RenderCustom_Init();
 
 	Package_Init( &gGuiPackage, "GUI", "GUI_GFX" );
-	gpGubAsset = AssetClient_Register( "TILEEDIT.GUB", "GUI_GFX", GuiGub_OnLoad, GuiGub_OnUnLoad, (void**)&gpGuiData );
+	gGubAsset.OnLoad = GuiGub_OnLoad;
+	gGubAsset.OnUnLoad = GuiGub_OnUnLoad;
+	AssetClient_Init( &gGubAsset, "TILEEDIT.GUB", "GUI_GFX", (void**)&gpGuiData );
 	PackageManager_Load( &gGuiPackage );
 
 	Video_SetPalST( gKernelPal );
@@ -143,7 +145,7 @@ void	TileEdit_Kernel_Init( void )
 
 void	TileEdit_Kernel_DeInit( void )
 {
-	AssetClient_UnRegister( gpGubAsset );
+	AssetClient_DeInit( &gGubAsset );
 	Package_DeInit( &gGuiPackage );
 
 	Build_CliDeInit();
