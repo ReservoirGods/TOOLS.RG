@@ -13,4 +13,7 @@
 ]
 
 #include    "$GodLibDir$\FAST\Base.bff"
+
+.ExtraBuildTargets + 'DataBuild'
+
 #include    "$GodLibDir$\FAST\Combine.bff"

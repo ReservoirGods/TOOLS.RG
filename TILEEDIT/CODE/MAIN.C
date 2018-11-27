@@ -70,7 +70,7 @@ S16	GodLib_Game_Main( S16 argc, char * argv[] )
 S16	TileEdit_Main( void )
 {
 	Platform_Init();
-	PackageManager_SetLinkEnableFlag(0);
+/*	PackageManager_SetLinkEnableFlag(0);*/
 	if( ( System_GetEMU() == EMU_STEEM ) && ( System_GetEmuVersion() < 0x0240 ) )
 	{
 		printf( "This game requires STEEM version 2.4\n\n" );
