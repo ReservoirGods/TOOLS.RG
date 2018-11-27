@@ -96,6 +96,7 @@ sDataFile	gAnimScriptFile;
 sDataFile	gAnimFramesFile;
 sDataFile	gAnimMusicFile;
 sPackage	gAscotPackage;
+sContext	gAscotContext;
 
 
 /* ###################################################################################
@@ -188,6 +189,8 @@ void	Ascot_Main( void )
 
 void	Data_Init( void )
 {
+	Context_Init( &gAscotContext, "CONTEXT1" );
+
 	ImageManager_Init();
 	SampleManager_Init();
 	Font_Init();
@@ -255,6 +258,8 @@ void	Data_DeInit( void )
 	Font_DeInit();
 	ImageManager_DeInit();
 	SampleManager_DeInit();
+
+	Context_DeInit( &gAscotContext );
 }
 
 

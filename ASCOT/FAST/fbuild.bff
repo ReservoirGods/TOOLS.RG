@@ -13,6 +13,9 @@
 					+ ' /D dLINKFILE=1'
 					+ ' /D dGODLIB_PACKAGEMANGER=1'
 					+ ' /D dSCREENGRAB=1'
+					+ ' /D dDEBUG'
+					+ ' /D dDEBUGLOG'
+					+ ' /D dMEMORY_TRACK'
 ]
 
 #include    "$GodLibDir$\FAST\Base.bff"
