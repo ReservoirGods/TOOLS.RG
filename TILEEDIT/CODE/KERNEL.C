@@ -47,6 +47,7 @@ enum
 
 U16				gKernelShutdownFlag;
 U16				gKernelState;
+sContext		gTileEditContext;
 sPackage		gGuiPackage;
 sAssetClient	gGubAsset;
 sGuiData *		gpGuiData;
@@ -101,6 +102,8 @@ U32		GuiGub_OnUnLoad( void * apData, const U32 aSize, const U32 aUserData );
 
 void	TileEdit_Kernel_Init( void )
 {
+	Context_Init( &gTileEditContext, "GUI_GFX");
+
 	HashTree_Init( &gKernelHashTree );
 
 	Build_CliInit();
@@ -115,8 +118,8 @@ void	TileEdit_Kernel_Init( void )
 
 
 	System_SetSnapShotFlag( 0 );
-	Build_CliCmdInit( "mem", Kernel_CLI_mem );
-	Build_CliCmdInit( "ass", Kernel_CLI_ass );
+	Build_CliCmdInit( "mem", TileEdit_Kernel_CLI_mem );
+	Build_CliCmdInit( "ass", TileEdit_Kernel_CLI_ass );
 
 	TileEdit_Kernel_VarsInit();
 	Gui_Init( &gKernelHashTree );
@@ -162,6 +165,7 @@ void	TileEdit_Kernel_DeInit( void )
 
 	TileEdit_Kernel_VarsDeInit();
 	HashTree_DeInit( &gKernelHashTree );
+	Context_DeInit( &gTileEditContext );
 }
 
 
@@ -305,7 +309,7 @@ U32		GuiGub_OnLoad( void * apData,const U32 aSize, const U32 aUserData )
 	(void)aUserData;
 	(void)aSize;
 	(void)apData;
-	DebugLog_Printf2( "GuiGub_OnLoad %lx %ld", apData, aSize );
+	DebugLog_Printf2( "GuiGub_OnLoad %p %ld", apData, aSize );
 	DebugLog_Printf0( "GuiGub_OnLoad relocate" );
 	GuiData_Relocate( (sGuiData*)apData );
 	DebugLog_Printf0( "GuiGub_OnLoad init" );
