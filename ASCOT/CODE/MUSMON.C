@@ -23,9 +23,9 @@ sRelocater 	gMusicMonRelocater;
 
 void	MusicMon_ItemInit( void * apItem );
 
-U32	MusicMon_RelocIsType( void * apData, const U32 aSize, const U32 aID );
-U32	MusicMon_RelocDoInit( void * apData, const U32 aSize, const U32 aID );
-U32	MusicMon_RelocDoDeInit( void * apData, const U32 aSize, const U32 aID );
+U32	MusicMon_RelocIsType( sAsset * apAsset );
+U32	MusicMon_RelocDoInit( sAsset * apAsset );
+U32	MusicMon_RelocDoDeInit( sAsset * apAsset );
 
 extern	void	MusicMon_Start( void * apSong );
 extern	void	MusicMon_Stop( void );
@@ -150,38 +150,33 @@ void	MusicMon_ItemInit( void * apItem )
 
 
 /*-----------------------------------------------------------------------------------*
-* FUNCTION : MusicMon_RelocIsType( void * apData,const U32 aSize,const U32 aID )
+* FUNCTION : MusicMon_RelocIsType( sAsset * apAsset )
 * ACTION   : MusicMon_RelocIsType
 * CREATION : 11.12.2003 PNK
 *-----------------------------------------------------------------------------------*/
 
-U32	MusicMon_RelocIsType( void * apData,const U32 aSize,const U32 aID )
+U32	MusicMon_RelocIsType( sAsset * apAsset )
 {
-	(void)apData;
-	(void)aSize;
-	(void)aID;
-
+	(void)apAsset;
 	return( 1 );	
 }
 
 
 /*-----------------------------------------------------------------------------------*
-* FUNCTION : MusicMon_RelocDoInit( void * apData,const U32 aSize,const U32 aID )
+* FUNCTION : MusicMon_RelocDoInit( sAsset * apAsset )
 * ACTION   : MusicMon_RelocDoInit
 * CREATION : 11.12.2003 PNK
 *-----------------------------------------------------------------------------------*/
 
-U32	MusicMon_RelocDoInit( void * apData,const U32 aSize,const U32 aID )
+U32	MusicMon_RelocDoInit( sAsset * apAsset )
 {
 	sMusicMonTune *	lpTune;
 
-	(void)aSize;
-
-	lpTune = (sMusicMonTune*)HashList_ItemRegister( &gMusicMonList, aID );
+	lpTune = (sMusicMonTune*)HashList_ItemRegister( &gMusicMonList, apAsset->mID );
 
 	if( lpTune )
 	{
-		lpTune->mpTune = apData;
+		lpTune->mpTune = apAsset->mpData;
 	}
 
 	return( (lpTune != 0) );
@@ -189,17 +184,14 @@ U32	MusicMon_RelocDoInit( void * apData,const U32 aSize,const U32 aID )
 
 
 /*-----------------------------------------------------------------------------------*
-* FUNCTION : MusicMon_RelocDoDeInit( void * apData,const U32 aSize,const U32 aID )
+* FUNCTION : MusicMon_RelocDoDeInit( sAsset * apAsset )
 * ACTION   : MusicMon_RelocDoDeInit
 * CREATION : 11.12.2003 PNK
 *-----------------------------------------------------------------------------------*/
 
-U32	MusicMon_RelocDoDeInit( void * apData,const U32 aSize,const U32 aID )
+U32	MusicMon_RelocDoDeInit( sAsset * apAsset )
 {
-	(void)apData;
-	(void)aSize;
-
-	HashList_ItemUnRegister( &gMusicMonList, aID );
+	HashList_ItemUnRegister( &gMusicMonList, apAsset->mID );
 
 	return( 1 );
 }

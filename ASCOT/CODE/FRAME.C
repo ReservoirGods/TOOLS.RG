@@ -30,9 +30,9 @@ sRelocater	gFrameRelocater;
 void	Frame_ParseLoad(   const char * apText,const S32 aSize );
 void	Frame_ParseUnLoad( const char * apText,const S32 aSize );
 
-U32	Frame_RelocIsType( void * apData, const U32 aSize, const U32 aID );
-U32	Frame_RelocDoInit( void * apData, const U32 aSize, const U32 aID );
-U32	Frame_RelocDoDeInit( void * apData, const U32 aSize, const U32 aID );
+U32	Frame_RelocIsType(   sAsset * apAsset );
+U32	Frame_RelocDoInit(   sAsset * apAsset );
+U32	Frame_RelocDoDeInit( sAsset * apAsset );
 
 void	Frame_ItemInit( void * apItem );
 void	Frame_ItemDeInit( void * apItem );
@@ -122,46 +122,41 @@ void	Frame_ItemDeInit( void * apItem )
 
 
 /*-----------------------------------------------------------------------------------*
-* FUNCTION : Frame_RelocIsType( void * apData,const U32 aSize,const U32 aID )
+* FUNCTION : Frame_RelocIsType( sAsset * apAsset )
 * ACTION   : Frame_RelocIsType
 * CREATION : 10.12.2003 PNK
 *-----------------------------------------------------------------------------------*/
 
-U32	Frame_RelocIsType( void * apData,const U32 aSize,const U32 aID )
+U32	Frame_RelocIsType( sAsset * apAsset )
 {
-	(void)apData;
-	(void)aSize;
-	(void)aID;
+	(void)apAsset;
 
 	return( 1 );	
 }
 
 
 /*-----------------------------------------------------------------------------------*
-* FUNCTION : Frame_RelocDoInit( void * apData,const U32 aSize,const U32 aID )
+* FUNCTION : Frame_RelocDoInit( sAsset * apAsset )
 * ACTION   : Frame_RelocDoInit
 * CREATION : 10.12.2003 PNK
 *-----------------------------------------------------------------------------------*/
 
-U32	Frame_RelocDoInit( void * apData,const U32 aSize,const U32 aID )
+U32	Frame_RelocDoInit( sAsset * apAsset )
 {
-	(void)aID;
-
-	Frame_ParseLoad( (char*)apData, aSize );
+	Frame_ParseLoad( (char*)apAsset->mpData, apAsset->mSize );
 	return( 1 );
 }
 
 
 /*-----------------------------------------------------------------------------------*
-* FUNCTION : Frame_RelocDoDeInit( void * apData,const U32 aSize,const U32 aID )
+* FUNCTION : Frame_RelocDoDeInit( sAsset * apAsset )
 * ACTION   : Frame_RelocDoDeInit
 * CREATION : 10.12.2003 PNK
 *-----------------------------------------------------------------------------------*/
 
-U32	Frame_RelocDoDeInit( void * apData,const U32 aSize,const U32 aID )
+U32	Frame_RelocDoDeInit( sAsset * apAsset )
 {
-	(void)aID;
-	Frame_ParseUnLoad( (char*)apData, aSize );
+	Frame_ParseUnLoad( (char*)apAsset->mpData, apAsset->mSize );
 	return( 1 );
 }
 

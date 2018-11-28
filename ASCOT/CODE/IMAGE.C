@@ -20,9 +20,9 @@ sRelocater	gImageRelocater;
 #  PROTOTYPES
 ################################################################################### */
 
-U32	Image_RelocIsType( void * apData, const U32 aSize, const U32 aID );
-U32	Image_RelocDoInit( void * apData, const U32 aSize, const U32 aID );
-U32	Image_RelocDoDeInit( void * apData, const U32 aSize, const U32 aID );
+U32	Image_RelocIsType( sAsset * apAsset );
+U32	Image_RelocDoInit( sAsset * apAsset );
+U32	Image_RelocDoDeInit( sAsset * apAsset );
 void	Image_ItemInit( void * apItem );
 
 
@@ -81,39 +81,34 @@ void	ImageManager_UnRegister( sImage * apImage )
 
 
 /*-----------------------------------------------------------------------------------*
-* FUNCTION : Image_RelocIsType( void * apData,const U32 aSize,const U32 aID )
+* FUNCTION : Image_RelocIsType( sAsset * apAsset )
 * ACTION   : Image_RelocIsType
 * CREATION : 09.12.2003 PNK
 *-----------------------------------------------------------------------------------*/
 
-U32	Image_RelocIsType( void * apData,const U32 aSize,const U32 aID )
+U32	Image_RelocIsType( sAsset * apAsset )
 {
-	(void)apData;
-	(void)aSize;
-	(void)aID;
+	(void)apAsset;
 
 	return( 1 );	
 }
 
 
 /*-----------------------------------------------------------------------------------*
-* FUNCTION : Image_RelocDoInit( void * apData,const U32 aSize,const U32 aID )
+* FUNCTION : Image_RelocDoInit( sAsset * apAsset )
 * ACTION   : Image_RelocDoInit
 * CREATION : 09.12.2003 PNK
 *-----------------------------------------------------------------------------------*/
 
-U32	Image_RelocDoInit( void * apData,const U32 aSize,const U32 aID )
+U32	Image_RelocDoInit( sAsset * apAsset )
 {
 	sImage *	lpImage;
 
-	(void)aSize;
-
-	(void)apData;
-	lpImage = (sImage*)HashList_ItemRegister( &gImageList, aID );
+	lpImage = (sImage*)HashList_ItemRegister( &gImageList, apAsset->mID );
 
 	if( lpImage )
 	{
-		lpImage->mpPicture = apData;
+		lpImage->mpPicture = apAsset->mpData;
 	}
 
 	return( (lpImage != 0) );
@@ -121,17 +116,14 @@ U32	Image_RelocDoInit( void * apData,const U32 aSize,const U32 aID )
 
 
 /*-----------------------------------------------------------------------------------*
-* FUNCTION : Image_RelocDoDeInit( void * apData,const U32 aSize,const U32 aID )
+* FUNCTION : Image_RelocDoDeInit( sAsset * apAsset )
 * ACTION   : Image_RelocDoDeInit
 * CREATION : 09.12.2003 PNK
 *-----------------------------------------------------------------------------------*/
 
-U32	Image_RelocDoDeInit( void * apData,const U32 aSize,const U32 aID )
+U32	Image_RelocDoDeInit( sAsset * apAsset )
 {
-	(void)apData;
-	(void)aSize;
-
-	HashList_ItemUnRegister( &gImageList, aID );
+	HashList_ItemUnRegister( &gImageList, apAsset->mID );
 
 	return( 1 );
 }

@@ -20,9 +20,9 @@ sRelocater	gSampleRelocater;
 #  PROTOTYPES
 ################################################################################### */
 
-U32		Sample_RelocIsType( void * apData, const U32 aSize, const U32 aID );
-U32		Sample_RelocDoInit( void * apData, const U32 aSize, const U32 aID );
-U32		Sample_RelocDoDeInit( void * apData, const U32 aSize, const U32 aID );
+U32		Sample_RelocIsType(   sAsset * apAsset );
+U32		Sample_RelocDoInit(   sAsset * apAsset );
+U32		Sample_RelocDoDeInit( sAsset * apAsset );
 void	Sample_ItemInit( void * apItem );
 
 
@@ -81,37 +81,35 @@ void	SampleManager_UnRegister( sAscotSpl * apSpl )
 
 
 /*-----------------------------------------------------------------------------------*
-* FUNCTION : Sample_RelocIsType( void * apData,const U32 aSize,const U32 aID )
+* FUNCTION : Sample_RelocIsType( sAsset * apAsset )
 * ACTION   : Sample_RelocIsType
 * CREATION : 11.02.2004 PNK
 *-----------------------------------------------------------------------------------*/
 
-U32	Sample_RelocIsType( void * apData,const U32 aSize,const U32 aID )
+U32	Sample_RelocIsType( sAsset * apAsset )
 {
-	(void)apData;
-	(void)aSize;
-	(void)aID;
+	(void)apAsset;
 
 	return( 1 );	
 }
 
 
 /*-----------------------------------------------------------------------------------*
-* FUNCTION : Sample_RelocDoInit( void * apData,const U32 aSize,const U32 aID )
+* FUNCTION : Sample_RelocDoInit( sAsset * apAsset )
 * ACTION   : Sample_RelocDoInit
 * CREATION : 11.02.2004 PNK
 *-----------------------------------------------------------------------------------*/
 
-U32	Sample_RelocDoInit( void * apData,const U32 aSize,const U32 aID )
+U32	Sample_RelocDoInit( sAsset * apAsset )
 {
 	sAscotSpl *	lpSpl;
 
-	lpSpl = (sAscotSpl*)HashList_ItemRegister( &gSampleList, aID );
+	lpSpl = (sAscotSpl*)HashList_ItemRegister( &gSampleList, apAsset->mID );
 
 	if( lpSpl )
 	{
-		lpSpl->mSound.mpSound = apData;
-		lpSpl->mSound.mLength = aSize;
+		lpSpl->mSound.mpSound = apAsset->mpData;
+		lpSpl->mSound.mLength = apAsset->mSize;
 	}
 
 	return( lpSpl != 0 );
@@ -119,17 +117,14 @@ U32	Sample_RelocDoInit( void * apData,const U32 aSize,const U32 aID )
 
 
 /*-----------------------------------------------------------------------------------*
-* FUNCTION : Sample_RelocDoDeInit( void * apData,const U32 aSize,const U32 aID )
+* FUNCTION : Sample_RelocDoDeInit( sAsset * apAsset )
 * ACTION   : Sample_RelocDoDeInit
 * CREATION : 11.02.2004 PNK
 *-----------------------------------------------------------------------------------*/
 
-U32	Sample_RelocDoDeInit( void * apData,const U32 aSize,const U32 aID )
+U32	Sample_RelocDoDeInit( sAsset * apAsset )
 {
-	(void)apData;
-	(void)aSize;
-
-	HashList_ItemUnRegister( &gSampleList, aID );
+	HashList_ItemUnRegister( &gSampleList, apAsset->mID );
 	return( 1 );
 }
 
