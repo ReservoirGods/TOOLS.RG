@@ -19,8 +19,8 @@ sRelocater gRFontReloc;
 #  PROTOTYPES
 ################################################################################### */
 
-U32	RFONT_IsType( void * apData, const U32 aSize, const U32 aID );
-U32	RFONT_DoRelocate( void * apData, const U32 aSize, const U32 aID );
+U32	RFONT_IsType(     sAsset * apAsset );
+U32	RFONT_DoRelocate( sAsset * apAsset );
 
 
 /* ###################################################################################
@@ -52,35 +52,27 @@ void	RenderFont_DeInit( void )
 
 
 /*-----------------------------------------------------------------------------------*
-* FUNCTION : RFONT_IsType( void * apData,const U32 aSize,const U32 aID )
+* FUNCTION : RFONT_IsType( sAsset * apAsset )
 * ACTION   : RFONT_IsType
 * CREATION : 22.01.2004 PNK
 *-----------------------------------------------------------------------------------*/
 
-U32	RFONT_IsType( void * apData,const U32 aSize,const U32 aID )
+U32	RFONT_IsType( sAsset * apAsset )
 {
-	(void)apData;
-	(void)aSize;
-	(void)aID;
+	(void)apAsset;
 	return( 1 );	
 }
 
 
 /*-----------------------------------------------------------------------------------*
-* FUNCTION : RFONT_DoRelocate( void * apData,const U32 aSize,const U32 aID )
+* FUNCTION : RFONT_DoRelocate( sAsset * apAsset )
 * ACTION   : RFONT_DoRelocate
 * CREATION : 22.01.2004 PNK
 *-----------------------------------------------------------------------------------*/
 
-U32	RFONT_DoRelocate( void * apData,const U32 aSize,const U32 aID )
+U32	RFONT_DoRelocate( sAsset * apAsset )
 {
-	sFont * lpFont;
-
-	(void)apData;
-	(void)aSize;
-	(void)aID;
-
-	lpFont = (sFont*)apData;
+	sFont * lpFont= (sFont*)apAsset->mpData;
 	Font_Relocate( lpFont );
 
 	return( 1 );

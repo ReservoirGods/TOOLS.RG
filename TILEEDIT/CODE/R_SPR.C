@@ -19,8 +19,8 @@ sRelocater	gRSPRReloc;
 #  PROTOTYPES
 ################################################################################### */
 
-U32	RSPR_IsType(     void * apData, const U32 aSize, const U32 aID );
-U32	RSPR_DoRelocate( void * apData, const U32 aSize, const U32 aID );
+U32	RSPR_IsType(     sAsset * apAsset );
+U32	RSPR_DoRelocate( sAsset * apAsset );
 
 
 /* ###################################################################################
@@ -52,35 +52,29 @@ void	RenderSprite_DeInit( void )
 
 
 /*-----------------------------------------------------------------------------------*
-* FUNCTION : RSPR_IsType( void * apData,const U32 aSize,const U32 aID )
+* FUNCTION : RSPR_IsType( sAsset * apAsset )
 * ACTION   : RSPR_IsType
 * CREATION : 06.01.2004 PNK
 *-----------------------------------------------------------------------------------*/
 
-U32	RSPR_IsType( void * apData,const U32 aSize,const U32 aID )
+U32	RSPR_IsType( sAsset * apAsset )
 {
-	(void)apData;
-	(void)aSize;
-	(void)aID;
+	(void)apAsset;
 	return( 1 );	
 }
 
 
 /*-----------------------------------------------------------------------------------*
-* FUNCTION : RSPR_DoRelocate( void * apData,const U32 aSize,const U32 aID )
+* FUNCTION : RSPR_DoRelocate( sAsset * apAsset )
 * ACTION   : RSPR_DoRelocate
 * CREATION : 06.01.2004 PNK
 *-----------------------------------------------------------------------------------*/
 
-U32	RSPR_DoRelocate( void * apData,const U32 aSize,const U32 aID )
+U32	RSPR_DoRelocate( sAsset * apAsset )
 {
-	(void)apData;
-	(void)aSize;
-	(void)aID;
-	Sprite_BlockRelocate( (sSpriteBlock*)apData );
+	Sprite_BlockRelocate( (sSpriteBlock*)apAsset->mpData );
 	return( 1 );
 }
-
 
 
 /* ################################################################################ */
