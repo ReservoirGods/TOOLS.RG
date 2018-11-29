@@ -1,0 +1,141 @@
+[ FONT ]
+{
+src            = RAW\GFX\FONT8X8.PI1
+msk            = COOKED\GFX\MASKS\FONT8X8.PI1
+dst            = COOKED\LINK\GUI\FONT8X8.BFB
+charfirstvalue = 0
+charlastvalue  = 127
+x              = 0
+y              = 0
+stepx          = 16
+stepy          = 8
+width          = 16
+height         = 8
+planes         = 4
+canvaswidth    = 320
+framecount     = 128
+}
+[ FONT ]
+{
+src            = RAW\GFX\FONT8X16.PI1
+msk            = COOKED\GFX\MASKS\FONT8X16.PI1
+dst            = COOKED\LINK\GUI\FONT8X16.BFB
+charfirstvalue = 0
+charlastvalue  = 127
+x              = 0
+y              = 0
+stepx          = 16
+stepy          = 16
+width          = 16
+height         = 16
+planes         = 4
+canvaswidth    = 320
+framecount     = 128
+}
+[ SPRITE ]
+{
+src         = RAW\GFX\CURSOR.PI1
+msk         = COOKED\GFX\MASKS\CURSOR.PI1
+dst         = COOKED\LINK\GUI\CURSOR.BSB
+x           = 0
+y           = 0
+stepx       = 0
+stepy       = 0
+width       = 16
+height      = 16
+planes      = 4
+canvaswidth = 320
+framecount  = 1
+}
+[ SPRITE ]
+{
+src         = RAW\GFX\BUTTONS.PI1
+msk         = COOKED\GFX\MASKS\BUTTONS.PI1
+dst         = COOKED\LINK\GUI\CLOSE.BSB
+x           = 0
+y           = 0
+stepx       = 16
+stepy       = 0
+width       = 16
+height      = 16
+planes      = 4
+canvaswidth = 320
+framecount  = 3
+}
+[ SPRITE ]
+{
+src         = RAW\GFX\BUTTONS.PI1
+msk         = COOKED\GFX\MASKS\BUTTONS.PI1
+dst         = COOKED\LINK\GUI\UP.BSB
+x           = 0
+y           = 16
+stepx       = 16
+stepy       = 0
+width       = 16
+height      = 16
+planes      = 4
+canvaswidth = 320
+framecount  = 3
+}
+[ SPRITE ]
+{
+src         = RAW\GFX\BUTTONS.PI1
+msk         = COOKED\GFX\MASKS\BUTTONS.PI1
+dst         = COOKED\LINK\GUI\DOWN.BSB
+x           = 0
+y           = 32
+stepx       = 16
+stepy       = 0
+width       = 16
+height      = 16
+planes      = 4
+canvaswidth = 320
+framecount  = 3
+}
+[ SPRITE ]
+{
+src         = RAW\GFX\BUTTONS.PI1
+msk         = COOKED\GFX\MASKS\BUTTONS.PI1
+dst         = COOKED\LINK\GUI\RIGHT.BSB
+x           = 0
+y           = 48
+stepx       = 16
+stepy       = 0
+width       = 16
+height      = 16
+planes      = 4
+canvaswidth = 320
+framecount  = 3
+}
+[ SPRITE ]
+{
+src         = RAW\GFX\BUTTONS.PI1
+msk         = COOKED\GFX\MASKS\BUTTONS.PI1
+dst         = COOKED\LINK\GUI\LEFT.BSB
+x           = 0
+y           = 64
+stepx       = 16
+stepy       = 0
+width       = 16
+height      = 16
+planes      = 4
+canvaswidth = 320
+framecount  = 3
+}
+[ FONT ]
+{
+src            = RAW\GFX\FONT6X6.PI1
+msk            = COOKED\GFX\MASKS\FONT6X6.PI1
+dst            = COOKED\LINK\GUI\FONT6X6.BFB
+charfirstvalue = 0
+charlastvalue  = 127
+x              = 0
+y              = 0
+stepx          = 16
+stepy          = 6
+width          = 16
+height         = 6
+planes         = 4
+canvaswidth    = 320
+framecount     = 128
+}
