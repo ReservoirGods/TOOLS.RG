@@ -20,9 +20,9 @@ sRelocater	gImageRelocater;
 #  PROTOTYPES
 ################################################################################### */
 
-U32	Image_RelocIsType( sAsset * apAsset );
-U32	Image_RelocDoInit( sAsset * apAsset );
-U32	Image_RelocDoDeInit( sAsset * apAsset );
+U32	Image_RelocIsType( sAssetItem * apAsset );
+U32	Image_RelocDoInit( sAssetItem * apAsset );
+U32	Image_RelocDoDeInit( sAssetItem * apAsset );
 void	Image_ItemInit( void * apItem );
 
 
@@ -81,12 +81,12 @@ void	ImageManager_UnRegister( sImage * apImage )
 
 
 /*-----------------------------------------------------------------------------------*
-* FUNCTION : Image_RelocIsType( sAsset * apAsset )
+* FUNCTION : Image_RelocIsType( sAssetItem * apAsset )
 * ACTION   : Image_RelocIsType
 * CREATION : 09.12.2003 PNK
 *-----------------------------------------------------------------------------------*/
 
-U32	Image_RelocIsType( sAsset * apAsset )
+U32	Image_RelocIsType( sAssetItem * apAsset )
 {
 	(void)apAsset;
 
@@ -95,16 +95,16 @@ U32	Image_RelocIsType( sAsset * apAsset )
 
 
 /*-----------------------------------------------------------------------------------*
-* FUNCTION : Image_RelocDoInit( sAsset * apAsset )
+* FUNCTION : Image_RelocDoInit( sAssetItem * apAsset )
 * ACTION   : Image_RelocDoInit
 * CREATION : 09.12.2003 PNK
 *-----------------------------------------------------------------------------------*/
 
-U32	Image_RelocDoInit( sAsset * apAsset )
+U32	Image_RelocDoInit( sAssetItem * apAsset )
 {
 	sImage *	lpImage;
 
-	lpImage = (sImage*)HashList_ItemRegister( &gImageList, apAsset->mID );
+	lpImage = (sImage*)HashList_ItemRegister( &gImageList, apAsset->mHashKey );
 
 	if( lpImage )
 	{
@@ -116,14 +116,14 @@ U32	Image_RelocDoInit( sAsset * apAsset )
 
 
 /*-----------------------------------------------------------------------------------*
-* FUNCTION : Image_RelocDoDeInit( sAsset * apAsset )
+* FUNCTION : Image_RelocDoDeInit( sAssetItem * apAsset )
 * ACTION   : Image_RelocDoDeInit
 * CREATION : 09.12.2003 PNK
 *-----------------------------------------------------------------------------------*/
 
-U32	Image_RelocDoDeInit( sAsset * apAsset )
+U32	Image_RelocDoDeInit( sAssetItem * apAsset )
 {
-	HashList_ItemUnRegister( &gImageList, apAsset->mID );
+	HashList_ItemUnRegister( &gImageList, apAsset->mHashKey );
 
 	return( 1 );
 }

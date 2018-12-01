@@ -23,9 +23,9 @@ sRelocater 	gMusicMonRelocater;
 
 void	MusicMon_ItemInit( void * apItem );
 
-U32	MusicMon_RelocIsType( sAsset * apAsset );
-U32	MusicMon_RelocDoInit( sAsset * apAsset );
-U32	MusicMon_RelocDoDeInit( sAsset * apAsset );
+U32	MusicMon_RelocIsType( sAssetItem * apAsset );
+U32	MusicMon_RelocDoInit( sAssetItem * apAsset );
+U32	MusicMon_RelocDoDeInit( sAssetItem * apAsset );
 
 extern	void	MusicMon_Start( void * apSong );
 extern	void	MusicMon_Stop( void );
@@ -150,12 +150,12 @@ void	MusicMon_ItemInit( void * apItem )
 
 
 /*-----------------------------------------------------------------------------------*
-* FUNCTION : MusicMon_RelocIsType( sAsset * apAsset )
+* FUNCTION : MusicMon_RelocIsType( sAssetItem * apAsset )
 * ACTION   : MusicMon_RelocIsType
 * CREATION : 11.12.2003 PNK
 *-----------------------------------------------------------------------------------*/
 
-U32	MusicMon_RelocIsType( sAsset * apAsset )
+U32	MusicMon_RelocIsType( sAssetItem * apAsset )
 {
 	(void)apAsset;
 	return( 1 );	
@@ -163,16 +163,16 @@ U32	MusicMon_RelocIsType( sAsset * apAsset )
 
 
 /*-----------------------------------------------------------------------------------*
-* FUNCTION : MusicMon_RelocDoInit( sAsset * apAsset )
+* FUNCTION : MusicMon_RelocDoInit( sAssetItem * apAsset )
 * ACTION   : MusicMon_RelocDoInit
 * CREATION : 11.12.2003 PNK
 *-----------------------------------------------------------------------------------*/
 
-U32	MusicMon_RelocDoInit( sAsset * apAsset )
+U32	MusicMon_RelocDoInit( sAssetItem * apAsset )
 {
 	sMusicMonTune *	lpTune;
 
-	lpTune = (sMusicMonTune*)HashList_ItemRegister( &gMusicMonList, apAsset->mID );
+	lpTune = (sMusicMonTune*)HashList_ItemRegister( &gMusicMonList, apAsset->mHashKey );
 
 	if( lpTune )
 	{
@@ -184,14 +184,14 @@ U32	MusicMon_RelocDoInit( sAsset * apAsset )
 
 
 /*-----------------------------------------------------------------------------------*
-* FUNCTION : MusicMon_RelocDoDeInit( sAsset * apAsset )
+* FUNCTION : MusicMon_RelocDoDeInit( sAssetItem * apAsset )
 * ACTION   : MusicMon_RelocDoDeInit
 * CREATION : 11.12.2003 PNK
 *-----------------------------------------------------------------------------------*/
 
-U32	MusicMon_RelocDoDeInit( sAsset * apAsset )
+U32	MusicMon_RelocDoDeInit( sAssetItem * apAsset )
 {
-	HashList_ItemUnRegister( &gMusicMonList, apAsset->mID );
+	HashList_ItemUnRegister( &gMusicMonList, apAsset->mHashKey );
 
 	return( 1 );
 }

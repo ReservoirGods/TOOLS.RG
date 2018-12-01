@@ -30,9 +30,9 @@ sRelocater	gFrameRelocater;
 void	Frame_ParseLoad(   const char * apText,const S32 aSize );
 void	Frame_ParseUnLoad( const char * apText,const S32 aSize );
 
-U32	Frame_RelocIsType(   sAsset * apAsset );
-U32	Frame_RelocDoInit(   sAsset * apAsset );
-U32	Frame_RelocDoDeInit( sAsset * apAsset );
+U32	Frame_RelocIsType(   sAssetItem * apAsset );
+U32	Frame_RelocDoInit(   sAssetItem * apAsset );
+U32	Frame_RelocDoDeInit( sAssetItem * apAsset );
 
 void	Frame_ItemInit( void * apItem );
 void	Frame_ItemDeInit( void * apItem );
@@ -122,12 +122,12 @@ void	Frame_ItemDeInit( void * apItem )
 
 
 /*-----------------------------------------------------------------------------------*
-* FUNCTION : Frame_RelocIsType( sAsset * apAsset )
+* FUNCTION : Frame_RelocIsType( sAssetItem * apAsset )
 * ACTION   : Frame_RelocIsType
 * CREATION : 10.12.2003 PNK
 *-----------------------------------------------------------------------------------*/
 
-U32	Frame_RelocIsType( sAsset * apAsset )
+U32	Frame_RelocIsType( sAssetItem * apAsset )
 {
 	(void)apAsset;
 
@@ -136,12 +136,12 @@ U32	Frame_RelocIsType( sAsset * apAsset )
 
 
 /*-----------------------------------------------------------------------------------*
-* FUNCTION : Frame_RelocDoInit( sAsset * apAsset )
+* FUNCTION : Frame_RelocDoInit( sAssetItem * apAsset )
 * ACTION   : Frame_RelocDoInit
 * CREATION : 10.12.2003 PNK
 *-----------------------------------------------------------------------------------*/
 
-U32	Frame_RelocDoInit( sAsset * apAsset )
+U32	Frame_RelocDoInit( sAssetItem * apAsset )
 {
 	Frame_ParseLoad( (char*)apAsset->mpData, apAsset->mSize );
 	return( 1 );
@@ -149,12 +149,12 @@ U32	Frame_RelocDoInit( sAsset * apAsset )
 
 
 /*-----------------------------------------------------------------------------------*
-* FUNCTION : Frame_RelocDoDeInit( sAsset * apAsset )
+* FUNCTION : Frame_RelocDoDeInit( sAssetItem * apAsset )
 * ACTION   : Frame_RelocDoDeInit
 * CREATION : 10.12.2003 PNK
 *-----------------------------------------------------------------------------------*/
 
-U32	Frame_RelocDoDeInit( sAsset * apAsset )
+U32	Frame_RelocDoDeInit( sAssetItem * apAsset )
 {
 	Frame_ParseUnLoad( (char*)apAsset->mpData, apAsset->mSize );
 	return( 1 );

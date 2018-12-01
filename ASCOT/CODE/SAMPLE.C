@@ -20,9 +20,9 @@ sRelocater	gSampleRelocater;
 #  PROTOTYPES
 ################################################################################### */
 
-U32		Sample_RelocIsType(   sAsset * apAsset );
-U32		Sample_RelocDoInit(   sAsset * apAsset );
-U32		Sample_RelocDoDeInit( sAsset * apAsset );
+U32		Sample_RelocIsType(   sAssetItem * apAsset );
+U32		Sample_RelocDoInit(   sAssetItem * apAsset );
+U32		Sample_RelocDoDeInit( sAssetItem * apAsset );
 void	Sample_ItemInit( void * apItem );
 
 
@@ -81,12 +81,12 @@ void	SampleManager_UnRegister( sAscotSpl * apSpl )
 
 
 /*-----------------------------------------------------------------------------------*
-* FUNCTION : Sample_RelocIsType( sAsset * apAsset )
+* FUNCTION : Sample_RelocIsType( sAssetItem * apAsset )
 * ACTION   : Sample_RelocIsType
 * CREATION : 11.02.2004 PNK
 *-----------------------------------------------------------------------------------*/
 
-U32	Sample_RelocIsType( sAsset * apAsset )
+U32	Sample_RelocIsType( sAssetItem * apAsset )
 {
 	(void)apAsset;
 
@@ -95,16 +95,16 @@ U32	Sample_RelocIsType( sAsset * apAsset )
 
 
 /*-----------------------------------------------------------------------------------*
-* FUNCTION : Sample_RelocDoInit( sAsset * apAsset )
+* FUNCTION : Sample_RelocDoInit( sAssetItem * apAsset )
 * ACTION   : Sample_RelocDoInit
 * CREATION : 11.02.2004 PNK
 *-----------------------------------------------------------------------------------*/
 
-U32	Sample_RelocDoInit( sAsset * apAsset )
+U32	Sample_RelocDoInit( sAssetItem * apAsset )
 {
 	sAscotSpl *	lpSpl;
 
-	lpSpl = (sAscotSpl*)HashList_ItemRegister( &gSampleList, apAsset->mID );
+	lpSpl = (sAscotSpl*)HashList_ItemRegister( &gSampleList, apAsset->mHashKey );
 
 	if( lpSpl )
 	{
@@ -117,14 +117,14 @@ U32	Sample_RelocDoInit( sAsset * apAsset )
 
 
 /*-----------------------------------------------------------------------------------*
-* FUNCTION : Sample_RelocDoDeInit( sAsset * apAsset )
+* FUNCTION : Sample_RelocDoDeInit( sAssetItem * apAsset )
 * ACTION   : Sample_RelocDoDeInit
 * CREATION : 11.02.2004 PNK
 *-----------------------------------------------------------------------------------*/
 
-U32	Sample_RelocDoDeInit( sAsset * apAsset )
+U32	Sample_RelocDoDeInit( sAssetItem * apAsset )
 {
-	HashList_ItemUnRegister( &gSampleList, apAsset->mID );
+	HashList_ItemUnRegister( &gSampleList, apAsset->mHashKey );
 	return( 1 );
 }
 
