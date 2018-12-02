@@ -56,6 +56,7 @@ GOD_TEST.TOS
 ;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
 ..\..\GODLIB\BASE\BASE.C
+..\..\GODLIB\CLOCK\CLOCK.C
 ..\..\GODLIB\DRIVE\DRIVE.C
 ..\..\GODLIB\DRIVE\DISK_IO.C
 ..\..\GODLIB\ENCRYPT\ENCRYPT.C
