@@ -43,6 +43,7 @@ PRG\MAKELINK.TTP
 ;	GODLIB LIBRARY MODULES
 ;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
+..\..\GODLIB\ASSET\ASSET.C
 ..\..\GODLIB\BASE\BASE.C
 ..\..\GODLIB\DRIVE\DRIVE.C
 ..\..\GODLIB\FILE\FILE.C
