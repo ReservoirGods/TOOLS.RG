@@ -125,16 +125,16 @@ void	EditMenu_Init( sHashTree * apTree )
 	gEditMenuClass.mMapXmax = gEditMenuClass.mTileMap.mBlocksX - 20;
 	gEditMenuClass.mMapYmax = gEditMenuClass.mTileMap.mBlocksX - 12;
 
-	gEditMenuClass.mpVars[ eEM_VAR_FILENAME  ] = HashTree_VarInit( apTree, "TILEEDIT\\EDITMENU\\FILENAME",	sizeof(sString*),	&gEditMenuClass.mMapFileName );
-	gEditMenuClass.mpVars[ eEM_VAR_MAPWIDTH  ] = HashTree_VarInit( apTree, "TILEEDIT\\EDITMENU\\MAPWIDTH",	sizeof(U16),		&gEditMenuClass.mTileMap.mBlocksX );
-	gEditMenuClass.mpVars[ eEM_VAR_MAPHEIGHT ] = HashTree_VarInit( apTree, "TILEEDIT\\EDITMENU\\MAPHEIGHT",	sizeof(U16),		&gEditMenuClass.mTileMap.mBlocksY );
-	gEditMenuClass.mpVars[ eEM_VAR_MAPX      ] = HashTree_VarInit( apTree, "TILEEDIT\\EDITMENU\\MAPX",		sizeof(U32),		&gEditMenuClass.mMapX );
-	gEditMenuClass.mpVars[ eEM_VAR_MAPY      ] = HashTree_VarInit( apTree, "TILEEDIT\\EDITMENU\\MAPY",		sizeof(U32),		&gEditMenuClass.mMapY );
-	gEditMenuClass.mpVars[ eEM_VAR_MAPXMAX   ] = HashTree_VarInit( apTree, "TILEEDIT\\EDITMENU\\MAPXMAX",	sizeof(U32),		&gEditMenuClass.mMapXmax );
-	gEditMenuClass.mpVars[ eEM_VAR_MAPYMAX   ] = HashTree_VarInit( apTree, "TILEEDIT\\EDITMENU\\MAPYMAX",	sizeof(U32),		&gEditMenuClass.mMapYmax );
+	gEditMenuClass.mpVars[ eEM_VAR_FILENAME  ] = HashTree_Var_Create( apTree, "TILEEDIT\\EDITMENU\\FILENAME",	sizeof(sString*),	&gEditMenuClass.mMapFileName );
+	gEditMenuClass.mpVars[ eEM_VAR_MAPWIDTH  ] = HashTree_Var_Create( apTree, "TILEEDIT\\EDITMENU\\MAPWIDTH",	sizeof(U16),		&gEditMenuClass.mTileMap.mBlocksX );
+	gEditMenuClass.mpVars[ eEM_VAR_MAPHEIGHT ] = HashTree_Var_Create( apTree, "TILEEDIT\\EDITMENU\\MAPHEIGHT",	sizeof(U16),		&gEditMenuClass.mTileMap.mBlocksY );
+	gEditMenuClass.mpVars[ eEM_VAR_MAPX      ] = HashTree_Var_Create( apTree, "TILEEDIT\\EDITMENU\\MAPX",		sizeof(U32),		&gEditMenuClass.mMapX );
+	gEditMenuClass.mpVars[ eEM_VAR_MAPY      ] = HashTree_Var_Create( apTree, "TILEEDIT\\EDITMENU\\MAPY",		sizeof(U32),		&gEditMenuClass.mMapY );
+	gEditMenuClass.mpVars[ eEM_VAR_MAPXMAX   ] = HashTree_Var_Create( apTree, "TILEEDIT\\EDITMENU\\MAPXMAX",	sizeof(U32),		&gEditMenuClass.mMapXmax );
+	gEditMenuClass.mpVars[ eEM_VAR_MAPYMAX   ] = HashTree_Var_Create( apTree, "TILEEDIT\\EDITMENU\\MAPYMAX",	sizeof(U32),		&gEditMenuClass.mMapYmax );
 
-	gEditMenuClass.mpVars[ eEM_VAR_DEL  ] = HashTree_VarInit( apTree, "TILEEDIT\\MAPMENU\\DEL",	sizeof(U16),	&gEditMenuClass.mDel );
-	gEditMenuClass.mpVars[ eEM_VAR_INS  ] = HashTree_VarInit( apTree, "TILEEDIT\\MAPMENU\\INS",	sizeof(U16),	&gEditMenuClass.mIns );
+	gEditMenuClass.mpVars[ eEM_VAR_DEL  ] = HashTree_Var_Create( apTree, "TILEEDIT\\MAPMENU\\DEL",	sizeof(U16),	&gEditMenuClass.mDel );
+	gEditMenuClass.mpVars[ eEM_VAR_INS  ] = HashTree_Var_Create( apTree, "TILEEDIT\\MAPMENU\\INS",	sizeof(U16),	&gEditMenuClass.mIns );
 
 	gEditMenuClass.mpButtMain = HashTree_VarRegister( apTree, "GUI\\BUTTONS\\BUTT_EDIT_MAIN" );
 
@@ -167,7 +167,7 @@ void	EditMenu_DeInit( void )
 
 	for( i=0; i<eEM_VAR_LIMIT; i++ )
 	{
-		HashTree_VarDeInit( gEditMenuClass.mpTree, gEditMenuClass.mpVars[ i ] );
+		HashTree_Var_Destroy( gEditMenuClass.mpTree, gEditMenuClass.mpVars[ i ] );
 	}
 	TileMap_DeInit( &gEditMenuClass.mTileMap );	
 }

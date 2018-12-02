@@ -103,8 +103,8 @@ void	ImageMenu_Init( sHashTree * apTree )
 
 	gImgClass.mImageIndexMax = dIMGMENU_IMG_LIMIT;
 
-	gImgClass.mpVars[ eIMGMENU_VAR_IMGINDEX    ] = HashTree_VarInit( apTree, "TILEEDIT\\IMAGEMENU\\IMAGEINDEX", sizeof(U32), &gImgClass.mImageIndex );
-	gImgClass.mpVars[ eIMGMENU_VAR_IMGINDEXMAX ] = HashTree_VarInit( apTree, "TILEEDIT\\IMAGEMENU\\IMAGEINDEXMAX", sizeof(U32), &gImgClass.mImageIndexMax );
+	gImgClass.mpVars[ eIMGMENU_VAR_IMGINDEX    ] = HashTree_Var_Create( apTree, "TILEEDIT\\IMAGEMENU\\IMAGEINDEX", sizeof(U32), &gImgClass.mImageIndex );
+	gImgClass.mpVars[ eIMGMENU_VAR_IMGINDEXMAX ] = HashTree_Var_Create( apTree, "TILEEDIT\\IMAGEMENU\\IMAGEINDEXMAX", sizeof(U32), &gImgClass.mImageIndexMax );
 
 	HashTree_VarClient_Init( &gImgClass.mVarClients[ eIMGMENU_VARCLIENT_IMGINDEX ], apTree, "TILEEDIT\\IMAGEMENU\\IMAGEINDEX",	ImageMenu_OnImageIndex );
 	HashTree_VarClient_Init( &gImgClass.mVarClients[ eIMGMENU_VARCLIENT_IMGNEXT  ], apTree, "GUI\\BUTTONS\\BUTT_IMG_NEXT",		ImageMenu_OnImageNext );
@@ -126,6 +126,11 @@ void	ImageMenu_DeInit( void )
 	for( i=0; i<eIMGMENU_VARCLIENT_LIMIT; i++ )
 	{
 		HashTree_VarClient_DeInit( &gImgClass.mVarClients[ i ], gImgClass.mpTree );
+	}
+
+	for( i=0; i<eIMGMENU_VAR_LIMIT; i++ )
+	{
+		HashTree_Var_Destroy( gImgClass.mpTree, gImgClass.mpVars[ i ] );
 	}
 
 	for( i=0; i<dIMGMENU_IMG_LIMIT; i++ )
