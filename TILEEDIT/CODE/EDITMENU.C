@@ -70,18 +70,18 @@ enum
 
 typedef	struct	sEditMenuClass
 {
-	sHashTree *				mpTree;
-	sTileMap				mTileMap;
-	sString 				mMapFileName;
-	sHashTreeVar *			mpVars[ eEM_VAR_LIMIT ];
-	sHashTreeVar *			mpButtMain;
-	sHashTreeVarClient *	mpVarClients[ eEM_VARCLIENT_LIMIT ];
-	U16						mDel;
-	U16						mIns;
-	U32						mMapX;
-	U32						mMapY;
-	U32						mMapXmax;
-	U32						mMapYmax;
+	sHashTree *			mpTree;
+	sTileMap			mTileMap;
+	sString 			mMapFileName;
+	sHashTreeVar *		mpVars[ eEM_VAR_LIMIT ];
+	sHashTreeVar *		mpButtMain;
+	sHashTreeVarClient	mVarClients[ eEM_VARCLIENT_LIMIT ];
+	U16					mDel;
+	U16					mIns;
+	U32					mMapX;
+	U32					mMapY;
+	U32					mMapXmax;
+	U32					mMapYmax;
 } sEditMenuClass;
 
 
@@ -138,10 +138,10 @@ void	EditMenu_Init( sHashTree * apTree )
 
 	gEditMenuClass.mpButtMain = HashTree_VarRegister( apTree, "GUI\\BUTTONS\\BUTT_EDIT_MAIN" );
 
-	gEditMenuClass.mpVarClients[ eEM_VARCLIENT_DEL      ] = HashTree_VarClientRegister( apTree, "TILEEDIT\\MAPMENU\\DEL",			EditMenu_Del_OnWrite, 0, 0, 0 );
-	gEditMenuClass.mpVarClients[ eEM_VARCLIENT_INS      ] = HashTree_VarClientRegister( apTree, "TILEEDIT\\MAPMENU\\INS",			EditMenu_Ins_OnWrite, 0, 0, 0 );
-	gEditMenuClass.mpVarClients[ eEM_VARCLIENT_MAPX     ] = HashTree_VarClientRegister( apTree, "TILEEDIT\\EDITMENU\\MAPX",			EditMenu_MapX_OnWrite, 0, 0, 0 );
-	gEditMenuClass.mpVarClients[ eEM_VARCLIENT_MAPX     ] = HashTree_VarClientRegister( apTree, "TILEEDIT\\EDITMENU\\MAPY",			EditMenu_MapY_OnWrite, 0, 0, 0 );
+	HashTree_VarClient_Init( &gEditMenuClass.mVarClients[ eEM_VARCLIENT_DEL      ], apTree, "TILEEDIT\\MAPMENU\\DEL",			EditMenu_Del_OnWrite );
+	HashTree_VarClient_Init( &gEditMenuClass.mVarClients[ eEM_VARCLIENT_INS      ], apTree, "TILEEDIT\\MAPMENU\\INS",			EditMenu_Ins_OnWrite );
+	HashTree_VarClient_Init( &gEditMenuClass.mVarClients[ eEM_VARCLIENT_MAPX     ], apTree, "TILEEDIT\\EDITMENU\\MAPX",			EditMenu_MapX_OnWrite );
+	HashTree_VarClient_Init( &gEditMenuClass.mVarClients[ eEM_VARCLIENT_MAPX     ], apTree, "TILEEDIT\\EDITMENU\\MAPY",			EditMenu_MapY_OnWrite );
 	String_Init( &gEditMenuClass.mMapFileName, "TEST.MAP" );
 }
 
@@ -162,7 +162,7 @@ void	EditMenu_DeInit( void )
 
 	for( i=0; i<eEM_VARCLIENT_LIMIT; i++ )
 	{
-		HashTree_VarClientUnRegister( gEditMenuClass.mpTree, gEditMenuClass.mpVarClients[ i ] );
+		HashTree_VarClient_DeInit( &gEditMenuClass.mVarClients[ i ], gEditMenuClass.mpTree );
 	}
 
 	for( i=0; i<eEM_VAR_LIMIT; i++ )

@@ -52,9 +52,9 @@ enum
 
 typedef	struct	sMainMenuClass
 {
-	sGuiFSInfo				mFSs[ eMM_FS_LIMIT ];
-	sHashTree *				mpTree;
-	sHashTreeVarClient *	mpVarClients[ eMM_VARCLIENT_LIMIT ];
+	sGuiFSInfo			mFSs[ eMM_FS_LIMIT ];
+	sHashTree *			mpTree;
+	sHashTreeVarClient	mVarClients[ eMM_VARCLIENT_LIMIT ];
 } sMainMenuClass;
 
 
@@ -99,12 +99,12 @@ void MainMenu_Init(sHashTree * apTree)
 	Memory_Clear( sizeof(gMainMenuClass), &gMainMenuClass );
 	gMainMenuClass.mpTree = apTree;
 
-	gMainMenuClass.mpVarClients[ eMM_VARCLIENT_LOADMAP ] = HashTree_VarClientRegister( apTree, "GUI\\BUTTONS\\BUTT_MM_LOADMAP", MainMenu_OnLoadMap, 0, 0, 0 );
-	gMainMenuClass.mpVarClients[ eMM_VARCLIENT_SAVEMAP ] = HashTree_VarClientRegister( apTree, "GUI\\BUTTONS\\BUTT_MM_SAVEMAP", MainMenu_OnSaveMap, 0, 0, 0 );
-	gMainMenuClass.mpVarClients[ eMM_VARCLIENT_LOADPRJ ] = HashTree_VarClientRegister( apTree, "GUI\\BUTTONS\\BUTT_MM_LOADPRJ", MainMenu_OnLoadPrj, 0, 0, 0 );
-	gMainMenuClass.mpVarClients[ eMM_VARCLIENT_SAVEPRJ ] = HashTree_VarClientRegister( apTree, "GUI\\BUTTONS\\BUTT_MM_SAVEPRJ", MainMenu_OnSavePrj, 0, 0, 0 );
-	gMainMenuClass.mpVarClients[ eMM_VARCLIENT_LOADBIN ] = HashTree_VarClientRegister( apTree, "GUI\\BUTTONS\\BUTT_MM_LOADBIN", MainMenu_OnLoadBin, 0, 0, 0 );
-	gMainMenuClass.mpVarClients[ eMM_VARCLIENT_SAVEBIN ] = HashTree_VarClientRegister( apTree, "GUI\\BUTTONS\\BUTT_MM_SAVEBIN", MainMenu_OnSaveBin, 0, 0, 0 );
+	HashTree_VarClient_Init( &gMainMenuClass.mVarClients[ eMM_VARCLIENT_LOADMAP ], apTree, "GUI\\BUTTONS\\BUTT_MM_LOADMAP", MainMenu_OnLoadMap );
+	HashTree_VarClient_Init( &gMainMenuClass.mVarClients[ eMM_VARCLIENT_SAVEMAP ], apTree, "GUI\\BUTTONS\\BUTT_MM_SAVEMAP", MainMenu_OnSaveMap );
+	HashTree_VarClient_Init( &gMainMenuClass.mVarClients[ eMM_VARCLIENT_LOADPRJ ], apTree, "GUI\\BUTTONS\\BUTT_MM_LOADPRJ", MainMenu_OnLoadPrj );
+	HashTree_VarClient_Init( &gMainMenuClass.mVarClients[ eMM_VARCLIENT_SAVEPRJ ], apTree, "GUI\\BUTTONS\\BUTT_MM_SAVEPRJ", MainMenu_OnSavePrj );
+	HashTree_VarClient_Init( &gMainMenuClass.mVarClients[ eMM_VARCLIENT_LOADBIN ], apTree, "GUI\\BUTTONS\\BUTT_MM_LOADBIN", MainMenu_OnLoadBin );
+	HashTree_VarClient_Init( &gMainMenuClass.mVarClients[ eMM_VARCLIENT_SAVEBIN ], apTree, "GUI\\BUTTONS\\BUTT_MM_SAVEBIN", MainMenu_OnSaveBin );
 
 	GuiFSInfo_Init( &gMainMenuClass.mFSs[ eMM_FS_BIN ], "LOAD BIN", "*.BIN", "TEST.BIN" );
 	GuiFSInfo_Init( &gMainMenuClass.mFSs[ eMM_FS_IMG ], "LOAD IMG", "*.PI1", "TEST.PI1" );
@@ -130,7 +130,7 @@ void MainMenu_DeInit(void)
 	
 	for( i=0; i<eMM_VARCLIENT_LIMIT; i++ )
 	{
-		HashTree_VarClientUnRegister( gMainMenuClass.mpTree, gMainMenuClass.mpVarClients[ i ] );
+		HashTree_VarClient_DeInit( &gMainMenuClass.mVarClients[ i ], gMainMenuClass.mpTree );
 	}
 }
 

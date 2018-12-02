@@ -47,12 +47,13 @@ typedef	struct	sImageMenuAsset
 
 typedef	struct	sImageMenuClass
 {
-	sImageMenuAsset			mAssets[ dIMGMENU_IMG_LIMIT ];
-	sHashTreeVar *			mpVars[ eIMGMENU_VAR_LIMIT ];
-	sHashTreeVarClient *	mpVarClients[ eIMGMENU_VARCLIENT_LIMIT ];
-	sGuiFSInfo				mFS;
-	U32						mImageIndex;
-	U32						mImageIndexMax;
+	sHashTree *			mpTree;
+	sImageMenuAsset		mAssets[ dIMGMENU_IMG_LIMIT ];
+	sHashTreeVar *		mpVars[ eIMGMENU_VAR_LIMIT ];
+	sHashTreeVarClient	mVarClients[ eIMGMENU_VARCLIENT_LIMIT ];
+	sGuiFSInfo			mFS;
+	U32					mImageIndex;
+	U32					mImageIndexMax;
 } sImageMenuClass;
 
 
@@ -98,16 +99,17 @@ void	ImageMenu_Init( sHashTree * apTree )
 
 	GuiFSInfo_Init( &gImgClass.mFS, "LOAD IMAGE", "*.PI1", "TEST.PI1" );
 	gImgClass.mFS.mpCB = ImageMenu_OnLoadFS;
+	gImgClass.mpTree = apTree;
 
 	gImgClass.mImageIndexMax = dIMGMENU_IMG_LIMIT;
 
 	gImgClass.mpVars[ eIMGMENU_VAR_IMGINDEX    ] = HashTree_VarInit( apTree, "TILEEDIT\\IMAGEMENU\\IMAGEINDEX", sizeof(U32), &gImgClass.mImageIndex );
 	gImgClass.mpVars[ eIMGMENU_VAR_IMGINDEXMAX ] = HashTree_VarInit( apTree, "TILEEDIT\\IMAGEMENU\\IMAGEINDEXMAX", sizeof(U32), &gImgClass.mImageIndexMax );
 
-	gImgClass.mpVarClients[ eIMGMENU_VARCLIENT_IMGINDEX ] = HashTree_VarClientRegister( apTree, "TILEEDIT\\IMAGEMENU\\IMAGEINDEX",	ImageMenu_OnImageIndex, 0, 0, 0 );
-	gImgClass.mpVarClients[ eIMGMENU_VARCLIENT_IMGNEXT  ] = HashTree_VarClientRegister( apTree, "GUI\\BUTTONS\\BUTT_IMG_NEXT",		ImageMenu_OnImageNext,	0, 0, 0 );
-	gImgClass.mpVarClients[ eIMGMENU_VARCLIENT_IMGPREV  ] = HashTree_VarClientRegister( apTree, "GUI\\BUTTONS\\BUTT_IMG_PREV",		ImageMenu_OnImagePrev,	0, 0, 0 );
-	gImgClass.mpVarClients[ eIMGMENU_VARCLIENT_IMGLOAD  ] = HashTree_VarClientRegister( apTree, "GUI\\BUTTONS\\BUTT_IMG_LOAD",		ImageMenu_OnImageLoad,	0, 0, 0 );
+	HashTree_VarClient_Init( &gImgClass.mVarClients[ eIMGMENU_VARCLIENT_IMGINDEX ], apTree, "TILEEDIT\\IMAGEMENU\\IMAGEINDEX",	ImageMenu_OnImageIndex );
+	HashTree_VarClient_Init( &gImgClass.mVarClients[ eIMGMENU_VARCLIENT_IMGNEXT  ], apTree, "GUI\\BUTTONS\\BUTT_IMG_NEXT",		ImageMenu_OnImageNext );
+	HashTree_VarClient_Init( &gImgClass.mVarClients[ eIMGMENU_VARCLIENT_IMGPREV  ], apTree, "GUI\\BUTTONS\\BUTT_IMG_PREV",		ImageMenu_OnImagePrev );
+	HashTree_VarClient_Init( &gImgClass.mVarClients[ eIMGMENU_VARCLIENT_IMGLOAD  ], apTree, "GUI\\BUTTONS\\BUTT_IMG_LOAD",		ImageMenu_OnImageLoad );
 }
 
 
@@ -120,6 +122,11 @@ void	ImageMenu_Init( sHashTree * apTree )
 void	ImageMenu_DeInit( void )
 {
 	U16	i;
+
+	for( i=0; i<eIMGMENU_VARCLIENT_LIMIT; i++ )
+	{
+		HashTree_VarClient_DeInit( &gImgClass.mVarClients[ i ], gImgClass.mpTree );
+	}
 
 	for( i=0; i<dIMGMENU_IMG_LIMIT; i++ )
 	{
