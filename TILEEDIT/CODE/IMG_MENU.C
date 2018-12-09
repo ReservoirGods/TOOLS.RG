@@ -49,7 +49,7 @@ typedef	struct	sImageMenuClass
 {
 	sHashTree *			mpTree;
 	sImageMenuAsset		mAssets[ dIMGMENU_IMG_LIMIT ];
-	sHashTreeVar *		mpVars[ eIMGMENU_VAR_LIMIT ];
+	sHashTreeVar 		mVars[ eIMGMENU_VAR_LIMIT ];
 	sHashTreeVarClient	mVarClients[ eIMGMENU_VARCLIENT_LIMIT ];
 	sGuiFSInfo			mFS;
 	U32					mImageIndex;
@@ -103,8 +103,8 @@ void	ImageMenu_Init( sHashTree * apTree )
 
 	gImgClass.mImageIndexMax = dIMGMENU_IMG_LIMIT;
 
-	gImgClass.mpVars[ eIMGMENU_VAR_IMGINDEX    ] = HashTree_Var_Create( apTree, "TILEEDIT\\IMAGEMENU\\IMAGEINDEX", sizeof(U32), &gImgClass.mImageIndex );
-	gImgClass.mpVars[ eIMGMENU_VAR_IMGINDEXMAX ] = HashTree_Var_Create( apTree, "TILEEDIT\\IMAGEMENU\\IMAGEINDEXMAX", sizeof(U32), &gImgClass.mImageIndexMax );
+	HashTree_Var_Init( &gImgClass.mVars[ eIMGMENU_VAR_IMGINDEX    ], apTree, "TILEEDIT\\IMAGEMENU\\IMAGEINDEX", sizeof(U32), &gImgClass.mImageIndex );
+	HashTree_Var_Init( &gImgClass.mVars[ eIMGMENU_VAR_IMGINDEXMAX ], apTree, "TILEEDIT\\IMAGEMENU\\IMAGEINDEXMAX", sizeof(U32), &gImgClass.mImageIndexMax );
 
 	HashTree_VarClient_Init( &gImgClass.mVarClients[ eIMGMENU_VARCLIENT_IMGINDEX ], apTree, "TILEEDIT\\IMAGEMENU\\IMAGEINDEX",	ImageMenu_OnImageIndex );
 	HashTree_VarClient_Init( &gImgClass.mVarClients[ eIMGMENU_VARCLIENT_IMGNEXT  ], apTree, "GUI\\BUTTONS\\BUTT_IMG_NEXT",		ImageMenu_OnImageNext );
@@ -130,7 +130,7 @@ void	ImageMenu_DeInit( void )
 
 	for( i=0; i<eIMGMENU_VAR_LIMIT; i++ )
 	{
-		HashTree_Var_Destroy( gImgClass.mpTree, gImgClass.mpVars[ i ] );
+		HashTree_Var_DeInit( &gImgClass.mVars[ i ], gImgClass.mpTree );
 	}
 
 	for( i=0; i<dIMGMENU_IMG_LIMIT; i++ )

@@ -52,7 +52,7 @@ sPackage		gGuiPackage;
 sAssetClient	gGubAsset;
 sGuiData *		gpGuiData;
 sHashTree		gKernelHashTree;
-sHashTreeVar *	gpKernelVars[ eKERNEL_VAR_LIMIT ];
+sHashTreeVar 	gKernelVars[ eKERNEL_VAR_LIMIT ];
 
 U16				gKernelPal[ 16 ] =
 {
@@ -347,8 +347,8 @@ void	TileEdit_Kernel_VarsInit( void )
 
 	lScrollX = 6;
 	lScrollXMax = 300;
-	gpKernelVars[ eKERNEL_VAR_SCROLLX    ] = HashTree_Var_Create( &gKernelHashTree, "TILEEDIT\\SCROLLX",	sizeof(S16), &lScrollX    );
-	gpKernelVars[ eKERNEL_VAR_SCROLLXMAX ] = HashTree_Var_Create( &gKernelHashTree, "TILEEDIT\\SCROLLXMAX",	sizeof(S16), &lScrollXMax );
+	HashTree_Var_Init( &gKernelVars[ eKERNEL_VAR_SCROLLX    ], &gKernelHashTree, "TILEEDIT\\SCROLLX",	sizeof(S16), &lScrollX    );
+	HashTree_Var_Init( &gKernelVars[ eKERNEL_VAR_SCROLLXMAX ], &gKernelHashTree, "TILEEDIT\\SCROLLXMAX",	sizeof(S16), &lScrollXMax );
 
 }
 
@@ -365,7 +365,7 @@ void	TileEdit_Kernel_VarsDeInit( void )
 
 	for( i=0; i<eKERNEL_VAR_LIMIT; i++ )
 	{
-		HashTree_Var_Destroy( &gKernelHashTree, gpKernelVars[ i ] );
+		HashTree_Var_DeInit( &gKernelVars[ i ], &gKernelHashTree );
 	}
 }
 
