@@ -74,7 +74,7 @@ typedef	struct	sEditMenuClass
 	sTileMap			mTileMap;
 	sString 			mMapFileName;
 	sHashTreeVar *		mpVars[ eEM_VAR_LIMIT ];
-	sHashTreeVar *		mpButtMain;
+	sHashTreeVarClient	mButtMainClient;
 	sHashTreeVarClient	mVarClients[ eEM_VARCLIENT_LIMIT ];
 	U16					mDel;
 	U16					mIns;
@@ -136,7 +136,7 @@ void	EditMenu_Init( sHashTree * apTree )
 	gEditMenuClass.mpVars[ eEM_VAR_DEL  ] = HashTree_Var_Create( apTree, "TILEEDIT\\MAPMENU\\DEL",	sizeof(U16),	&gEditMenuClass.mDel );
 	gEditMenuClass.mpVars[ eEM_VAR_INS  ] = HashTree_Var_Create( apTree, "TILEEDIT\\MAPMENU\\INS",	sizeof(U16),	&gEditMenuClass.mIns );
 
-	gEditMenuClass.mpButtMain = HashTree_VarRegister( apTree, "GUI\\BUTTONS\\BUTT_EDIT_MAIN" );
+	HashTree_VarClient_Init( &gEditMenuClass.mButtMainClient, apTree, "GUI\\BUTTONS\\BUTT_EDIT_MAIN", 0 );
 
 	HashTree_VarClient_Init( &gEditMenuClass.mVarClients[ eEM_VARCLIENT_DEL      ], apTree, "TILEEDIT\\MAPMENU\\DEL",			EditMenu_Del_OnWrite );
 	HashTree_VarClient_Init( &gEditMenuClass.mVarClients[ eEM_VARCLIENT_INS      ], apTree, "TILEEDIT\\MAPMENU\\INS",			EditMenu_Ins_OnWrite );
@@ -158,7 +158,7 @@ void	EditMenu_DeInit( void )
 
 	String_DeInit( &gEditMenuClass.mMapFileName );
 
-	HashTree_VarUnRegister( gEditMenuClass.mpTree, gEditMenuClass.mpButtMain );
+	HashTree_VarClient_DeInit( &gEditMenuClass.mButtMainClient, gEditMenuClass.mpTree );
 
 	for( i=0; i<eEM_VARCLIENT_LIMIT; i++ )
 	{
@@ -298,9 +298,9 @@ void EditMenu_MapRePaint(void)
 	sGuiEvent *		lpEvent;
 	sGuiButton *	lpButton;
 
-	if( gEditMenuClass.mpButtMain )
+	if( gEditMenuClass.mButtMainClient.mpVar )
 	{
-		lpEvent = (sGuiEvent*)gEditMenuClass.mpButtMain->mpData;
+		lpEvent = (sGuiEvent*)gEditMenuClass.mButtMainClient.mpVar->mpData;
 		if( lpEvent )
 		{			
 			lpButton = (sGuiButton*)lpEvent->mpInfo;
