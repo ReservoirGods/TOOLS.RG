@@ -8,6 +8,7 @@
 #include	"EDITMENU.H"
 #include	"IMG_MENU.H"
 #include	"MAINMENU.H"
+#include	"TILEMAP.H"
 
 #include	"R_CUSTOM.H"
 
@@ -16,6 +17,7 @@
 #include	<GODLIB\DEBUGLOG\DEBUGLOG.H>
 #include	<GODLIB\GUI\GUI.H>
 #include	<GODLIB\GUI\GUIDATA.H>
+#include	<GODLIB\GUI\GUIEDIT.H>
 #include	<GODLIB\GUI\GUIFS.H>
 #include	<GODLIB\GUI\GUIPARSE.H>
 #include	<GODLIB\GUI\R_GUI.H>

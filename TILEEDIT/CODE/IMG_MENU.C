@@ -6,6 +6,8 @@
 
 #include	<GODLIB\FILE\FILE.H>
 #include	<GODLIB\GUI\GUI.H>
+#include	<GODLIB\GUI\GUIDATA.H>
+#include	<GODLIB\GUI\GUIEDIT.H>
 #include	<GODLIB\GUI\GUIFS.H>
 #include	<GODLIB\MEMORY\MEMORY.H>
 #include	<GODLIB\PICTYPES\DEGAS.H>
