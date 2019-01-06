@@ -865,6 +865,8 @@ void	Purebot_DeInit( void )
 	if( EMU_STEEM == System_GetEMU())
 	{
 		System_SetFastForwardFlag(gOldFF);
+		/* emu reset */
+		*(U8*)0xffc104 = 0;
 	}
 }
 
